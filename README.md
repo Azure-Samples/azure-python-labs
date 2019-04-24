@@ -8,11 +8,13 @@ You will:
 - Create a training script using the recommender repo's [util functions](https://github.com/Microsoft/Recommenders/tree/master/reco_utils) for SAR and add logging information
 - Submit the training job to AzureML, and monitor the run with a jupyter widget
 - Test an existing model with new user data
+
 **Optional part 2:** 
 - Deploy the model to a web service using Azure Container Instance. 
-(short, 1-3 sentenced, description of the project)
-
-
 
 ## Getting Started
-- Clone in Azure Notebooks
+1. Clone in Azure Notebooks
+2. Open the `sar_movielens_with_azureml.ipynb` notebook and run through the lab.
+
+**Optional: Run through the `deploy_with_azureml.ipynb`
+
