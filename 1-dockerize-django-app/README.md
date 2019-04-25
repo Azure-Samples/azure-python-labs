@@ -6,6 +6,11 @@ to a SQLite database.
 We'll take this application and use Visual Studio Code to package the application
 up in a docker container.
 
+## Pre-requisites
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
+1. Install [Visual Studio Code](https://code.visualstudio.com)
+1. Install the [VS Code Docker Extension](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker)
+
 ## Open workspace and build a development container
 1. Open this folder using Visual Studio Code:
     ```
