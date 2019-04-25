@@ -1,6 +1,6 @@
-# Detecting Emotion wiht Azure Cognitive Services
+# Detecting Emotion with Azure Cognitive Services
 
-To start the lab, run the command: 
+To start the lab, run the command:  
 
 ``` powershell
 jupyter notebook DetectingEmotionWithAzureCognitiveServices.ipynb

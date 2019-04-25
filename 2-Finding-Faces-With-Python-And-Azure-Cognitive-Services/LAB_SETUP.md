@@ -25,4 +25,3 @@ This will return a json resembling:
 ```
 
 Copy this output to the `local.settings.json` file and you are all set!
-
