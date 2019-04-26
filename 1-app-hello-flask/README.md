@@ -1,18 +1,25 @@
 # Containerize and Deploy a Python Flask application with Azure Container Registry and Azure Container Instances
 
-In this lab we will demonstrate how to:
+In this lab you will learn to:
 - Build a Python Flask application using Docker and a Dockerfile.
-- Build our container image in the cloud using Azure Container Registry (ACR).
-- Deploy our container image to Azure Container Instances (ACI).
+- Build the container image in the cloud using Azure Container Registry (ACR).
+- Deploy the container image to Azure Container Instances (ACI).
 
 ## 1. Explore Docker and Dockerfiles
 
-This section is **for illustrative purposes only**. If we have Docker installed locally, we have three options to run and/or build our Flask application inside a container:
+If you have Docker installed locally, you have three options to build and run the Flask application inside a container.
 
-Run commands manually inside a `python` container pulled from [Docker Hub](https://hub.docker.com/_/python/) to run and debug our application locally.
+This section is **for illustrative purposes only** and you **do not** need to run these commands. 
+
+After cloning the repository as follows:
+
 ```bash
 git clone https://github.com/Microsoft/python-sample-vscode-flask-tutorial
 cd python-sample-vscode-flask-tutorial/
+```
+
+The following commands could be run inside a `python` container pulled from [Docker Hub](https://hub.docker.com/_/python/) to run and debug the application locally.
+```bash
 docker run --rm -v ${PWD}:/pwd/ -w /pwd/ -p 8080:5000 -it python bash
 pip install -r requirements.txt
 export FLASK_APP=startup.py
@@ -22,7 +29,6 @@ flask run --host=0.0.0.0
 
 Build a *development* container from a `Dockerfile` ([dev.Dockerfile](dev.Dockerfile)).
 ```bash
-git clone https://github.com/Microsoft/python-sample-vscode-flask-tutorial
 docker build -f dev.Dockerfile -t test python-sample-vscode-flask-tutorial/
 docker run --rm -p 8080:5000 -it test
 # open http://localhost:8080
@@ -30,7 +36,6 @@ docker run --rm -p 8080:5000 -it test
 
 Build a *production* container from a `Dockerfile` ([prod.Dockerfile](prod.Dockerfile)).
 ```bash
-git clone https://github.com/Microsoft/python-sample-vscode-flask-tutorial
 docker build -f prod.Dockerfile -t prod python-sample-vscode-flask-tutorial/
 docker run --rm -p 8080:5000 -it prod
 # open http://localhost:8080
@@ -38,13 +43,13 @@ docker run --rm -p 8080:5000 -it prod
 
 ## 2. Build with Azure Container Registry (ACR)
 
-Azure Container Registry is Azure's private container registry. It has the ability to build our container image inside the registry from our source code and a Dockerfile.
+Azure Container Registry is Azure's private container registry. It has the ability to build a container image inside the registry from source code and a Dockerfile.
 
-In the snippet below we set the correct value for the RESOURCE_GROUP variable. This can be set manually as below, or via the `az group list` command with `jq` to select the name of the "first group that starts with Group-". If you're doing this lab on your own, **not at an event**, you will need to un-comment and **set the RESOURCE_GROUP variable manually**.
+The snippet below the correct value for the `RESOURCE_GROUP` variable. This can be set manually as below, or via the `az group list` command with `jq` to select the name of the "first group that starts with Group-". If you're doing this lab on your own, **not at an event**, you will need to un-comment and **set the RESOURCE_GROUP variable manually**.
 
-Our Azure Container Registry's name must also be globally unique, so we are also setting CONTAINER_REGISTRY to 'acr' with 6 character random suffix.
+The Azure Container Registry's name must also be globally unique, so here `CONTAINER_REGISTRY` to 'acr' with a 6 character random suffix.
 
-Let's set our environment variables:
+First set some environment variables:
 
 ```bash
 # RESOURCE_GROUP='Group-...'
@@ -56,37 +61,60 @@ CONTAINER_REGISTRY=acr${RANDOM_STR}
 CONTAINER_IMAGE='hello-flask:latest'
 ```
 
-If we're not yet logged in:
+If you are not yet logged in:
 
-    az login
+```bash
+az login
+```
 
 Create the resource group, if required:
 
-    az group create --name $RESOURCE_GROUP --location $LOCATION
+```bash
+az group create --name $RESOURCE_GROUP --location $LOCATION
+```
 
-Now let's use the Azure CLI (az) to create an Azure Container Registry and build an image in the cloud.
+Now use the Azure CLI (az) to create an Azure Container Registry and build an image in the cloud.
 
-    az acr create -g $RESOURCE_GROUP -l $LOCATION --name $CONTAINER_REGISTRY --sku Basic --admin-enabled true
+```bash
+az acr create -g $RESOURCE_GROUP -l $LOCATION --name $CONTAINER_REGISTRY --sku Basic --admin-enabled true
+```
 
-Next we use the [az acr build](https://docs.microsoft.com/en-us/cli/azure/acr?#az-acr-build) command, which will push our source code and Dockerfile to the cloud, build the image, and store it in our Azure Container Registry:
+Clone the source code from our sample repository:
 
-    az acr build -r $CONTAINER_REGISTRY -t hello-flask --file prod.Dockerfile python-sample-vscode-flask-tutorial/
+```bash
+git clone https://github.com/Microsoft/python-sample-vscode-flask-tutorial
+```
+
+Next run the [az acr build](https://docs.microsoft.com/en-us/cli/azure/acr?#az-acr-build) command, which will push our source code and Dockerfile to the cloud, build the image, and store it in our Azure Container Registry:
+
+```bash
+az acr build -r $CONTAINER_REGISTRY -t hello-flask --file prod.Dockerfile python-sample-vscode-flask-tutorial/
+```
 
 The fully-qualified name of the image in our Container Registry will then be `$CONTAINER_REGISTRY'.azurecr.io/hello-flask:latest'`. Let's output this with:
 
-    echo "${CONTAINER_REGISTRY}.azurecr.io/hello-flask:latest"
+```bash
+echo "${CONTAINER_REGISTRY}.azurecr.io/hello-flask:latest"
+```
 
-Congratulations, you have built your first image inside Azure Container Registry. This can be used on local and remote machines via `az acr login -n $CONTAINER_REGISTRY` and `docker run -it $CONTAINER_REGISTRY'.azurecr.io/hello-flask:latest'` which we'll explore in a future tutorial.
+Now you've published your first image on Azure Container Registry. You can run this image in any environment with Docker with the commands:
 
-Since Azure Container Registry (ACR) is completely private, we need to log in with `az acr login` in order to use the image we have built inside our registry. For public images, which we can access without authentication, we can use Docker Hub, where we have pushed a pre-built image available at: `aaronmsft/hello-flask`
+```bash
+az acr login -n $CONTAINER_REGISTRY
+docker run -it $CONTAINER_REGISTRY'.azurecr.io/hello-flask:latest'
+```
 
-Finally, Azure Container Registry enables you to automatically trigger image builds in the cloud [when you commit source code to a Git repository](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-build-task) or [when a container's base image is updated](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update).
+Since Azure Container Registry (ACR) is completely private, you need to log in with `az acr login` in order to use the image you have built inside our registry. 
+
+Images hosted on public container registries, such as Docker Hub, can be accessed without authentication. We have pushed a copy of this image to Docker Hub which is available at: `aaronmsft/hello-flask`
+
+In addition to the ACR Tasks [quick task](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task) feature you have explored above, Azure Container Registry enables you to automatically trigger image builds in the cloud [when you commit source code to a Git repository](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-build-task) or [when a container's base image is updated](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update).
 
 ## 3. Deploy with Azure Container Instances (ACI)
 
-We can deploy the same application as a single stand-alone container to Azure Container Instance below. See also: [Azure Container Instances Quickstart](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart#create-a-container).
+You can deploy the same application as a single stand-alone container to Azure Container Instances with the [az container create](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart#create-a-container) command, as outlined below.
 
-Ensure you have run the section above to set environment variables, as we are re-using these below.
+Ensure you have run the section above to set environment variables, as these are re-used below.
 
 ```bash
 # get our container registry password
@@ -119,11 +147,13 @@ echo "http://${CONTAINER_INSTANCE_FQDN}:8080"
 ```
 
 # Resources 
+- https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task
+- https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-build-task
+- https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update
+- https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart
+- https://docs.microsoft.com/en-us/azure/app-service/containers/quickstart-python
 - https://code.visualstudio.com/docs/python/tutorial-flask
 - https://code.visualstudio.com/docs/python/tutorial-deploy-containers
-- https://docs.microsoft.com/en-us/azure/app-service/containers/quickstart-python
 - https://github.com/Microsoft/python-sample-vscode-flask-tutorial
 - https://github.com/Azure-Samples/python-docs-hello-world
-- https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-build
-- https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-build-task
 - http://flask.pocoo.org/docs/1.0/quickstart/
