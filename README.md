@@ -30,7 +30,7 @@ A collection of labs demonstrating how build Python applications with Azure and 
 
 ...
 
-[Go to lab](1-azure-machine-learning-movie-recommendation/README.md)
+[Go to lab](1-azureml-movie-recommendation/README.md)
 
 ## Application messaging with Azure Service Bus
 
