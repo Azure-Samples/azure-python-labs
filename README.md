@@ -18,13 +18,13 @@ A collection of labs demonstrating how build Python applications with Azure and 
 
 ...
 
-[Go to lab](1-python-functions/README.md)
+[Go to lab](4-azure-functions-python/README.md)
 
 ## Detecting Emotion with Azure Cognitive Services
 
 ...
 
-[Go to lab](1-cognitive-services-face/README.md)
+[Go to lab](5-jupyter-azure-cognitive-services-face/README.md)
 
 ## Build a Movie Recommendation System with Azure Machine Learning
 
