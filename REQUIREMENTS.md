@@ -4,6 +4,7 @@
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Python Extension for Visual Studio Code](https://marketplace.visualstudio.com/itemdetails?itemName=ms-python.python)
 - [VS Code Remote Development](https://aka.ms/vscode-remote)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
 - [Azure Functions Core Tools 2.x](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#v2)
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 ([Local Install (Preferred)](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) or [Cloud Shell](https://docs.microsoft.com/en-ca/azure/cloud-shell/overview))
