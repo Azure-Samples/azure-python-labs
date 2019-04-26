@@ -47,7 +47,7 @@ Azure Container Registry is Azure's private container registry. It has the abili
 
 The snippet below the correct value for the `RESOURCE_GROUP` variable. This can be set manually as below, or via the `az group list` command with `jq` to select the name of the "first group that starts with Group-". If you're doing this lab on your own, **not at an event**, you will need to un-comment and **set the RESOURCE_GROUP variable manually**.
 
-The Azure Container Registry's name must also be globally unique, so here `CONTAINER_REGISTRY` to 'acr' with a 6 character random suffix.
+The Azure Container Registry's name must also be globally unique, so here `CONTAINER_REGISTRY` to `acr` with a 6 character random suffix.
 
 First set some environment variables:
 
