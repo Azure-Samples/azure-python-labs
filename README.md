@@ -6,13 +6,13 @@ A collection of labs demonstrating how build Python applications with Azure and 
 
 ...
 
-[Go to lab](1-vscode-django/README.md)
+[Go to lab](1-vscode-django-docker/README.md)
 
 ## Developing a Django+PostgreSQL application in a Dev Container
 
 ...
 
-[Go to lab](1-vscode-django-postgres/README.md)
+[Go to lab](2-vscode-django-postgres-dev-container/README.md)
 
 ## Python Primacy on Azure Functions
 
