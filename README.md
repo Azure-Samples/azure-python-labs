@@ -1,57 +1,12 @@
-# Project Name
+# Azure Python Labs
 
-(short, 1-3 sentenced, description of the project)
+A collection of labs demonstrating how build Python applications with Azure and Visual Studio Code.
 
-## Features
+## 1. Containerize and Deploy a Python Flask application with Azure Container Registry and Azure Container Instances
 
-This project framework provides the following features:
+In this lab we will demonstrate how to:
+1. Build a Python Flask application using Docker and a Dockerfile.
+2. Build our container image in the cloud using Azure Container Registry (ACR).
+3. Deploy our container image to Azure Container Instances (ACI).
 
-* Feature 1
-* Feature 2
-* ...
-
-## Getting Started
-
-### Prerequisites
-
-(ideally very short, if any)
-
-- OS
-- Library version
-- ...
-
-### Installation
-
-(ideally very short)
-
-- npm install [package name]
-- mvn install
-- ...
-
-### Quickstart
-(Add steps to get up and running quickly)
-
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
-
-
-## Demo
-
-A demo app is included to show how to use the project.
-
-To run the demo, follow these steps:
-
-(Add steps to start up the demo)
-
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
+[Go to lab](1-app-hello-flask/README.md) | Duration: 5-10 minutes
