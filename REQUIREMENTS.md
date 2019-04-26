@@ -1,6 +1,6 @@
 # REQUIREMENTS
 
-- [Python 3](https://www.python.org/downloads/)
+- [Python 3.7](https://www.python.org/downloads/)
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Python Extension for Visual Studio Code](https://marketplace.visualstudio.com/itemdetails?itemName=ms-python.python)
 - [VS Code Remote Development](https://aka.ms/vscode-remote)
