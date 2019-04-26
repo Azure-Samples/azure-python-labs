@@ -1,7 +1,7 @@
 # Developing a Django+PostgreSQL application in a Dev Container
 
 In this lab we'll use Visual Studio Code remote development features to work on a 
-a Django+PostgreSQL application in a dockerized development environment.
+Django+PostgreSQL application in a dockerized development environment.
 
 ## Pre-requisites
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
