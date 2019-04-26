@@ -45,4 +45,4 @@ In this lab you will learn to:
 2. Build the container image in the cloud using Azure Container Registry (ACR).
 3. Deploy the container image to Azure Container Instances (ACI).
 
-[Go to lab](1-app-hello-flask/README.md) | Duration: 5-10 minutes
+[Go to lab](3-azure-cli-flask-registry-container-instances/README.md) | Duration: 5-10 minutes
