@@ -54,7 +54,7 @@ First set some environment variables:
 ```bash
 # RESOURCE_GROUP='Group-...'
 RESOURCE_GROUP=$(az group list | jq -r '[.[].name|select(. | startswith("Group-"))][0]')
-LOCATION='eastus'
+LOCATION='centralus'
 if [ -z "$RANDOM_STR" ]; then RANDOM_STR=$(openssl rand -hex 3); else echo $RANDOM_STR; fi
 # RANDOM_STR='9c445c'
 CONTAINER_REGISTRY=acr${RANDOM_STR}
