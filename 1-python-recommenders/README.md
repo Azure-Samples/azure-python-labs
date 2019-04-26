@@ -32,6 +32,6 @@ Data scientists and AI developers use the main [Azure Machine Learning Python SD
 - Easy to scale out when dataset grows - by just creating and pointing to new compute target
 
 # Getting Started
-1. Clone this repository
+1. Clone this repository in Azure Notebooks[![Azure Notebooks](https://notebooks.azure.com/launch.svg)](https://notebooks.azure.com/heatherbshapiro/projects/pycon-recommender?clone=true) 
 2. Open the `sar_movielens_with_azureml.ipynb` notebook and run through the lab.
 **Optional: Run through the `deploy_with_azureml.ipynb` jupyter notebook
