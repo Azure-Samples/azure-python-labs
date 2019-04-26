@@ -26,11 +26,19 @@ A collection of labs demonstrating how build Python applications with Azure and 
 
 [Go to lab](5-jupyter-azure-cognitive-services-face/README.md)
 
-## Build a Movie Recommendation System with Azure Machine Learning
+## Build a Movie Recommendation system using Azure Machine Learning
 
-...
+This tutorial will walk through how to build a Movie Recommender system trained with a Simple Algorithm for Recommenders (SAR) for the Movielens dataset on Azure Machine Learning service. It demonstrates how to use the power of the cloud to manage data, switch to powerful GPU machines, and monitor runs while training a model. In this lab you will:
 
-[Go to lab](1-azureml-movie-recommendation/README.md)
+- Connect to an Azure Machine Learning service workspace
+- Access movielens data from a datastore
+- Connect to cpu and gpu machines from Azure Machine Learning Compute
+- Create a training script using the recommender repo's util functions for SAR and add logging information
+- Submit the training job to AzureML, and monitor the run with a jupyter widget
+- Test an existing model with new user data
+- **Optional Part 2**: Deploy the model to a web service using Azure Container Instance.
+
+[Go to lab](6-azureml-movie-recommendation/README.md)
 
 ## Application messaging with Azure Service Bus
 
