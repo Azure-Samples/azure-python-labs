@@ -1,57 +1,48 @@
-# Project Name
+# Azure Python Labs
 
-(short, 1-3 sentenced, description of the project)
+A collection of labs demonstrating how build Python applications with Azure and Visual Studio Code.
 
-## Features
+## Containerize a Django application using Visual Studio Code
 
-This project framework provides the following features:
+...
 
-* Feature 1
-* Feature 2
-* ...
+[Go to lab](1-vscode-django/README.md)
 
-## Getting Started
+## Developing a Django+PostgreSQL application in a Dev Container
 
-### Prerequisites
+...
 
-(ideally very short, if any)
+[Go to lab](1-vscode-django-postgres/README.md)
 
-- OS
-- Library version
-- ...
+## Python Primacy on Azure Functions
 
-### Installation
+...
 
-(ideally very short)
+[Go to lab](1-python-functions/README.md)
 
-- npm install [package name]
-- mvn install
-- ...
+## Detecting Emotion with Azure Cognitive Services
 
-### Quickstart
-(Add steps to get up and running quickly)
+...
 
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+[Go to lab](1-cognitive-services-face/README.md)
 
+## Build a Movie Recommendation System with Azure Machine Learning
 
-## Demo
+...
 
-A demo app is included to show how to use the project.
+[Go to lab](1-azureml-movie-recommendation/README.md)
 
-To run the demo, follow these steps:
+## Application messaging with Azure Service Bus
 
-(Add steps to start up the demo)
+...
 
-1.
-2.
-3.
+[Go to lab](1-service-bus-messaging/README.md)
 
-## Resources
+## Containerize and Deploy a Python Flask application with Azure Container Registry and Azure Container Instances
 
-(Any additional resources or related projects)
+In this lab you will learn to:
+1. Build a Python Flask application using Docker and a Dockerfile.
+2. Build the container image in the cloud using Azure Container Registry (ACR).
+3. Deploy the container image to Azure Container Instances (ACI).
 
-- Link to supporting information
-- Link to similar sample
-- ...
+[Go to lab](3-azure-cli-flask-registry-container-instances/README.md) | Duration: 5-10 minutes
