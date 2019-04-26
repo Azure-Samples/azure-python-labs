@@ -14,7 +14,7 @@ up in a docker container.
 ## Open workspace and build a development container
 1. Open this folder using Visual Studio Code:
     ```
-    cd 1-dockerize-django-app
+    cd 1-vscode-django-docker
     code .
     ```
 1. Run `Ctrl-Shift-P` and type `Add Docker files to Workspace`
