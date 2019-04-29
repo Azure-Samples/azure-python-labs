@@ -1,6 +1,6 @@
 # Azure Python Labs
 
-A collection of labs demonstrating how build Python applications with Azure and Visual Studio Code.
+A collection of labs demonstrating how to build Python applications with Azure and Visual Studio Code.
 
 ## Containerize a Django application using Visual Studio Code
 
