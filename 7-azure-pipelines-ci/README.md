@@ -33,21 +33,21 @@ small, modern Python application with unit tests.  We'll make a copy of this pro
 
 * Next, sign in to GitHub.
 
-  ![sign in](1-signin.png)
+  ![sign in](images/1-signin.png)
 
 * When you've signed in, you'll be returned to the Microsoft Cloud Scanner repository.  Click Fork in the top right corner of the repository page.
 
-  ![fork](1-fork.png)
+  ![fork](images/1-fork.png)
 
 * If you are part of any GitHub organizations, you will be prompted to choose where to fork the repository.  Choose your personal GitHub account, on the top of the list.
 
-  ![select account](1-selectaccount.png)
+  ![select account](images/1-selectaccount.png)
 
   (If you are not prompted, skip this step.)
 
 * Wait a few seconds while the fork completes.
 
-  ![forking](1-forking.png)
+  ![forking](images/1-forking.png)
 
 Now, you will be at _your own_ copy of this repository, which is a duplicate of the original repository.  You can work in this repository, commit to it and configure a continuous integration build without impacting the original open source project.
 
@@ -57,27 +57,27 @@ Enable Azure Pipelines for thie repository by adding the GitHub app from the Git
 
 * Open the GitHub Marketplace by clicking on Marketplace in the banner at the top of the GitHub page.
 
-  ![marketplace](2-marketplace.png)
+  ![marketplace](images/2-marketplace.png)
 
 * In the GitHub Marketplace search box, type "Azure Pipelines"
 
-  ![search](2-search.png)
+  ![search](images/2-search.png)
 
 * On the search results page, select "Azure Pipelines"
 
-  ![select](2-select.png)
+  ![select](images/2-select.png)
 
 * On the Azure Pipelines application page, scroll down to the bottom of the page.  Then select "Install for free".
 
-  ![install for free](2-installfree.png)
+  ![install for free](images/2-installfree.png)
 
 * On the confirmation page, select "complete order and begin installation".
 
-  ![completeorder](2-completeorder.png)
+  ![completeorder](images/2-completeorder.png)
 
 * On the installation page, provide a final validation that you want to install Azure Pipelines.
 
-  ![confirm](2-confirm.png)
+  ![confirm](images/2-confirm.png)
 
 ## 3. Set up an Azure DevOps account
 
@@ -87,13 +87,13 @@ Create a new Azure DevOps account so that you can enable Azure Pipelines for you
 
 * Set your Project name to "cloud-scanner".
 
-  ![New Account](3-newaccount.png)
+  ![New Account](images/3-newaccount.png)
 
 * Click Continue, and wait a few seconds while your account is created.
 
 * Once your account is created, you'll need to authorize it so that it can be connected to GitHub.
 
-  ![Authorize](3-authorize.png)
+  ![Authorize](images/3-authorize.png)
 
 Now you have an Azure DevOps account created, and Azure Pipelines is linked to GitHub so that you can set up continuous integration builds and pull request validation.
 
@@ -103,11 +103,11 @@ Azure Pipelines can examine your repository so that it can try to determine what
 
 * Select the repository that you want to build.  This will be the `cloud-scanner` repository that you forked in step 1.  (It should be at the top of the repository list.)
 
-  ![Select repository](4-selectrepo.png)
+  ![Select repository](images/4-selectrepo.png)
 
 * Azure Pipelines will now analyze your repository to determine what language is it, and how it should build it.  Once it's finished with the examination, it will present you with some choices.  Select "Python package" from the options.
 
-  ![Python](4-python.png)
+  ![Python](images/4-python.png)
 
 * Now, Azure Pipelines will show you the build definition.  Build definitions are written in the YAML language and checked in to the repository, right next to the code they build.  This is a technique called "configuration as code" and is helpful since it versions the steps to build the code alongside the code itself.
 
@@ -123,7 +123,7 @@ Azure Pipelines can examine your repository so that it can try to determine what
 
    We want to _remove_ Python 2.7 and Python 3.5 from this build pipeline.  In the build YAML, delete lines 13-16.
 
-   ![edit yaml](4-edityaml.png)
+   ![edit yaml](images/4-edityaml.png)
 
    These are the lines that specify that Azure Pipelines.  Your matrix should then look like:
 
@@ -138,7 +138,7 @@ Azure Pipelines can examine your repository so that it can try to determine what
 
 * Once you've updated your build YAML, click "Save and Run".  Then on the pop-up dialog, click "Save and Run" again.  This will finalize the configuration, checking in the YAML into your repository and queue your first build.
 
-  ![save and run](4-saveandrun.png)
+  ![save and run](images/4-saveandrun.png)
 
 Once you've saved your configuration, Azure Pipelines will set up GitHub so that builds are queued for new pushed into your master branch and new pull requests.  Then Azure Pipelines will start your first build.
 
@@ -146,19 +146,19 @@ Once you've saved your configuration, Azure Pipelines will set up GitHub so that
 
 Now your build will start.  Azure Pipelines will locate two unused Ubuntu 16.04 build agents that are hosted in Azure to perform your build, and start your builds on them.  You're performing two builds in paralell, one for each version of Python that you're building and testing on, as configured by your matrix in step 4.
 
-![parallel jobs](5-paralleljobs.png)
+![parallel jobs](images/5-paralleljobs.png)
 
 You can watch each step as it's being executed, and you can see the build output from each step.  You can click on any step that's being executed, or has completed, to see the detailed line-by-line output.
 
 After about a 45 seconds, both jobs should be complete, and should succeed.  You'll see this indicated by green success check marks next to each job.
 
-![success](5-success.png)
+![success](images/5-success.png)
 
 You'll also see the overall status for this build, in the title, be decorated with a green check mark as well.
 
 You can now review the build output to understand how this project is build, and you can also click the "Tests" tab to see the output from unit tests.  (They're all passing, as we would hope.)
 
-![tests](5-tests.png)
+![tests](images/5-tests.png)
 
 ## 6. Create a pull request to your repository
 
@@ -168,15 +168,15 @@ Let's add a "badge" for PyPI to the project's README, so that users know that th
 
 * Navigate back to your project's repository on GitHub.  You can click on the repository name at the top of the build output page.
 
-  ![go to github](6-gotogithub.png)
+  ![go to github](images/6-gotogithub.png)
 
 * On your GitHub repository, scroll down to the README section (below the files list).  Then click the pencil on the right side of the README's header.  This will let you start editing the README.
 
-  ![edit readme](6-editreadme.png)
+  ![edit readme](images/6-editreadme.png)
 
 * You'll see the markdown for the README.  On line three, you'll see an existing badge, this is the build badge for the repository, that shows the status of the continuous integration build.
 
-  ![readme](6-readme.png)
+  ![readme](images/6-readme.png)
 
   (Note that it shows the _original_ project's build status, not your forked repository's build.  This is standard for open source projects.)
 
@@ -190,23 +190,23 @@ Let's add a "badge" for PyPI to the project's README, so that users know that th
 
   Select the radio button that says "Create a **new branch** for this commit and start a pull request."
 
-  ![propose change](6-proposechange.png)
+  ![propose change](images/6-proposechange.png)
 
   Then click "Propose file change".
 
 * The next page is the new pull request page.  Simply click "Create pull request".
 
-  ![create pull request](6-createpr.png)
+  ![create pull request](images/6-createpr.png)
 
 * Now you'll be taken to the new pull request page.  In the middle of this page is the GitHub Checks section.  Immediately upon creating the pull request, this section is yellow while GitHub ensures that there are no conflicts with the master branch in the pull request that you've opened.  Once that is satisfied, the section will turn green.
 
   A few seconds later, however, the section should turn yellow again.  At this point, Azure Pipelines will queue a build for the pull request branch, to validate the PR.
 
-  ![build queued](6-buildqueued.png)
+  ![build queued](images/6-buildqueued.png)
 
   Eventually, Azure Pipelines will build the pull request branch, and report the status back, so that you can ensure that you have a successful build and tests on the pull request.
 
-  ![build complete](6-builddone.png)
+  ![build complete](images/6-builddone.png)
 
 Now you've set up a continuous integration build for your Python project on GitHub, and you've seen how to customize the build and how it operates on GitHub Pull Requests.
 
