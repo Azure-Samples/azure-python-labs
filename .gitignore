@@ -100,6 +100,7 @@ celerybeat-schedule
 # Environments
 .env
 .venv
+.winenv
 env/
 venv/
 ENV/
@@ -135,3 +136,6 @@ API
 Training
 Blog
 About
+
+# VSCode
+.vscode
