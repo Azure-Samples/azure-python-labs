@@ -44,7 +44,7 @@ This tutorial will walk through how to build a Movie Recommender system trained 
 
 ...
 
-[Go to lab](1-service-bus-messaging/README.md)
+[Go to lab](8-azure-service-bus-messaging/README.md)
 
 ## Containerize and Deploy a Python Flask application with Azure Container Registry and Azure Container Instances
 
