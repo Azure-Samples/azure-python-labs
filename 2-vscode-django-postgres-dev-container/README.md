@@ -16,20 +16,24 @@ Django+PostgreSQL application in a dockerized development environment.
     code-insiders .
     ```
 1. Click the ```Reopen in Container``` prompt, or press `Ctrl-Shift-P` and select the `Re-open folder in dev container` command
-1. After the container builds, open a new terminal using ```Ctrl-Shift-` ``` and type
+1. After the workspace terminal loads, open a new terminal using ```Ctrl-Shift-` ``` and type the following to build the React frontend:
+    ```
+    npm run dev
+    ```
+1. Open another using ```Ctrl-Shift-` ``` and type the following to initialize the database and run the Python backend:
     ```
     python manage.py migrate
     python manage.py loaddata initial_data
     python manage.py runserver
     ```
 1. Open [http://localhost:8000](http://localhost:8000) in the browser to view the app
+1. Create an account and login to the app
 
 ## Set up debugging in the container
 1. From the `Debug` menu, select `Start Debugging`
 1. Select the `Django` debug configuration from the menu
-1. Open `tweeter/views.py`, set a breakpoint on line 14
+1. Open `tweeter/views.py`, set a breakpoint on line 26
 1. Refresh the app in the browser to hit the breakpoint
-1. Open the debug console `Views > Debug Console`, and type `bob` into the debug console to inspect the user
-1. Look up the user's e-mail address by inspecting the variable in the debug console
+1. Open the debug console `Views > Debug Console`, and type `request.user` into the debug console to inspect the logged in user
 
 
