@@ -26,7 +26,7 @@ You can [join GitHub](http://github.com/join) to get started.
 
 ## 1. Fork the Microsoft cloud scanner project
 
-To demonstrate a continous integraiton build and test setup, we'll use a
+To demonstrate a continous integration build and test setup, we'll use a
 small, modern Python application with unit tests.  We'll make a copy of this project, or a "fork", into our own GitHub repository so that we can work on it freely, without impacting the original open source  project.
 
 * Open your browser and navigate to [https://github.com/ethomson/cloud-scanner](https://github.com/ethomson/cloud-scanner).
@@ -53,7 +53,7 @@ Now, you will be at _your own_ copy of this repository, which is a duplicate of 
 
 ## 2. Add the Azure Pipelines app to this repository
 
-Enable Azure Pipelines for thie repository by adding the GitHub app from the GitHub Marketplace.
+Enable Azure Pipelines for the repository by adding the GitHub app from the GitHub Marketplace.
 
 * Open the GitHub Marketplace by clicking on Marketplace in the banner at the top of the GitHub page.
 
@@ -67,11 +67,11 @@ Enable Azure Pipelines for thie repository by adding the GitHub app from the Git
 
   ![select](images/2-select.png)
 
-* On the Azure Pipelines application page, scroll down to the bottom of the page.  Then select "Install for free".
+* On the Azure Pipelines application page, scroll down to the bottom of the page.  Then select "Install it for free".
 
   ![install for free](images/2-installfree.png)
 
-* On the confirmation page, select "complete order and begin installation".
+* On the confirmation page, select "Complete order and begin installation".
 
   ![completeorder](images/2-completeorder.png)
 
@@ -125,7 +125,7 @@ Azure Pipelines can examine your repository so that it can try to determine what
 
    ![edit yaml](images/4-edityaml.png)
 
-   These are the lines that specify that Azure Pipelines.  Your matrix should then look like:
+   These are the lines that specify the Azure Pipelines.  Your matrix should then look like:
 
    ```
    strategy:
@@ -140,21 +140,21 @@ Azure Pipelines can examine your repository so that it can try to determine what
 
   ![save and run](images/4-saveandrun.png)
 
-Once you've saved your configuration, Azure Pipelines will set up GitHub so that builds are queued for new pushed into your master branch and new pull requests.  Then Azure Pipelines will start your first build.
+Once you've saved your configuration, Azure Pipelines will set up GitHub so that builds are queued for new and pushed into your master branch and new pull requests.  Then Azure Pipelines will start your first build.
 
 ## 5. Watch your project build
 
-Now your build will start.  Azure Pipelines will locate two unused Ubuntu 16.04 build agents that are hosted in Azure to perform your build, and start your builds on them.  You're performing two builds in paralell, one for each version of Python that you're building and testing on, as configured by your matrix in step 4.
+Now your build will start.  Azure Pipelines will locate two unused Ubuntu 16.04 build agents that are hosted in Azure to perform your build, and start your builds on them.  You're performing two builds in parallel, one for each version of Python that you're building and testing on, as configured by your matrix in step 4.
 
 ![parallel jobs](images/5-paralleljobs.png)
 
 You can watch each step as it's being executed, and you can see the build output from each step.  You can click on any step that's being executed, or has completed, to see the detailed line-by-line output.
 
-After about a 45 seconds, both jobs should be complete, and should succeed.  You'll see this indicated by green success check marks next to each job.
+After about 45 seconds, both jobs should be complete, and should succeed.  You'll see this indicated by green success check marks next to each job.
 
 ![success](images/5-success.png)
 
-You'll also see the overall status for this build, in the title, be decorated with a green check mark as well.
+You'll also see that the overall status for this build, in the title, will be decorated with a green check mark as well.
 
 You can now review the build output to understand how this project is build, and you can also click the "Tests" tab to see the output from unit tests.  (They're all passing, as we would hope.)
 
