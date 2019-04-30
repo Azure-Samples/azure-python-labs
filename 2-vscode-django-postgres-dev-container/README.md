@@ -16,7 +16,7 @@ In this lab we'll use Visual Studio Code remote development features to work on 
     code-insiders .
     ```
 
-1. Click the ```Reopen in Container``` prompt, or press `Ctrl-Shift-P` and select the `Reopen folder in dev container` command
+1. Click the ```Reopen in Container``` prompt, or press `F1` and select the `Reopen folder in dev container` command
 
 1. After the workspace terminal loads, open a new terminal using ```Ctrl-Shift-` ``` and type the following to build the React frontend:
 
