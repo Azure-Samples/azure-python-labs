@@ -9,16 +9,17 @@ In this lab you will learn to:
 
 If you have Docker installed locally, you have three options to build and run the Flask application inside a container.
 
-This section is **for illustrative purposes only** and you **do not** need to run these commands. 
+> __IMPORTANT__: This section is **for illustrative purposes only** and you **do not** need to run these commands. 
 
-After cloning the repository as follows:
+Clone the Visual Studio Code Flask tutorial:
 
 ```bash
 git clone https://github.com/Microsoft/python-sample-vscode-flask-tutorial
 cd python-sample-vscode-flask-tutorial/
 ```
 
-The following commands could be run inside a `python` container pulled from [Docker Hub](https://hub.docker.com/_/python/) to run and debug the application locally.
+Run the application from inside of a Docker container: 
+
 ```bash
 docker run --rm -v ${PWD}:/pwd/ -w /pwd/ -p 8080:5000 -it python bash
 pip install -r requirements.txt
@@ -28,6 +29,7 @@ flask run --host=0.0.0.0
 ```
 
 Build a *development* container from a `Dockerfile` ([dev.Dockerfile](dev.Dockerfile)).
+
 ```bash
 docker build -f dev.Dockerfile -t test python-sample-vscode-flask-tutorial/
 docker run --rm -p 8080:5000 -it test
@@ -85,13 +87,13 @@ Clone the source code from our sample repository:
 git clone https://github.com/Microsoft/python-sample-vscode-flask-tutorial
 ```
 
-Next run the [az acr build](https://docs.microsoft.com/en-us/cli/azure/acr?#az-acr-build) command, which will push our source code and Dockerfile to the cloud, build the image, and store it in our Azure Container Registry:
+Next run the [az acr build](https://docs.microsoft.com/en-us/cli/azure/acr?#az-acr-build) command, which will push the source code and Dockerfile to the cloud, build the image, and store it in the Azure Container Registry:
 
 ```bash
 az acr build -r $CONTAINER_REGISTRY -t hello-flask --file prod.Dockerfile python-sample-vscode-flask-tutorial/
 ```
 
-The fully-qualified name of the image in our Container Registry will then be `$CONTAINER_REGISTRY'.azurecr.io/hello-flask:latest'`. Let's output this with:
+The fully-qualified name of the image in your Container Registry is `$CONTAINER_REGISTRY'.azurecr.io/hello-flask:latest'`. Output this with:
 
 ```bash
 echo "${CONTAINER_REGISTRY}.azurecr.io/hello-flask:latest"
@@ -104,17 +106,17 @@ az acr login -n $CONTAINER_REGISTRY
 docker run -it $CONTAINER_REGISTRY'.azurecr.io/hello-flask:latest'
 ```
 
-Since Azure Container Registry (ACR) is completely private, you need to log in with `az acr login` in order to use the image you have built inside our registry. 
+Since Azure Container Registry (ACR) is completely private, you need to log in with `az acr login` in order to use the image built inside the registry. 
 
-Images hosted on public container registries, such as Docker Hub, can be accessed without authentication. We have pushed a copy of this image to Docker Hub which is available at: `aaronmsft/hello-flask`
+Images hosted on public container registries, such as Docker Hub, can be accessed without authentication. This image is also available on Docker Hub at: `aaronmsft/hello-flask`
 
-In addition to the ACR Tasks [quick task](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task) feature you have explored above, Azure Container Registry enables you to automatically trigger image builds in the cloud [when you commit source code to a Git repository](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-build-task) or [when a container's base image is updated](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update).
+In addition to the ACR Tasks [quick task](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-quick-task) feature explored above, Azure Container Registry enables you to automatically trigger image builds in the cloud [when you commit source code to a Git repository](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-build-task) or [when a container's base image is updated](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-tutorial-base-image-update).
 
 ## 3. Deploy with Azure Container Instances (ACI)
 
-You can deploy the same application as a single stand-alone container to Azure Container Instances with the [az container create](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart#create-a-container) command, as outlined below.
+You can deploy the same application as a single stand-alone container to Azure Container Instances with the [az container create](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-quickstart#create-a-container) command.
 
-Ensure you have run the section above to set environment variables, as these are re-used below.
+Ensure you have run the section above to set environment variables, as these are re-used:
 
 ```bash
 # get our container registry password

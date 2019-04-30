@@ -1,50 +1,59 @@
 # Containerize a Django application using Visual Studio Code
 
-Let's start with a simple Django web application that allows you to log messages and saves them 
-to a SQLite database.
+This lab teaches you how to use Visual Studio Code's Docker extension to build a Docker container for an existing Django web application which
+takes log messages and stores them in an SQLite database.
 
-We'll take this application and use Visual Studio Code to package the application
-up in a docker container.
+The container that you use in this lab will be used in other labs that teach you how to publish a Docker container.
 
-## Pre-requisites
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
-1. Install [Visual Studio Code](https://code.visualstudio.com)
-1. Install the [VS Code Docker Extension](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker)
+## Prerequisites
+
+If you're doing this lab outside of the Microsoft booth at PyCon 2019, you'll need the following tools installed on your local machine:
+
+1. [Docker Desktop](https://www.docker.com/products/docker-desktop)
+1. [Visual Studio Code](https://code.visualstudio.com)
+1. The [VS Code Docker Extension](https://marketplace.visualstudio.com/items?itemName=PeterJausovec.vscode-docker)
 
 ## Open workspace and build a development container
-1. Open this folder using Visual Studio Code:
-    ```
+
+1. Open the lab folder with Visual Studio Code:
+
+    ```bash
     cd 1-vscode-django-docker
     code .
     ```
-1. Run `Ctrl-Shift-P` and type `Add Docker files to Workspace`
-1. Following the prompts select `Python` and ports `8000`
-1. Change the RUN and CMD lines to the following:
+
+1. Run `Ctrl-Shift-P` and type `Add Docker files to Workspace`.
+1. Following the prompts select `Python` and port `8000`.
+1. Change the RUN and CMD lines in the Dockerfile to the following:
+
     ```Dockerfile
     # Using pip:
     RUN python3 -m pip install -r requirements.txt
     RUN python3 manage.py migrate
     CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
     ```
-1. Right-click on docker-compose.yml and click compose up
-1. Open [http://localhost:8000](http://localhost:8000) in the browser to view the app
+
+1. Right-click on docker-compose.yml and click `Compose up`.
+1. Open [http://localhost:8000](http://localhost:8000) in the browser to view the app.
 
 ## Build a production-ready container
-Now let's update the image to use a production webserver using nginx and uwsgi. 
-The application already contains a uwsgi.ini file which defines how to run the web server,
-so we just need to make some small modifications to our Dockerfile.
+
+Now update the image to use a production webserver using nginx and uwsgi. 
+The application already contains a `uwsgi.ini` file which defines how to run the web server,
+so you only need to make some small modifications to the Dockerfile.
 
 1. Remove the CMD line from the Dockerfile.
 1. Change the FROM line to:
+
     ```Dockerfile
     FROM tiangolo/uwsgi-nginx
     ```
+
 1. Replace the EXPOSE line with
+
     ```Dockerfile
     ENV LISTEN_PORT=8000
     ```
-1. Right-click on docker-compose.yml and click compose up
-1. Open [http://localhost:8000](http://localhost:8000) in the browser to view the app
 
-
-
+1. Right-click on docker-compose.yml and click `Compose up`.
+1. Open [http://localhost:8000](http://localhost:8000) in the browser to view the app.
