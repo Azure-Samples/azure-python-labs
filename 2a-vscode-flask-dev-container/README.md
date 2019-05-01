@@ -18,7 +18,7 @@ First we'll create a new dev container that we can start building our app in:
 1. Press `F1` and select `Remote-Containers: Create container configuration file...`
 1. Select `Python 3` from the list
 1. Select the `Reopen in Container` button in the notification that appears. If you miss the notification, 
-press `Ctrl-Shift-P` and select the `Remote-Containers: Re-open folder in dev container` command
+press `F1` and select the `Remote-Containers: Re-open folder in dev container` command
 
 After the dev container builds and installs, you will now be working in a dev container and you
 can start building your app!
@@ -30,7 +30,7 @@ and expose port 8000.
     ```
     flask
     ```
-1. Expose Open `.devcontainer/.devcontainer.json` and expose port 5000 by adding the appPort setting:
+1. Open `.devcontainer/.devcontainer.json` and expose port 5000 by adding the appPort setting:
     ```
     {
         "appPort": 5000,
@@ -59,3 +59,4 @@ exposes port 5000. Press `F1` and select `Remote-Containers: Rebuild container`.
     ],
     ```
 1. Press `F5` to start debugging, browse to your app at [https://localhost:5000](https://localhost:5000)
+2. Optionally set a breakpoint on line 6 of the app and refresh the page
