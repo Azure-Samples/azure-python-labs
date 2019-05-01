@@ -43,12 +43,12 @@ If you're doing this lab outside of the Microsoft booth at PyCon 2019, you'll ne
     ```
 
 1. Open [http://localhost:8000](http://localhost:8000) in the browser to view the app.
+1. Create an account and login to the app
 
 ## Set up debugging in the container
 
 1. From the `Debug` menu, select `Start Debugging`.
 1. Select the `Django` debug configuration from the menu.
-1. Open `tweeter/views.py`, and set a breakpoint on line 14.
-1. Refresh the app in the browser to hit the breakpoint.
-1. Open the debug console `Views > Debug Console`, and type `bob` into the debug console to inspect the user.
-1. Look up the user's e-mail address by inspecting the variable in the debug console.
+1. Open `tweeter/views.py`, set a breakpoint on line 26
+1. Refresh the app in the browser to hit the breakpoint
+1. Open the debug console `Views > Debug Console`, and type `request.user` into the debug console to inspect the logged in user
