@@ -27,7 +27,14 @@ If you're doing this lab outside of the Microsoft booth at PyCon 2019, you'll ne
 
 1. Click the `Reopen in Container` prompt, or press `F1` and select the `Reopen folder in dev container` command.
 
-1. After the container builds, open a new terminal using ```Ctrl-Shift-` ``` and type:
+1. After the workspace terminal loads, open a new terminal using ```Ctrl-Shift-` ``` and type the following to build the React frontend:
+
+    ```cmd
+    npm install
+    npm run dev
+    ```
+
+1. After the container builds, open another terminal using ```Ctrl-Shift-` ``` and type:
 
     ```cmd
     python manage.py migrate
