@@ -42,9 +42,18 @@ This tutorial will walk through how to build a Movie Recommender system trained 
 
 ## Application messaging with Azure Service Bus
 
-...
+This tutorial walks you through building a messaging system on Azure Service Bus that allows you to pass information back and forth between unconnected programs,
+with a small Flask application that has two messaging endpoints: One for sending messages to a queue, and one for retrieving them. Service Bus messaging can
+be used by applications which aren't connected to or authenticated with Azure, as long as they have the authentication tokens for the messaging system itself.
 
-[Go to lab](8-azure-service-bus-messaging/README.md)
+In this lab you will:
+
+1. Create Service Bus resources on Azure.
+2. Program a small Flask application to run locally.
+3. Send and receive messages without signing in to an Azure account.
+4. **Optional** Experiment with other ways to process queued messages.
+
+[Go to lab](8-azure-service-bus-messaging/README.md) | Duration: 10-15 minutes
 
 ## Containerize and Deploy a Python Flask application with Azure Container Registry and Azure Container Instances
 
