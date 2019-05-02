@@ -1,5 +1,5 @@
 {
-    "subscription_id": "",
-    "resource_group": "",
-    "workspace_name": ""
+    "subscription_id": "d5aa990f-2452-4701-bd8e-21959f91194c",
+    "resource_group": "190500-labs-azureml",
+    "workspace_name": "pycon_azureml"
 }
