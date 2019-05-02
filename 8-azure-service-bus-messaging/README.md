@@ -24,7 +24,9 @@ The first step is to create a resource group, which functions as a logical conta
 group resources together:
 
 ```bash
-az group create --name PyconLab --location westus2
+# RESOURCE_GROUP='Group-...'
+RESOURCE_GROUP=$(az group list | jq -r '[.[].name|select(. | startswith("Group-"))][0]')
+az group create --name $RESOURCE_GROUP --location westus2
 ```
 
 Next, create the Service Bus and queue. Service Bus resources are separate from their messaging
@@ -36,16 +38,16 @@ Since service bus names must be unique, a random string of characters is added o
 
 ```bash
 busName="PyconLabBus$(openssl rand -hex 3)"
-az servicebus namespace create --name $busName --resource-group PyconLab
-az servicebus queue create --name PyconLabQueue --resource-group PyconLab --namespace-name $busName
+az servicebus namespace create --name $busName --resource-group $RESOURCE_GROUP
+az servicebus queue create --name PyconLabQueue --resource-group $RESOURCE_GROUP --namespace-name $busName
 ```
 
 > PowerShell
 
 ```powershell
 $busName="PyconLabBus$((((New-Guid).Guid) -split '-')[0])"
-az servicebus namespace create --name $busName --resource-group PyconLab
-az servicebus queue create --name PyconLabQueue --resource-group PyconLab --namespace-name $busName
+az servicebus namespace create --name $busName --resource-group $RESOURCE_GROUP
+az servicebus queue create --name PyconLabQueue --resource-group $RESOURCE_GROUP --namespace-name $busName
 ```
 
 In order to access the queue to send and receive messages, you need the queue endpoint and a token to
@@ -53,11 +55,11 @@ connect. The CLI allows getting both:
 
 ```bash
 accessRule=$(az servicebus namespace authorization-rule list --namespace-name $busName \
-    --resource-group PyconLab \
+    --resource-group $RESOURCE_GROUP \
     --query '[0].name' \
     --output tsv)
 export SB_CONNECTION=$(az servicebus namespace authorization-rule keys list \
-    --resource-group PyconLab \
+    --resource-group $RESOURCE_GROUP \
     --namespace-name $busName \
     --name $accessRule \
     --query 'primaryConnectionString' \
@@ -146,7 +148,7 @@ was added to the queue now:
 ```bash
 az servicebus queue show --name PyconLabQueue \
     --namespace-name $busName \
-    --resource-group PyconLab \
+    --resource-group $RESOURCE_GROUP \
     --query 'countDetails.activeMessageCount'
 ```
 
