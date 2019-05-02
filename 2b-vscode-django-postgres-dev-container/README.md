@@ -14,6 +14,10 @@ If you're doing this lab outside of the Microsoft booth at PyCon 2019, you'll ne
 1. [Docker Desktop](https://www.docker.com/products/docker-desktop)
 1. [Visual Studio Code Insider Build](https://code.visualstudio.com/insiders)
 1. The [VS Code Remote Extensions](https://aka.ms/vscode-remote) 
+1. If you are running on windows, set your git line endings to use LF:
+    ```
+    git config --global core.autocrlf false
+    ```
 
 ## Open the dev container workspace
 
@@ -47,6 +51,7 @@ If you're doing this lab outside of the Microsoft booth at PyCon 2019, you'll ne
 
 ## Set up debugging in the container
 
+1. Stop the app in the terminal by pressing `Ctrl-C` (otherwise the port will be taken when you debug)
 1. From the `Debug` menu, select `Start Debugging`.
 1. Select the `Django` debug configuration from the menu.
 1. Open `tweeter/views.py`, set a breakpoint on line 26
