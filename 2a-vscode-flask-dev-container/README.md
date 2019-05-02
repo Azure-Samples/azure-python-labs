@@ -1,4 +1,4 @@
-# Developing a Django+PostgreSQL application in a Dev Container
+# Developing a new Flask application in a Dev Container
 
 In this lab we'll use Visual Studio Code remote development features to create a new
 hello world Flask application in a dockerized development environment.

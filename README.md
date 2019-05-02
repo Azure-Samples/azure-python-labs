@@ -12,7 +12,7 @@ A collection of labs demonstrating how to build Python applications with Azure a
 
 ...
 
-[Go to lab](2a-vscode-django-flask-dev-container/README.md)
+[Go to lab](2a-vscode-flask-dev-container/README.md)
 
 ## Developing a Django+PostgreSQL application in a Dev Container
 
