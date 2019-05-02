@@ -4,19 +4,19 @@ A collection of labs demonstrating how to build Python applications with Azure a
 
 ## Containerize a Django application using Visual Studio Code
 
-...
+Build a docker container to run a Django app using the Docker extension in Visual Studio Code to generate Dockerfiles and run the containers.
 
 [Go to lab](1-vscode-django-docker/README.md)
 
 ## Developing a new Flask application in a Dev Container
 
-...
+Build a new dev container using Visual Studio Code remote from scratch and create a simple Flask app inside of the new environment.
 
 [Go to lab](2a-vscode-flask-dev-container/README.md)
 
 ## Developing a Django+PostgreSQL application in a Dev Container
 
-...
+Open an existing dev container using Visual Studio Code remote extensions, build a React front-end, initialize a PostgreSQL database, and run a Django app. 
 
 [Go to lab](2b-vscode-django-postgres-dev-container/README.md)
 
