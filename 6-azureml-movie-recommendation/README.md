@@ -3,27 +3,21 @@ Recommendation systems are used in a variety of industries, from retail to news 
 
 This tutorial will walk through how to build a Movie Recommender system trained with a Simple Algorithm for Recommenders (SAR) for the [Movielens dataset](https://grouplens.org/datasets/movielens/) on [Azure Machine Learning service](https://docs.microsoft.com/azure/machine-learning/service/overview-what-is-azure-ml). It demonstrates how to use the power of the cloud to manage data, switch to powerful GPU machines, and monitor runs while training a model. You will also be able to 
 
-In this lab you will: 
+In this lab you will:
+
 - Connect to an Azure Machine Learning service workspace
-- Access movielens data from a datastore
-- Connect to cpu and gpu machines from [Azure Machine Learning Compute](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets#amlcompute)
+- Access Movielens data from a datastore
+- Connect to CPU and GPU machines from [Azure Machine Learning Compute](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets#amlcompute)
 - Create a training script using the recommender repo's [util functions](https://github.com/Microsoft/Recommenders/tree/master/reco_utils) for SAR and add logging information
 - Submit the training job to AzureML, and monitor the run with a jupyter widget
 - Test an existing model with new user data
 - **Optional part 2:** Deploy the model to a web service using Azure Container Instance. 
 
-# Getting Started
+## Getting Started
+
 1. Clone this repository in Azure Notebooks[![Azure Notebooks](https://notebooks.azure.com/launch.svg)](https://notebooks.azure.com/heatherbshapiro/projects/pycon-recommender?clone=true) 
 2. Open the `sar_movielens_with_azureml.ipynb` notebook and run through the lab.
-**Optional: Run through the `deploy_with_azureml.ipynb` jupyter notebook
-
-## Prerequisities
-These items will be provided for you at the conference. If you would like to try it on your own computer you will need:
-   - **Azure Subscription**
-     - If you don’t have an Azure subscription, create a free account before you begin. Try the [free or paid version of Azure Machine Learning service today](https://azure.microsoft.com/en-us/free/services/machine-learning/).
-     - You get credits to spend on Azure services, which will easily cover the cost of running this example notebook. After they're used up, you can keep the account and use [free Azure services](https://azure.microsoft.com/en-us/free/). Your credit card is never charged unless you explicitly change your settings and ask to be charged. Or [activate MSDN subscriber benefits](https://azure.microsoft.com/en-us/pricing/member-offers/credit-for-visual-studio-subscribers/), which give you credits every month that you can use for paid Azure services.
-   - **Azure Machine Learning service workspace**
-     - You will need an AzureML service workspace to run through this lab at home. We will provide one for you during this lab. 
+3. **Optional**: Run through the `deploy_with_azureml.ipynb` jupyter notebook
 
 ## What is Azure Machine Learning service?
 The **[Azure Machine Learning service (AzureML)](https://docs.microsoft.com/azure/machine-learning/service/overview-what-is-azure-ml)** provides a cloud-based environment you can use to prep data, train, test, deploy, manage, and track machine learning models. By using Azure Machine Learning service, you can start training on your local machine and then scale out to the cloud. With many available compute targets, like [Azure Machine Learning Compute](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets#amlcompute) and [Azure Databricks](https://docs.microsoft.com/en-us/azure/azure-databricks/what-is-azure-databricks), and with [advanced hyperparameter tuning services](https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-tune-hyperparameters), you can build better models faster by using the power of the cloud.
@@ -35,3 +29,4 @@ Data scientists and AI developers use the main [Azure Machine Learning Python SD
 - Manage cloud resources for monitoring, logging, and organizing your machine learning experiments.
 - Train models either locally or by using cloud resources, including GPU-accelerated model training.
 - Easy to scale out when dataset grows - by just creating and pointing to new compute target
+

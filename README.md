@@ -20,27 +20,41 @@ Open an existing dev container using Visual Studio Code remote extensions, build
 
 [Go to lab](2b-vscode-django-postgres-dev-container/README.md)
 
-## Python Primacy on Azure Functions
+## Use Azure Functions to Find Primes
 
-...
+Create an Azure Function in Python with an HTTP endpoint that will respond with whether or not your input is a prime number.
+
+- Create an Azure Function using the command line interface.
+- Test the default "Hello, World" Function.
+- Edit the code run when the endpoint is called to determine if an input is prime.
+- Test the new functionality with your own inputs.
 
 [Go to lab](4-azure-functions-python/README.md)
 
 ## Detecting Emotion with Azure Cognitive Services
 
-...
+Use a Jupyter Notebook and Azure Cognitive Services to analyze images in real time to detect faces and their dominant emotions.
+
+In this lab you will:
+
+- Connect to Azure Cognitive Services (ACS).
+- Test the raw response from ACS.
+- Use this response to create an overlay plotting the detected faces and emotions over any given image.
+- Test it out with any image you want!
 
 [Go to lab](5-jupyter-azure-cognitive-services-face/README.md)
 
 ## Build a Movie Recommendation system using Azure Machine Learning
 
-This tutorial will walk through how to build a Movie Recommender system trained with a Simple Algorithm for Recommenders (SAR) for the Movielens dataset on Azure Machine Learning service. It demonstrates how to use the power of the cloud to manage data, switch to powerful GPU machines, and monitor runs while training a model. In this lab you will:
+Build a Movie Recommender system trained with a Simple Algorithm for Recommenders (SAR) for the Movielens dataset on Azure Machine Learning service. Use the power of the cloud to manage data, switch to powerful GPU machines, and monitor runs while training a model. 
+
+In this lab you will:
 
 - Connect to an Azure Machine Learning service workspace
-- Access movielens data from a datastore
-- Connect to cpu and gpu machines from Azure Machine Learning Compute
+- Access Movielens data from a datastore
+- Connect to CPU and GPU machines from Azure Machine Learning Compute
 - Create a training script using the recommender repo's util functions for SAR and add logging information
-- Submit the training job to AzureML, and monitor the run with a jupyter widget
+- Submit the training job to AzureML, and monitor the run with a Jupyter widget
 - Test an existing model with new user data
 - **Optional Part 2**: Deploy the model to a web service using Azure Container Instance.
 
