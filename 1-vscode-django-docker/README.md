@@ -36,9 +36,10 @@ If you're doing this lab outside of the Microsoft booth at PyCon 2019, you'll ne
 1. Right-click on docker-compose.yml and click `Compose up`.
 1. Open [http://localhost:8000](http://localhost:8000) in the browser to view the app.
 
-## Build a production-ready container
+## (Optional) Build a production-ready container
 
-Now update the image to use a production webserver using nginx and uwsgi. 
+If you want to build a container using a production webserver using nginx and uwsgi, you can follow the steps below.
+
 The application already contains a `uwsgi.ini` file which defines how to run the web server,
 so you only need to make some small modifications to the Dockerfile.
 
