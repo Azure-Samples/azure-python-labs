@@ -19,7 +19,7 @@ If you're doing this lab outside of the Microsoft booth at PyCon 2019, you'll ne
 
     ```bash
     cd 1-vscode-django-docker
-    code .
+    code-insiders .
     ```
 
 1. Run `Ctrl-Shift-P` and type `Add Docker files to Workspace`.
