@@ -56,5 +56,5 @@ exposes port 5000. Press `F1` and select `Remote-Containers: Rebuild container`.
         "--no-reload"
     ],
     ```
-1. Press `F5` to start debugging, browse to your app at [https://localhost:5000](https://localhost:5000).
+1. Press `F5` to start debugging, browse to your app at [http://localhost:5000](http://localhost:5000).
 1. Optionally set a breakpoint on line 6 of the app and refresh the page
