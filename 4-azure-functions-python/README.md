@@ -4,6 +4,12 @@ Create an Azure Function in Python that takes an integer and returns a Boolean v
 
 ## Use the Azure Functions Command Line Interface (CLI) to create a new Python Azure Function App
 
+If you are at an event, run the following command on the CLI:
+
+```powershell
+docker run --rm -v ${PWD}:/pwd/ -w /pwd/ -p 7071:7071 -it aaronmsft/azure-functions-core-tools:latest bash
+```
+
 Create a directory for the sample code and `cd` into it:
 
 ``` powershell
