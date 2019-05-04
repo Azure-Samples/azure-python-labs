@@ -8,6 +8,9 @@ If you are at an event, run the following command on the CLI:
 
 ```powershell
 docker run --rm -v ${PWD}:/pwd/ -w /pwd/ -p 7071:7071 -it aaronmsft/azure-functions-core-tools:latest bash
+# create a virtual environment
+python3.6 -m venv env
+. env/bin/activate
 ```
 
 Create a directory for the sample code and `cd` into it:
@@ -30,6 +33,7 @@ Initialize a new Azure Functions App project.
 func init prime_calculator
 ```
 
+<!-- does not show in bash -->
 Highlight `python (preview)` with the arrow keys in the list of worker runtimes, press `Enter` to select.  You should see output resembling:
 
 ``` powershell
