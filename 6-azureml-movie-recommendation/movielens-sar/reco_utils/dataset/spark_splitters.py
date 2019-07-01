@@ -75,7 +75,8 @@ def spark_chrono_split(
         raise ValueError("filter_by should be either 'user' or 'item'.")
 
     if min_rating < 1:
-        raise ValueError("min_rating should be integer and larger than or equal to 1.")
+        raise ValueError(
+            "min_rating should be integer and larger than or equal to 1.")
 
     multi_split, ratio = process_split_ratio(ratio)
 
@@ -93,7 +94,8 @@ def spark_chrono_split(
     ratio = ratio if multi_split else [ratio, 1 - ratio]
     ratio_index = np.cumsum(ratio)
 
-    window_spec = Window.partitionBy(split_by_column).orderBy(col(col_timestamp))
+    window_spec = Window.partitionBy(
+        split_by_column).orderBy(col(col_timestamp))
 
     rating_grouped = (
         data.groupBy(split_by_column)
@@ -112,7 +114,8 @@ def spark_chrono_split(
             rating_split = rating_rank.filter(col("rank") <= ratio_index[i])
         else:
             rating_split = rating_rank.filter(
-                (col("rank") <= ratio_index[i]) & (col("rank") > ratio_index[i - 1])
+                (col("rank") <= ratio_index[i]) & (
+                    col("rank") > ratio_index[i - 1])
             )
 
         splits.append(rating_split)
@@ -157,7 +160,8 @@ def spark_stratified_split(
         raise ValueError("filter_by should be either 'user' or 'item'.")
 
     if min_rating < 1:
-        raise ValueError("min_rating should be integer and larger than or equal to 1.")
+        raise ValueError(
+            "min_rating should be integer and larger than or equal to 1.")
 
     multi_split, ratio = process_split_ratio(ratio)
 
@@ -194,7 +198,8 @@ def spark_stratified_split(
             rating_split = rating_rank.filter(col("rank") <= ratio_index[i])
         else:
             rating_split = rating_rank.filter(
-                (col("rank") <= ratio_index[i]) & (col("rank") > ratio_index[i - 1])
+                (col("rank") <= ratio_index[i]) & (
+                    col("rank") > ratio_index[i - 1])
             )
 
         splits.append(rating_split)
@@ -241,7 +246,8 @@ def spark_timestamp_split(
     rating = data.withColumn("rank", row_number().over(window_spec))
 
     data_count = rating.count()
-    rating_rank = rating.withColumn("rank", row_number().over(window_spec) / data_count)
+    rating_rank = rating.withColumn(
+        "rank", row_number().over(window_spec) / data_count)
 
     splits = []
     for i, _ in enumerate(ratio_index):
@@ -251,7 +257,8 @@ def spark_timestamp_split(
             )
         else:
             rating_split = rating_rank.filter(
-                (col("rank") <= ratio_index[i]) & (col("rank") > ratio_index[i - 1])
+                (col("rank") <= ratio_index[i]) & (
+                    col("rank") > ratio_index[i - 1])
             ).drop("rank")
 
         splits.append(rating_split)

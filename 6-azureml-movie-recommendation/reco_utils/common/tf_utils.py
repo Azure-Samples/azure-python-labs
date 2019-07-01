@@ -84,11 +84,13 @@ def build_optimizer(name, lr=0.001, **kwargs):
         if 'momentum' in kwargs:
             optimizer = tf.train.MomentumOptimizer(learning_rate=lr, **kwargs)
         else:
-            optimizer = tf.train.MomentumOptimizer(learning_rate=lr, momentum=0.9, **kwargs)
+            optimizer = tf.train.MomentumOptimizer(
+                learning_rate=lr, momentum=0.9, **kwargs)
     elif name == 'RMSProp':
         optimizer = tf.train.RMSPropOptimizer(learning_rate=lr, **kwargs)
     elif name == 'SGD':
-        optimizer = tf.train.GradientDescentOptimizer(learning_rate=lr, **kwargs)
+        optimizer = tf.train.GradientDescentOptimizer(
+            learning_rate=lr, **kwargs)
 
     else:
         raise ValueError(
@@ -196,7 +198,8 @@ class _TrainLogHook(tf.train.SessionRunHook):
 
     def begin(self):
         if self.model_dir is not None:
-            self.summary_writer = tf.summary.FileWriterCache.get(self.model_dir)
+            self.summary_writer = tf.summary.FileWriterCache.get(
+                self.model_dir)
             self.global_step_tensor = tf.train.get_or_create_global_step()
         else:
             self.step = 0
@@ -236,9 +239,11 @@ class _TrainLogHook(tf.train.SessionRunHook):
                     len(self.eval_df)
                 ))
                 prediction_df = self.eval_df.copy()
-                prediction_df['prediction'] = [p['predictions'][0] for p in predictions]
+                prediction_df['prediction'] = [p['predictions'][0]
+                                               for p in predictions]
                 for fn in self.eval_fns:
-                    result = fn(self.true_df, prediction_df, **self.eval_kwargs)
+                    result = fn(self.true_df, prediction_df,
+                                **self.eval_kwargs)
                     self._log(fn.__name__, result)
 
             tf.logging.set_verbosity(_prev_log_level)

@@ -16,7 +16,7 @@ from reco_utils.common.notebook_utils import is_databricks
 
 
 CRITEO_URL = {
-    "full": "https://s3-eu-west-1.amazonaws.com/kaggle-display-advertising-challenge-dataset/dac.tar.gz", 
+    "full": "https://s3-eu-west-1.amazonaws.com/kaggle-display-advertising-challenge-dataset/dac.tar.gz",
     "sample": "http://labs.criteo.com/wp-content/uploads/2015/04/dac_sample.tar.gz"
 }
 DEFAULT_HEADER = (
@@ -89,7 +89,7 @@ def load_spark_df(
         header (list): Dataset header names.
         dbfs_datapath (str): Where to store the extracted files on Databricks.
         dbutils (Databricks.dbutils): Databricks utility object.
-  
+
     Returns:
         pySpark.DataFrame: Criteo DAC training dataset.
     """
@@ -101,7 +101,7 @@ def load_spark_df(
             try:
                 # Driver node's file path
                 node_path = "file:" + filepath
-                ## needs to be on dbfs to load
+                # needs to be on dbfs to load
                 dbutils.fs.cp(node_path, dbfs_datapath, recurse=True)
                 path = dbfs_datapath
             except:
@@ -113,7 +113,7 @@ def load_spark_df(
 
         schema = get_spark_schema(header)
         df = spark.read.csv(path, schema=schema, sep="\t", header=False)
-        df.cache().count() # trigger execution to overcome spark's lazy evaluation
+        df.cache().count()  # trigger execution to overcome spark's lazy evaluation
     return df
 
 
@@ -139,10 +139,10 @@ def extract_criteo(size, compressed_file, path=None):
         size (str): Size of criteo dataset. It can be "full" or "sample".
         compressed_file (str): Path to compressed file.
         path (str): Path to extract the file.
-    
+
     Returns:
         str: Path to the extracted file.
-    
+
     """
     if path is None:
         folder = os.path.dirname(compressed_file)
@@ -161,16 +161,13 @@ def extract_criteo(size, compressed_file, path=None):
 
 
 def get_spark_schema(header=DEFAULT_HEADER):
-    ## create schema
+    # create schema
     schema = StructType()
-    ## do label + ints
+    # do label + ints
     n_ints = 14
     for i in range(n_ints):
         schema.add(StructField(header[i], IntegerType()))
-    ## do categoricals
+    # do categoricals
     for i in range(26):
         schema.add(StructField(header[i + n_ints], StringType()))
     return schema
-
-
-

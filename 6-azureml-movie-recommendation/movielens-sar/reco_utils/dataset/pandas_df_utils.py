@@ -51,7 +51,8 @@ def user_item_pairs(
 
     # Filter
     if user_item_filter_df is not None:
-        users_items = filter_by(users_items, user_item_filter_df, [user_col, item_col])
+        users_items = filter_by(
+            users_items, user_item_filter_df, [user_col, item_col])
 
     if shuffle:
         users_items = users_items.sample(frac=1).reset_index(drop=True)
@@ -153,11 +154,13 @@ class LibffmConverter(object):
                 for x in types
             ]
         ):
-            raise TypeError("Input columns should be only object and/or numeric types.")
+            raise TypeError(
+                "Input columns should be only object and/or numeric types.")
 
         if col_rating not in df.columns:
             raise TypeError(
-                "Column of {} is not in input dataframe columns".format(col_rating)
+                "Column of {} is not in input dataframe columns".format(
+                    col_rating)
             )
 
         self.col_rating = col_rating
@@ -204,7 +207,8 @@ class LibffmConverter(object):
 
         def _convert(field, feature, field_index, field_feature_index_dict):
             if isinstance(feature, str):
-                field_feature_index = field_feature_index_dict[(field, feature)]
+                field_feature_index = field_feature_index_dict[(
+                    field, feature)]
                 feature = 1
             else:
                 field_feature_index = field_index
@@ -268,7 +272,7 @@ def negative_feedback_sampler(
     from a user-item interaction data.
     See for example the neural collaborative filtering paper 
     https://www.comp.nus.edu.sg/~xiangnan/papers/ncf.pdf
-    
+
     Examples:
         >>> import pandas as pd
         >>> df = pd.DataFrame({
@@ -330,7 +334,8 @@ def negative_feedback_sampler(
                     x[x[col_label] == 0].sample(
                         min(
                             max(
-                                round(len(x[x[col_label] == 1]) * ratio_neg_per_user), 1
+                                round(len(x[x[col_label] == 1])
+                                      * ratio_neg_per_user), 1
                             ),
                             len(x[x[col_label] == 0]),
                         ),
@@ -392,14 +397,16 @@ def has_same_base_dtype(df_1, df_2, columns=None):
         columns = df_1.columns
 
     if not (
-        has_columns(df=df_1, columns=columns) and has_columns(df=df_2, columns=columns)
+        has_columns(df=df_1, columns=columns) and has_columns(
+            df=df_2, columns=columns)
     ):
         return False
 
     result = True
     for column in columns:
         if df_1[column].dtype.type.__base__ != df_2[column].dtype.type.__base__:
-            logger.error("Columns {} do not have the same base datatype".format(column))
+            logger.error(
+                "Columns {} do not have the same base datatype".format(column))
             result = False
 
     return result

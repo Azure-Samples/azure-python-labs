@@ -13,6 +13,8 @@ from reco_utils.evaluation.python_evaluation import map_at_k, ndcg_at_k, precisi
 from reco_utils.recommender.sar.sar_singlenode import SARSingleNode
 
 # load the model
+
+
 def init():
     global model
     # retrieve the path to the model file using the model name
@@ -20,9 +22,11 @@ def init():
     model = joblib.load(model_path)
 
 # Passes data to the model and returns the prediction
+
+
 def run(raw_data):
     # make prediction
-    try: 
+    try:
         data = raw_data
         data = pd.read_json(data)
         return model.get_item_based_topk(items=data, sort_top_k=True).to_json()

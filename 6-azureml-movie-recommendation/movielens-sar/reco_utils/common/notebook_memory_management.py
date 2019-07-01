@@ -12,7 +12,8 @@
 #
 
 from __future__ import division  # 1/2 == 0.5, as in Py3
-from __future__ import absolute_import  # avoid hiding global modules with locals
+# avoid hiding global modules with locals
+from __future__ import absolute_import
 from __future__ import print_function  # force use of print("hello")
 from __future__ import (
     unicode_literals
@@ -96,4 +97,3 @@ def pre_run_cell():
     """Capture current time before we execute the current command"""
     global t1
     t1 = time.time()
-

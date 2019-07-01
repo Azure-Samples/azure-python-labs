@@ -33,7 +33,8 @@ def hello_there(request, name):
         name: Name to say hello to
     """
     return render(
-        request, "hello/hello_there.html", {"name": name, "date": datetime.now()}
+        request, "hello/hello_there.html", {"name": name,
+                                            "date": datetime.now()}
     )
 
 

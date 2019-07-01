@@ -58,7 +58,6 @@ class AffinityMatrix:
         self.save_path = save_path
 
     def _gen_index(self):
-
         """
         Generate the user/item index:
             map_users, map_items: dictionaries mapping the original user/item index to matrix indices
@@ -93,8 +92,10 @@ class AffinityMatrix:
         self.map_back_users = {i: x for i, x in enumerate(unique_users)}
         self.map_back_items = {i: x for i, x in enumerate(unique_items)}
 
-        self.df_.loc[:, "hashedItems"] = self.df_[self.col_item].map(self.map_items)
-        self.df_.loc[:, "hashedUsers"] = self.df_[self.col_user].map(self.map_users)
+        self.df_.loc[:, "hashedItems"] = self.df_[
+            self.col_item].map(self.map_items)
+        self.df_.loc[:, "hashedUsers"] = self.df_[
+            self.col_user].map(self.map_users)
 
         # optionally save the inverse dictionary to work with trained models
         if self.save_path is not None:
@@ -106,7 +107,6 @@ class AffinityMatrix:
             np.save(self.save_path + "/item_back_dict", self.map_back_items)
 
     def gen_affinity_matrix(self):
-
         """
         Generate the user/item affinity matrix
 
@@ -141,7 +141,8 @@ class AffinityMatrix:
         # ---------------------print the degree of sparsness of the matrix------------------------------
 
         zero = (self.AM == 0).sum()  # number of unrated items
-        total = self.AM.shape[0] * self.AM.shape[1]  # number of elements in the matrix
+        # number of elements in the matrix
+        total = self.AM.shape[0] * self.AM.shape[1]
         sparsness = zero / total * 100  # Percentage of zeros in the matrix
 
         log.info("Matrix generated, sparseness percentage: %d" % sparsness)
@@ -149,7 +150,6 @@ class AffinityMatrix:
         return self.AM
 
     def map_back_sparse(self, X, kind):
-
         """
         Map back the user/affinity matrix to a pd dataframe
 
@@ -166,8 +166,10 @@ class AffinityMatrix:
 
         # 1) Create a DF from a sparse matrix
         # obtain the non zero items
-        items = [np.asanyarray(np.where(X[i, :] != 0)).flatten() for i in range(m)]
-        ratings = [X[i, items[i]] for i in range(m)]  # obtain the non-zero ratings
+        items = [np.asanyarray(np.where(X[i, :] != 0)).flatten()
+                 for i in range(m)]
+        ratings = [X[i, items[i]]
+                   for i in range(m)]  # obtain the non-zero ratings
 
         # Creates user ids following the DF format
         userids = []

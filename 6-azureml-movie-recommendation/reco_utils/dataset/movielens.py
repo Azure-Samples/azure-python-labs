@@ -169,7 +169,7 @@ def load_pandas_df(
 
     Returns:
         pd.DataFrame: Movie rating dataset.
-        
+
     Examples:
         To load just user-id, item-id, and ratings from MovieLens-1M dataset,
         >>> df = load_pandas_df('1m', ('UserId', 'ItemId', 'Rating'))
@@ -197,7 +197,7 @@ def load_pandas_df(
     movie_col = header[1]
 
     with download_path(local_cache_path) as path:
-        filepath = os.path.join(path, "ml-{}.zip".format(size)) 
+        filepath = os.path.join(path, "ml-{}.zip".format(size))
         datapath, item_datapath = _maybe_download_and_extract(size, filepath)
 
         # Load movie features such as title, genres, and release year
@@ -254,7 +254,7 @@ def load_item_df(
         raise ValueError(ERROR_MOVIE_LENS_SIZE)
 
     with download_path(local_cache_path) as path:
-        filepath = os.path.join(path, "ml-{}.zip".format(size)) 
+        filepath = os.path.join(path, "ml-{}.zip".format(size))
         _, item_datapath = _maybe_download_and_extract(size, filepath)
         item_df = _load_item_df(
             size, item_datapath, movie_col, title_col, genres_col, year_col
@@ -368,7 +368,7 @@ def load_spark_df(
 
     Returns:
         pySpark.DataFrame: Movie rating dataset.
-        
+
     Examples:
         To load just user-id, item-id, and ratings from MovieLens-1M dataset,
         >>> spark_df = load_spark_df(spark, '1m', ('UserId', 'ItemId', 'Rating'))
@@ -397,15 +397,17 @@ def load_spark_df(
     movie_col = schema[1].name
 
     with download_path(local_cache_path) as path:
-        filepath = os.path.join(path, "ml-{}.zip".format(size)) 
+        filepath = os.path.join(path, "ml-{}.zip".format(size))
         datapath, item_datapath = _maybe_download_and_extract(size, filepath)
         spark_datapath = "file:///" + datapath  # shorten form of file://localhost/
 
         # Load movie features such as title, genres, and release year.
         # Since the file size is small, we directly load as pd.DataFrame from the driver node
         # and then convert into spark.DataFrame
-        item_pd_df = _load_item_df(size, item_datapath, movie_col, title_col, genres_col, year_col)
-        item_df = spark.createDataFrame(item_pd_df) if item_pd_df is not None else None
+        item_pd_df = _load_item_df(
+            size, item_datapath, movie_col, title_col, genres_col, year_col)
+        item_df = spark.createDataFrame(
+            item_pd_df) if item_pd_df is not None else None
 
         if is_databricks():
             if dbutils is None:
@@ -426,7 +428,8 @@ def load_spark_df(
         if len(separator) > 1:
             raw_data = spark.sparkContext.textFile(spark_datapath)
             data_rdd = raw_data.map(lambda l: l.split(separator)).map(
-                lambda c: [int(c[0]), int(c[1]), float(c[2]), int(c[3])][: len(schema)]
+                lambda c: [int(c[0]), int(c[1]), float(
+                    c[2]), int(c[3])][: len(schema)]
             )
             df = spark.createDataFrame(data_rdd, schema)
         else:

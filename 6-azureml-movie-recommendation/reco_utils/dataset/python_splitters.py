@@ -28,14 +28,15 @@ def python_random_split(data, ratio=0.75, seed=42):
             data into several portions corresponding to the split ratios. If a list is 
             provided and the ratios are not summed to 1, they will be normalized.
         seed (int): Seed.
-        
+
     Returns:
         list: Splits of the input data as pd.DataFrame.
     """
     multi_split, ratio = process_split_ratio(ratio)
 
     if multi_split:
-        splits = split_pandas_data_with_ratios(data, ratio, shuffle=True, seed=seed)
+        splits = split_pandas_data_with_ratios(
+            data, ratio, shuffle=True, seed=seed)
         splits_new = [x.drop('split_index', axis=1) for x in splits]
 
         return splits_new
@@ -59,7 +60,8 @@ def _do_stratification(
         raise ValueError("filter_by should be either 'user' or 'item'.")
 
     if min_rating < 1:
-        raise ValueError("min_rating should be integer and larger than or equal to 1.")
+        raise ValueError(
+            "min_rating should be integer and larger than or equal to 1.")
 
     if col_user not in data.columns:
         raise ValueError("Schema of data not valid. Missing User Col")
@@ -203,8 +205,8 @@ def python_stratified_split(
         seed=seed
     )
 
-def numpy_stratified_split(X, ratio=0.75, seed=42):
 
+def numpy_stratified_split(X, ratio=0.75, seed=42):
     """
     Split the user/item affinity matrix (sparse matrix) into train and test set matrices while maintaining
     local (i.e. per user) ratios.
@@ -249,7 +251,8 @@ def numpy_stratified_split(X, ratio=0.75, seed=42):
     """
 
     np.random.seed(seed)  # set the random seed
-    test_cut = int((1 - ratio) * 100)  # percentage of ratings to go in the test set
+    # percentage of ratings to go in the test set
+    test_cut = int((1 - ratio) * 100)
 
     # initialize train and test set matrices
     Xtr = X.copy()

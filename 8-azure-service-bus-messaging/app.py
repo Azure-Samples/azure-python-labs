@@ -11,11 +11,13 @@ if connection_string is None:
     print('ERROR: Requires `SB_CONNECTION` value to be set', file=sys.stderr)
     sys.exit(1)
 
-sb_client = ServiceBusClient.from_connection_string(os.environ['SB_CONNECTION'])
+sb_client = ServiceBusClient.from_connection_string(
+    os.environ['SB_CONNECTION'])
 queue = sb_client.get_queue('PyconLabQueue')
 
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
+
 
 @app.route('/send', methods=['POST'])
 def send():
@@ -23,6 +25,7 @@ def send():
     app.logger.info(f'SEND: {message}')
     (success, __) = queue.send(Message(message))[0]
     return str(success)
+
 
 @app.route('/receive', methods=['GET'])
 def get():
@@ -34,4 +37,4 @@ def get():
         message.complete()
     return make_response(json.dumps(messages), {
         'Content-Type': 'application/json; charset=utf-8'
-        })
+    })

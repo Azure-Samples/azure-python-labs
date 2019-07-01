@@ -24,19 +24,23 @@ run = Run.get_context()
 
 # let user feed in 2 parameters, the location of the data files (from datastore), and the regularization rate of the logistic regression model
 parser = argparse.ArgumentParser()
-parser.add_argument('--data-folder', type=str, dest='data_folder', help='data folder mounting point')
-parser.add_argument('--data-file', type=str, dest='data_file', help='data file name')
-parser.add_argument('--top-k', type=int, dest='top_k', default=10, help='top k items to recommend')
-parser.add_argument('--data-size', type=str, dest='data_size', default=10, help='Movielens data size: 100k, 1m, 10m, or 20m')
+parser.add_argument('--data-folder', type=str,
+                    dest='data_folder', help='data folder mounting point')
+parser.add_argument('--data-file', type=str,
+                    dest='data_file', help='data file name')
+parser.add_argument('--top-k', type=int, dest='top_k',
+                    default=10, help='top k items to recommend')
+parser.add_argument('--data-size', type=str, dest='data_size',
+                    default=10, help='Movielens data size: 100k, 1m, 10m, or 20m')
 args = parser.parse_args()
 
-run.log("top-k",args.top_k)
+run.log("top-k", args.top_k)
 run.log("data-size", args.data_size)
 data_pickle_path = os.path.join(args.data_folder, args.data_file)
 
 data = pd.read_pickle(path=data_pickle_path)
 
-train, test = python_random_split(data,0.75)
+train, test = python_random_split(data, 0.75)
 
 # instantiate the SAR algorithm and set the index
 header = {
@@ -46,11 +50,11 @@ header = {
     "col_timestamp": "Timestamp",
 }
 
-logging.basicConfig(level=logging.DEBUG, 
+logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s %(levelname)-8s %(message)s')
 
 model = SARSingleNode(
-    remove_seen=True, similarity_type="jaccard", 
+    remove_seen=True, similarity_type="jaccard",
     time_decay_coefficient=30, time_now=None, timedecay_formula=True, **header
 )
 
@@ -74,17 +78,17 @@ top_k['UserId'] = pd.to_numeric(top_k['UserId'])
 top_k['MovieId'] = pd.to_numeric(top_k['MovieId'])
 
 # evaluate
-eval_map = map_at_k(test, top_k, col_user="UserId", col_item="MovieId", 
-                    col_rating="Rating", col_prediction="prediction", 
+eval_map = map_at_k(test, top_k, col_user="UserId", col_item="MovieId",
+                    col_rating="Rating", col_prediction="prediction",
                     relevancy_method="top_k", k=args.top_k)
-eval_ndcg = ndcg_at_k(test, top_k, col_user="UserId", col_item="MovieId", 
-                      col_rating="Rating", col_prediction="prediction", 
+eval_ndcg = ndcg_at_k(test, top_k, col_user="UserId", col_item="MovieId",
+                      col_rating="Rating", col_prediction="prediction",
                       relevancy_method="top_k", k=args.top_k)
-eval_precision = precision_at_k(test, top_k, col_user="UserId", col_item="MovieId", 
-                                col_rating="Rating", col_prediction="prediction", 
+eval_precision = precision_at_k(test, top_k, col_user="UserId", col_item="MovieId",
+                                col_rating="Rating", col_prediction="prediction",
                                 relevancy_method="top_k", k=args.top_k)
-eval_recall = recall_at_k(test, top_k, col_user="UserId", col_item="MovieId", 
-                          col_rating="Rating", col_prediction="prediction", 
+eval_recall = recall_at_k(test, top_k, col_user="UserId", col_item="MovieId",
+                          col_rating="Rating", col_prediction="prediction",
                           relevancy_method="top_k", k=args.top_k)
 
 run.log("map", eval_map)

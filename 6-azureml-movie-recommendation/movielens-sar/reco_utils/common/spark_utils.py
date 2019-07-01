@@ -12,13 +12,13 @@ except ImportError:
 
 
 def start_or_get_spark(
-    app_name="Sample", 
-    url="local[*]", 
-    memory="10G", 
-    packages=None, 
-    jars=None, 
+    app_name="Sample",
+    url="local[*]",
+    memory="10G",
+    packages=None,
+    jars=None,
     repository=None
-    ):
+):
     """Start Spark if not started
 
     Args:
@@ -41,7 +41,8 @@ def start_or_get_spark(
     if repository is not None:
         submit_args += "--repositories {}".format(repository)
     if submit_args:
-        os.environ['PYSPARK_SUBMIT_ARGS'] = '{} pyspark-shell'.format(submit_args)
+        os.environ['PYSPARK_SUBMIT_ARGS'] = '{} pyspark-shell'.format(
+            submit_args)
 
     spark = (
         SparkSession.builder.appName(app_name)

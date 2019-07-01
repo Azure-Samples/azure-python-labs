@@ -17,7 +17,7 @@ class TqdmUpTo(tqdm):
 
     def update_to(self, b=1, bsize=1, tsize=None):
         """A progress bar showing how much is left to finish the opperation
-        
+
         Args:
             b (int): Number of blocks transferred so far.
             bsize (int): Size of each block (in tqdm units).
@@ -30,7 +30,7 @@ class TqdmUpTo(tqdm):
 
 def maybe_download(url, filename=None, work_directory=".", expected_bytes=None):
     """Download a file if it is not already downloaded.
-    
+
     Args:
         filename (str): File name.
         work_directory (str): Working directory.
@@ -82,5 +82,3 @@ def download_path(path=None):
     else:
         path = os.path.realpath(path)
         yield path
-
-    

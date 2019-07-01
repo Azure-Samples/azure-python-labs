@@ -18,4 +18,3 @@ SIM_LIFT = "lift"
 
 INDEXED_ITEMS = "indexedItems"
 INDEXED_USERS = "indexedUsers"
-

@@ -13,7 +13,7 @@ DEFAULT_CUDA_PATH_LINUX = "/usr/local/cuda/version.txt"
 
 def get_number_gpus():
     """Get the number of GPUs in the system.
-    
+
     Returns:
         int: Number of GPUs.
     """
@@ -35,7 +35,7 @@ def clear_memory_all_gpus():
 
 def get_cuda_version(unix_path=DEFAULT_CUDA_PATH_LINUX):
     """Get CUDA version
-    
+
     Args:
         unix_path (str): Path to CUDA version file in Linux/Mac.
 
@@ -57,7 +57,7 @@ def get_cuda_version(unix_path=DEFAULT_CUDA_PATH_LINUX):
 
 def get_cudnn_version():
     """Get the CuDNN version
-    
+
     Returns:
         str: Version of the library.
 
@@ -87,7 +87,7 @@ def get_cudnn_version():
 
     if sys.platform == "win32":
         candidates = ["C:\\NVIDIA\\cuda\\include\\cudnn.h",
-                     "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v*\\include\\cudnn.h"]
+                      "C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v*\\include\\cudnn.h"]
     elif sys.platform == "linux":
         candidates = [
             "/usr/include/x86_64-linux-gnu/cudnn_v*.h",
@@ -95,8 +95,8 @@ def get_cudnn_version():
             "/usr/include/cudnn.h",
         ]
     elif sys.platform == "darwin":
-        candidates = ["/usr/local/cuda/include/cudnn.h", "/usr/include/cudnn.h"]
+        candidates = ["/usr/local/cuda/include/cudnn.h",
+                      "/usr/include/cudnn.h"]
     else:
         raise ValueError("Not in Windows, Linux or Mac")
     return find_cudnn_in_headers(candidates)
-

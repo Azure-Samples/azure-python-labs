@@ -41,7 +41,8 @@ def process_split_ratio(ratio):
 
         multi = True
     else:
-        raise TypeError("Split ratio should be either float or a list of floats.")
+        raise TypeError(
+            "Split ratio should be either float or a list of floats.")
 
     return multi, ratio
 
@@ -128,7 +129,8 @@ def _check_min_rating_filter(filter_by, min_rating, col_user, col_item):
         raise ValueError("filter_by should be either 'user' or 'item'.")
 
     if min_rating < 1:
-        raise ValueError("min_rating should be integer and larger than or equal to 1.")
+        raise ValueError(
+            "min_rating should be integer and larger than or equal to 1.")
 
     split_by_column = col_user if filter_by == "user" else col_item
     split_with_column = col_item if filter_by == "user" else col_user

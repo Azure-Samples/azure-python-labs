@@ -68,7 +68,8 @@ def check_column_dtypes(func):
         if not has_same_base_dtype(
             rating_true, rating_pred, columns=[col_user, col_item]
         ):
-            raise ValueError("Columns in provided DataFrames are not the same datatype")
+            raise ValueError(
+                "Columns in provided DataFrames are not the same datatype")
 
         return func(
             rating_true=rating_true,
@@ -96,7 +97,7 @@ def merge_rating_true_pred(
 ):
     """Join truth and prediction data frames on userID and itemID and return the true
     and predicted rated with the correct index.
-    
+
     Args:
         rating_true (pd.DataFrame): True data
         rating_pred (pd.DataFrame): Predicted data
@@ -206,7 +207,7 @@ def rsquared(
         col_item (str): column name for item
         col_rating (str): column name for rating
         col_prediction (str): column name for prediction
-    
+
     Returns:
         float: R squared (min=0, max=1).
     """
@@ -369,7 +370,8 @@ def merge_ranking_true_pred(
     """
 
     # Make sure the prediction and true data frames have the same set of users
-    common_users = set(rating_true[col_user]).intersection(set(rating_pred[col_user]))
+    common_users = set(rating_true[col_user]).intersection(
+        set(rating_pred[col_user]))
     rating_true_common = rating_true[rating_true[col_user].isin(common_users)]
     rating_pred_common = rating_pred[rating_pred[col_user].isin(common_users)]
     n_users = len(common_users)
@@ -399,7 +401,8 @@ def merge_ranking_true_pred(
 
     # count the number of hits vs actual relevant items per user
     df_hit_count = pd.merge(
-        df_hit.groupby(col_user, as_index=False)[col_user].agg({"hit": "count"}),
+        df_hit.groupby(col_user, as_index=False)[
+            col_user].agg({"hit": "count"}),
         rating_true_common.groupby(col_user, as_index=False)[col_user].agg(
             {"actual": "count"}
         ),
@@ -521,9 +524,9 @@ def ndcg_at_k(
     threshold=DEFAULT_THRESHOLD,
 ):
     """Normalized Discounted Cumulative Gain (nDCG).
-    
+
     Info: https://en.wikipedia.org/wiki/Discounted_cumulative_gain
-    
+
     Args:
         rating_true (pd.DataFrame): True DataFrame
         rating_pred (pd.DataFrame): Predicted DataFrame
@@ -626,8 +629,10 @@ def map_at_k(
 
     # calculate reciprocal rank of items for each user and sum them up
     df_hit_sorted = df_hit.sort_values([col_user, "rank"])
-    df_hit_sorted["rr"] = (df_hit.groupby(col_user).cumcount() + 1) / df_hit["rank"]
-    df_hit_sorted = df_hit_sorted.groupby(col_user).agg({"rr": "sum"}).reset_index()
+    df_hit_sorted["rr"] = (df_hit.groupby(
+        col_user).cumcount() + 1) / df_hit["rank"]
+    df_hit_sorted = df_hit_sorted.groupby(
+        col_user).agg({"rr": "sum"}).reset_index()
 
     df_merge = pd.merge(df_hit_sorted, df_hit_count, on=col_user)
     return (df_merge["rr"] / df_merge["actual"]).sum() / n_users

@@ -70,11 +70,14 @@ class SparkRatingEvaluation:
             raise ValueError("Empty input dataframe")
 
         if self.col_user not in true_columns:
-            raise ValueError("Schema of rating_true not valid. Missing User Col")
+            raise ValueError(
+                "Schema of rating_true not valid. Missing User Col")
         if self.col_item not in true_columns:
-            raise ValueError("Schema of rating_true not valid. Missing Item Col")
+            raise ValueError(
+                "Schema of rating_true not valid. Missing Item Col")
         if self.col_rating not in true_columns:
-            raise ValueError("Schema of rating_true not valid. Missing Rating Col")
+            raise ValueError(
+                "Schema of rating_true not valid. Missing Rating Col")
 
         if self.col_user not in pred_columns:
             raise ValueError(
@@ -85,7 +88,8 @@ class SparkRatingEvaluation:
                 "Schema of rating_pred not valid. Missing Item Col"
             )  # pragma : No Cover
         if self.col_prediction not in pred_columns:
-            raise ValueError("Schema of rating_pred not valid. Missing Prediction Col")
+            raise ValueError(
+                "Schema of rating_pred not valid. Missing Prediction Col")
 
         self.rating_true = self.rating_true.select(
             col(self.col_user).cast("double"),
@@ -112,7 +116,7 @@ class SparkRatingEvaluation:
 
     def rmse(self):
         """Calculate Root Mean Squared Error
-        
+
         Returns:
             float: Root mean squared error.
         """
@@ -120,7 +124,7 @@ class SparkRatingEvaluation:
 
     def mae(self):
         """Calculate Mean Absolute for data
-        
+
         Returns:
             float: Mean Absolute Error.
         """
@@ -217,9 +221,11 @@ class SparkRankingEvaluation:
                 + str(true_columns)
             )
         if self.col_item not in true_columns:
-            raise ValueError("Schema of rating_true not valid. Missing Item Col")
+            raise ValueError(
+                "Schema of rating_true not valid. Missing Item Col")
         if self.col_rating not in true_columns:
-            raise ValueError("Schema of rating_true not valid. Missing Rating Col")
+            raise ValueError(
+                "Schema of rating_true not valid. Missing Rating Col")
 
         if self.col_user not in pred_columns:
             raise ValueError(
@@ -230,7 +236,8 @@ class SparkRankingEvaluation:
                 "Schema of rating_pred not valid. Missing Item Col"
             )  # pragma : No Cover
         if self.col_prediction not in pred_columns:
-            raise ValueError("Schema of rating_pred not valid. Missing Prediction Col")
+            raise ValueError(
+                "Schema of rating_pred not valid. Missing Prediction Col")
 
         self.k = k
 
@@ -305,7 +312,8 @@ class SparkRankingEvaluation:
             float: recall at k (min=0, max=1).
         """
         recall = self._items_for_user_all.rdd.map(
-            lambda x: float(len(set(x[0]).intersection(set(x[1])))) / float(len(x[1]))
+            lambda x: float(
+                len(set(x[0]).intersection(set(x[1])))) / float(len(x[1]))
         ).mean()
 
         return recall
@@ -448,7 +456,8 @@ def _get_relevant_items_by_timestamp(
     Return:
         spark.DataFrame: DataFrame of customerID-itemID-rating tuples with only relevant items.
     """
-    window_spec = Window.partitionBy(col_user).orderBy(col(col_timestamp).desc())
+    window_spec = Window.partitionBy(
+        col_user).orderBy(col(col_timestamp).desc())
 
     items_for_user = (
         dataframe.select(

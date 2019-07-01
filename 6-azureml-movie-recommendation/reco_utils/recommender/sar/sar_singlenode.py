@@ -128,7 +128,8 @@ class SARSingleNode:
         """
 
         user_item_hits = sparse.coo_matrix(
-            (np.repeat(1, df.shape[0]), (df[self.col_user_id], df[self.col_item_id])),
+            (np.repeat(1, df.shape[0]),
+             (df[self.col_user_id], df[self.col_item_id])),
             shape=(n_users, n_items),
         ).tocsr()
 
@@ -153,7 +154,8 @@ class SARSingleNode:
         self.item2index = {v: k for k, v in self.index2item.items()}
 
         # create mapping of users to continuous indices
-        self.user2index = {x[1]: x[0] for x in enumerate(df[self.col_user].unique())}
+        self.user2index = {x[1]: x[0]
+                           for x in enumerate(df[self.col_user].unique())}
 
         # set values for the total count of users and items
         self.n_users = len(self.user2index)
@@ -192,7 +194,8 @@ class SARSingleNode:
 
             # group time decayed ratings by user-item and take the sum as the user-item affinity
             temp_df = (
-                temp_df.groupby([self.col_user, self.col_item]).sum().reset_index()
+                temp_df.groupby([self.col_user, self.col_item]
+                                ).sum().reset_index()
             )
         else:
             # without time decay use the latest user-item rating in the dataset as the affinity score
@@ -203,8 +206,10 @@ class SARSingleNode:
 
         logger.info("Creating index columns")
         # map users and items according to the two dicts. Add the two new columns to temp_df.
-        temp_df.loc[:, self.col_item_id] = temp_df[self.col_item].map(self.item2index)
-        temp_df.loc[:, self.col_user_id] = temp_df[self.col_user].map(self.user2index)
+        temp_df.loc[:, self.col_item_id] = temp_df[self.col_item].map(
+            self.item2index)
+        temp_df.loc[:, self.col_user_id] = temp_df[self.col_user].map(
+            self.user2index)
 
         # retain seen items for removal at prediction time
         self.seen_items = temp_df[[self.col_user_id, self.col_item_id]].values
@@ -261,9 +266,11 @@ class SARSingleNode:
         """
 
         # get user / item indices from test set
-        user_ids = test[self.col_user].drop_duplicates().map(self.user2index).values
+        user_ids = test[self.col_user].drop_duplicates().map(
+            self.user2index).values
         if any(np.isnan(user_ids)):
-            raise ValueError("SAR cannot score users that are not in the training set")
+            raise ValueError(
+                "SAR cannot score users that are not in the training set")
 
         # calculate raw scores with a matrix multiplication
         logger.info("Calculating recommendation scores")
@@ -343,7 +350,8 @@ class SARSingleNode:
         # create local map of user ids
         if self.col_user in items.columns:
             test_users = items[self.col_user]
-            user2index = {x[1]: x[0] for x in enumerate(items[self.col_user].unique())}
+            user2index = {x[1]: x[0]
+                          for x in enumerate(items[self.col_user].unique())}
             user_ids = test_users.map(user2index)
         else:
             # if no user column exists assume all entries are for a single user
@@ -362,7 +370,8 @@ class SARSingleNode:
         # remove items in the seed set so recommended items are novel
         test_scores[user_ids, item_ids] = -np.inf
 
-        top_items, top_scores = get_top_k_scored_items(scores=test_scores, top_k=top_k, sort_top_k=sort_top_k)
+        top_items, top_scores = get_top_k_scored_items(
+            scores=test_scores, top_k=top_k, sort_top_k=sort_top_k)
 
         df = pd.DataFrame(
             {
@@ -392,7 +401,8 @@ class SARSingleNode:
 
         test_scores = self.score(test, remove_seen=remove_seen)
 
-        top_items, top_scores = get_top_k_scored_items(scores=test_scores, top_k=top_k, sort_top_k=sort_top_k)
+        top_items, top_scores = get_top_k_scored_items(
+            scores=test_scores, top_k=top_k, sort_top_k=sort_top_k)
 
         df = pd.DataFrame(
             {
@@ -426,7 +436,8 @@ class SARSingleNode:
             logger.warning(
                 "Items found in test not seen during training, new items will have score of 0"
             )
-            test_scores = np.append(test_scores, np.zeros((self.n_users, 1)), axis=1)
+            test_scores = np.append(
+                test_scores, np.zeros((self.n_users, 1)), axis=1)
             item_ids[nans] = self.n_items
             item_ids = item_ids.astype("int64")
 
