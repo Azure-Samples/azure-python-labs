@@ -1,3 +1,13 @@
+---
+page_type: sample
+languages:
+- python
+products:
+- azure
+description: "A collection of labs demonstrating how to build Python applications with Azure and Visual Studio Code."
+urlFragment: azure-python-labs
+---
+
 # Azure Python Labs
 
 A collection of labs demonstrating how to build Python applications with Azure and Visual Studio Code.
