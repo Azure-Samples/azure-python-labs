@@ -43,7 +43,7 @@ You will build an HTTP API using an Azure Function. An Azure Functions app can c
 VS Code reopens in the function app. Here are some important files and folders that you'll need to know for this lab:
 - `.venv/` - A virtual environment is automatically created for you using the version of Python you selected. When running your function app, it runs in this virtual environment.
 - `.vscode/` - VS Code settings, including the tasks needed to run and debug the function app.
-- `sentiment` folder
+- `sentiment/`
     - `__init__.py` - Your new function
     - `function.json` - Metadata for your function
 - `requirements.txt` - Contains Python dependencies for your app
