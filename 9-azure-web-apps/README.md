@@ -24,7 +24,7 @@ You will learn to:
 
 ### Login with Azure CLI
 
-Log in to azure using the `az login` command. This will open a browser window where you can authenticate.  [See az login](https://docs.microsoft.com/cli/azure/reference-index?view=azure-cli-latest#az-login).
+Log in to Azure using the `az login` command. This will open a browser window where you can authenticate.  [See az login](https://docs.microsoft.com/cli/azure/reference-index?view=azure-cli-latest#az-login).
 
 Choose the subscription you will use with the `az account set --subscription` command. You will only need to do this if you have more than one Azure subscription.
 [See az account](https://docs.microsoft.com/cli/azure/account?view=azure-cli-latest#az-account-set).
@@ -45,15 +45,15 @@ Run the following command:
 
 - **name** should be a unique string. **name** is used as the Azure resource name as well as part of the url for your app.
 
-- **location** will determine the Azure region where resource will be created. You can get a list of supported locations with `az account list-locations`.
+- **location** will determine the Azure region where your resource will be created. You can get a list of supported locations with `az account list-locations`.
 
-- **sku** lets you choose the service plan type. For this sample we will use the Free service plan tier, however for production we recommend `P1V2` or higher. [Learn more about App Service Pricing](https://azure.microsoft.com/pricing/details/app-service/windows/)
+- **sku** lets you choose across different service offerings. For this sample we will use the FREE option, however for production we recommend `P1V2` or higher. [Learn more about App Service Pricing](https://azure.microsoft.com/pricing/details/app-service/windows/)
 
-> Note: App Service has limits on how many free plans you can have in a subscription. I you have problems creating a free plan, try choosing a different region, or using one of the paid SKUs like B1.
+> Note: App Service has limits on how many free plans you can have in a subscription. If you have problems creating a free plan, try choosing a different region, or using one of the paid options such as B1.
 
 Running `az webapp up` for the first time will take a few minutes to complete. Behind the scenes it will provision all the necessary resources including an [Azure Resource Group](https://docs.microsoft.com/azure/azure-resource-manager/management/overview#resource-groups), [App Service plan](https://docs.microsoft.com/azure/app-service/overview-hosting-plans) and [Azure Webapp](https://docs.microsoft.com/azure/app-service/containers/app-service-linux-intro).
 
-Locally `az webapp up` will create a directory called `.azure` this is used to store the *local context*. Local context stores the configuration that you passed in through parameters to `az webapp up` to use later. For example you can now use `az webapp browse` without any parameters to browse to your app or `az webapp logs tail` to stream the runtime logs of your application.
+Locally `az webapp up` creates a directory called `.azure` this is used to store the *local context*. Local context stores the configuration that you passed in through parameters to `az webapp up` to use later. For example you can now use `az webapp browse` without any more parameters to browse to your app or `az webapp logs tail` to stream the runtime logs of your application.
 
 You can also modify this sample and run `az webapp up` again with no parameters to push any change you have made to the resources you already created on the first run.
 
