@@ -4,7 +4,8 @@ import json
 import logging
 
 from flask import Flask, request, make_response
-from azure.servicebus import ServiceBusClient, Message
+from azure.servicebus import ServiceBusClient, Message, ServiceBusReceiver
+from azure.servicebus.exceptions import MessageSendFailed
 
 connection_string = os.environ.get('SB_CONNECTION')
 if connection_string is None:
@@ -12,7 +13,7 @@ if connection_string is None:
     sys.exit(1)
 
 sb_client = ServiceBusClient.from_connection_string(os.environ['SB_CONNECTION'])
-queue = sb_client.get_queue('PyconLabQueue')
+queue_sender = sb_client.get_queue_sender('PyconLabQueue')
 
 app = Flask(__name__)
 app.logger.setLevel(logging.INFO)
@@ -20,13 +21,17 @@ app.logger.setLevel(logging.INFO)
 @app.route('/send', methods=['POST'])
 def send():
     message = request.get_data(cache=False, as_text=True)
-    app.logger.info(f'SEND: {message}')
-    (success, __) = queue.send(Message(message))[0]
+    app.logger.info(f'SEND: {message}')    
+    try:
+        queue_sender.send(Message(message))
+        success = True
+    except MessageSendFailed:
+        success = False
     return str(success)
 
 @app.route('/receive', methods=['GET'])
 def get():
-    receiver = queue.get_receiver(idle_timeout=3)
+    receiver = sb_client.get_queue_receiver('PyconLabQueue', idle_timeout=3)
     messages = []
     for message in receiver:
         app.logger.info(f'Got message: {message}')
