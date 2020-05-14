@@ -4,7 +4,7 @@ import json
 import logging
 
 from flask import Flask, request, make_response
-from azure.servicebus import ServiceBusClient, Message, ServiceBusReceiver
+from azure.servicebus import ServiceBusClient, Message
 from azure.servicebus.exceptions import MessageSendFailed
 
 connection_string = os.environ.get('SB_CONNECTION')
