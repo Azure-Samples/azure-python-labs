@@ -23,6 +23,35 @@ In this lab, you will build a serverless HTTP API with Azure Functions that take
 
 [Go to lab](4-azure-functions-python-vscode/README.md) | Duration: 7 minutes
 
+<!-- VS Code / Luciana -->
+# Hello World in Visual Studio Codespaces
+Create and work with an environment in Visual Studio Codespaces, all on the browser.
+
+-  How to get started with a GitHub repo
+- How to create and run a Hello World in Python
+- How to run a Flask app
+
+
+[Go to lab](9-vscodespaces/README.md)
+
+# Developing a Django + PostgreSQL application in a Dev Container
+Work in a dev container using Visual Studio Code
+
+- Open existing dev container in VS Code with the Remote - Container extension
+- Build a React front-end
+- Initialize a PostgreSQL database
+- Run a Django app
+
+[Go to lab](9-vscode-django-postgres-dev-container/README.md)
+
+# Debugging a Flask App with WSL in VS Code 
+Work with a Flask application using WSL in VS Code.
+- Run/debug the Flask app
+- Configure application tests
+- Run application tests 
+
+[Go to lab](9-windows-subsystem-for-linux/README.md)
+
 
 # Azure Web Apps
 
@@ -44,18 +73,9 @@ In this lab, you will build a serverless HTTP API with Azure Functions that take
 
 [Go to lab](9-containers/README.md)
 
-<!-- VS Code / Luciana -->
-# VS Code | Visual Studio Code & Online
 
-...
 
-[Go to lab](9-visual-studio-code/README.md)
 
-# VS Code | Windows Subsystem for Linux (WSL)
-
-...
-
-[Go to lab](9-windows-subsystem-for-linux/README.md)
 
 <!-- Azure AI/ML / Rong -->
 # Azure AI/ML | ...
