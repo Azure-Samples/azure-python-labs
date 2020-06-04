@@ -1,6 +1,6 @@
 # Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
 
-Azure Database for PostgreSQL is a managed service that you use to run, manage, and scale highly available PostgreSQL databases in the cloud. This Quickstart shows you how to create an Azure Database for PostgreSQL - Hyperscale (Citus) server group using the Azure portal. You'll explore distributed data: sharding tables across nodes, ingesting sample data, and run queries that are automatically parallelized across multiple nodes. 
+Azure Database for PostgreSQL is a managed service that you use to run, manage, and scale highly available PostgreSQL databases in the cloud. This Quickstart shows you how to create an Azure Database for PostgreSQL - Hyperscale (Citus) server group using the Azure portal. You'll explore distributed data: sharding tables across nodes, ingesting sample data, running queries that execute on multiple nodes, and learn how to use rollup queries to make real-time analytics even faster.
 
 ## Prerequisites
 
@@ -18,7 +18,7 @@ Within Hyperscale servers there are three types of tables:
 
 In this quickstart, we'll set up some distributed tables, learn how they work, and show how they make analytics faster.  
 
-The data model we're going to work with is simple: user and event data from our GitHub repo. Events include fork creation, git commits related to an organization, and more.
+The data model we're going to work with is simple: user and event data from GitHub. Events include fork creation, git commits related to an organization, and more.
 
 Connect to the Hyperscale coordinator using psql:
 
@@ -128,8 +128,83 @@ GROUP BY login
 ORDER BY count(*) DESC;
 ```
 
-As you can see, we've got perfectly normal SQL running in a distributed environment with no changes to our actual queries. This is a very powerful tool for scaling PostgreSQL to any size you need without dealing with the traditional complexity of distributed systems.
+## Rolling up data
 
-## Next steps (Optional)
+The previous query works fine in the early stages, but its performance degrades as your data scales. Even with distributed processing, it's faster to pre-compute the data than to recalculate it repeatedly.
 
-You have successfully completed this lab. If you are interested in learning about advanced functionality, you can continue to the [Rolling up data](README-ADVANCED.md#Rolling-up-data) section in the [Advanced](README-ADVANCED.md#Rolling-up-data) version of this lab, or refer to our [Quickstart](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-hyperscale-portal#create-an-azure-database-for-postgresql---hyperscale-citus) documentation in the future to create your own database.
+We can ensure our dashboard stays fast by regularly rolling up the raw data into an aggregate table. You can experiment with the aggregation duration. We used a per-minute aggregation table, but you could break data into 5, 15, or 60 minutes instead.
+
+First, we're going to create and distribute a rollup table:
+
+```sql
+-- sum of events per repo per user per minute
+CREATE TABLE github_rollup_1min
+(
+    event_type text,
+    repo_id bigint,
+    user_id bigint,
+    total_events bigint,
+    ingest_time TIMESTAMPTZ
+);
+
+-- last invoked time
+CREATE TABLE latest_rollup (
+  minute timestamptz PRIMARY KEY,
+
+  CHECK (minute = date_trunc('minute', minute))
+);
+
+SELECT create_distributed_table('github_rollup_1min', 'user_id');
+```
+
+To run this roll-up more easily, we're going to put it into a plpgsql function. Run these commands in psql to create the rollup_http_request function.
+
+```sql
+-- initialize to a time long ago
+INSERT INTO latest_rollup VALUES ('10-10-1901');
+
+-- create rollup function
+CREATE OR REPLACE FUNCTION rollup_http_request() RETURNS void AS $$
+DECLARE
+  curr_rollup_time timestamptz := date_trunc('minute', now());
+  last_rollup_time timestamptz := minute from latest_rollup;
+BEGIN
+  INSERT INTO github_rollup_1min (
+    event_type,repo_id,user_id,total_events,ingest_time
+  ) SELECT
+    event_type,
+    repo_id,
+    user_id,
+    count(1) AS total_events,
+    date_trunc('minute', created_at) AS ingest_minute
+    FROM github_events 
+  -- roll up only data new since last_rollup_time
+  WHERE date_trunc('minute', created_at) <@
+          tstzrange(last_rollup_time, curr_rollup_time, '(]')
+  GROUP BY event_type,repo_id,user_id,ingest_minute
+  ORDER BY user_id,event_type;
+
+  -- update the value in latest_rollup so that next time we run the
+  -- rollup it will operate on data newer than curr_rollup_time
+  UPDATE latest_rollup SET minute = curr_rollup_time;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+Now that we have the rollup query, let's run it:
+
+```sql
+SELECT rollup_http_request();
+```
+
+Now that our data is aggregated, let's take a look at our new analytics table to see what users were most active when and what they were doing then:
+
+```sql
+SELECT user_id,ingest_time,sum(total_events)
+FROM github_rollup_1min 
+GROUP by 1,2 
+ORDER by 3 desc 
+LIMIT 5;
+```
+
+As you can see, we've got some very useful information for user activity dashboards, and thanks to the rollup query precomputing some of the sums, we're able to get aggregate results very quickly. This will let us build extremely responsive applications that give detailed information over huge datasets. 
