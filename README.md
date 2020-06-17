@@ -12,6 +12,8 @@ urlFragment: azure-python-labs
 
 A collection of labs demonstrating how to build Python applications with Azure and Visual Studio Code.
 
+Join the Microsoft Python Discord (http://aka.ms/python-discord ) and the **#python-virtual-labs** channel to ask questions, get help with labs, and/or further instructions (also see: <https://aka.ms/python-virtual-labs> for our PyCon 2020 online experience).
+
 
 ## Sentiment Analysis with Python Azure Functions
 
