@@ -26,7 +26,7 @@ You'll need the following tools installed on your local machine:
 1. Open the terminal in VS Code (<kbd>Ctrl</kbd> + <kbd>`</kbd>)
 1. Create a virtual environment by typing:
 
-    ```python3 -m pip venv env```
+    ```python3 -m venv env```
 1. If a notification prompt is displayed asking if you want to select this newly created environment, click on "Yes". Otherwise, click on the Python information displayed on the status bar, located on bottom left of the screen
 1.  Create a new terminal to activate the virtual environment (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>`</kbd>)
 1. Install the dependencies:
