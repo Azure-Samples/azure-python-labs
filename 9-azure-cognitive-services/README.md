@@ -21,7 +21,7 @@ You will learn to:
 
 1. Open [Azure Portal](https://portal.azure.com/) and login using your account with an existing Azure subscription.
 
-1. In the top search bar search for Form Recognizer. You will find it in the Marketplace section. Or go directly to [the resource creation page](https://ms.portal.azure.com/#create/Microsoft.CognitiveServicesFormRecognizer)
+1. In the top search bar search for Form Recognizer. You will find it in the Marketplace section. Or go directly to [the resource creation page](https://portal.azure.com/#create/Microsoft.CognitiveServicesFormRecognizer)
 
 1. A series of open fields will appear. Enter the following values:
 
