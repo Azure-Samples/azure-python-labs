@@ -132,4 +132,4 @@ As you can see, we've got perfectly normal SQL running in a distributed environm
 
 ## Next steps (Optional)
 
-You have successfully completed this lab. If you are interested in learning about advanced functionality, you can continue to the [Rolling up data](README-ADVANCED.md#Rolling-up-data) section in the [Advanced](README-ADVANCED.md#Rolling-up-data) version of this lab, or refer to our [Quickstart](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-hyperscale-portal#create-an-azure-database-for-postgresql---hyperscale-citus) documentation in the future to create your own database.
+You have successfully completed this lab. If you are interested in learning about advanced functionality, you can continue to the [Rolling up data](README-ADVANCED.md#Rolling-up-data) section in the [Advanced](README-ADVANCED.md#Rolling-up-data) version of this lab, or refer to our [Quickstart](https://docs.microsoft.com/azure/postgresql/quickstart-create-hyperscale-portal#create-an-azure-database-for-postgresql---hyperscale-citus) documentation in the future to create your own database.
