@@ -1,0 +1,9 @@
+1. First, set up connection
+python3 lab_script.py writeConfig "host=coshepar-lab.postgres.database.azure.com port=5432 dbname=postgres user=lab@coshepar-lab password=944AddFQB6E9sa sslmode=require"
+
+2. Next, let's create a table and load some data
+python3 lab_script.py loadData data.csv
+
+3. Let's look at our average temperatures:
+
+python3 lab_script.py getAverageTemperatures
