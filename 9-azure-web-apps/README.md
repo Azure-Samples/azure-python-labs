@@ -40,7 +40,7 @@ App Service provides `az webapp up` as a quick way to get started with the servi
 Run the following command:
 
 ``` bash
-  az webapp up -n <name> -l <location> -sku FREE
+  az webapp up -n <name> -l <location> --sku FREE
 ```
 
 - **name** should be a unique string. **name** is used as the Azure resource name as well as part of the url for your app.
