@@ -17,12 +17,21 @@ def connect():
         except:
             print("Database connection error")
             return None
+def populateDevices():
+    conn=connect()
+    cursor=conn.cursor()
+    cursor.execute('INSERT INTO device_list SELECT distinct device_id,location FROM raw_data')
+    conn.commit()
+    return None
 
 def loadData(filename="data.csv"):
     conn=connect()
     cursor=conn.cursor()
+    cursor.execute('CREATE EXTENSION IF NOT EXISTS postgis')
     cursor.execute('DROP TABLE IF EXISTS raw_data')
     cursor.execute('CREATE TABLE raw_data(device_id bigint,user_id bigint,time timestamp,location geography(POINTZ,4326),data jsonb);')
+    cursor.execute('CREATE TABLE device_list(device_id bigint,location geography(POINTZ,4326));')
+
     conn.commit()
     with open(filename,'r') as incoming:
         cursor.copy_expert('COPY raw_data FROM stdin CSV',incoming)
@@ -42,6 +51,20 @@ def getAllData():
         ret[device].append(data)
     return ret
 
+def getNearestDevice(latitude, longitude):
+    conn=connect()
+    cursor=conn.cursor()
+    cursor.execute('SELECT device_id,ST_DISTANCE(location,ST_SetSRID(ST_MakePoint(%s,%s),4326)) FROM device_list ORDER BY 2 ASC LIMIT 1',(longitude,latitude))
+    data=cursor.fetchone()
+    return data[0]
+    
+def getDeviceAverage(device):
+    conn=connect()
+    cursor=conn.cursor()
+    cursor.execute("select data -> 'temperature' -> 'units',avg((data -> 'temperature' ->> 'value')::float) from raw_data where device_id = %s group by 1",(device,))
+    data=cursor.fetchone()
+    return data
+
 
 def getAverageTemperatures():
     ret=dict()
@@ -52,9 +75,6 @@ def getAverageTemperatures():
         device=entry[0]
         data=entry[1]['temperature']['value']
         unit=entry[1]['temperature']['units']
-        if unit=='C':
-            #Sometimes, we get the information in Celsius
-            data=(data*9/5)+32
         if device not in ret:
             ret[device]=[]
         ret[device].append(data)
@@ -65,5 +85,5 @@ def getAverageTemperatures():
     return None
 
 if __name__ == '__main__':
-    fire.Fire({"writeConfig":writeConfig,"loadData":loadData,"getAllData":getAllData,"getAverageTemperatures":getAverageTemperatures})
+    fire.Fire({"writeConfig":writeConfig,"loadData":loadData,"getAllData":getAllData,"getAverageTemperatures":getAverageTemperatures,"populateDevices":populateDevices,"getNearestDevice":getNearestDevice,"getDeviceAverage":getDeviceAverage})
 
