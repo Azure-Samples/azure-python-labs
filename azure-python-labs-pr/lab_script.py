@@ -65,6 +65,12 @@ def getDeviceAverage(device):
     data=cursor.fetchone()
     return data
 
+def runSQL(statement):
+    conn=connect()
+    cursor=conn.cursor()
+    cursor.execute(statement)
+    conn.commit()
+    return None
 
 def getAverageTemperatures():
     ret=dict()
@@ -85,5 +91,5 @@ def getAverageTemperatures():
     return None
 
 if __name__ == '__main__':
-    fire.Fire({"writeConfig":writeConfig,"loadData":loadData,"getAllData":getAllData,"getAverageTemperatures":getAverageTemperatures,"populateDevices":populateDevices,"getNearestDevice":getNearestDevice,"getDeviceAverage":getDeviceAverage})
+    fire.Fire({"writeConfig":writeConfig,"loadData":loadData,"getAllData":getAllData,"getAverageTemperatures":getAverageTemperatures,"populateDevices":populateDevices,"getNearestDevice":getNearestDevice,"getDeviceAverage":getDeviceAverage,"runSQL":runSQL})
 

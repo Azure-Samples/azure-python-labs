@@ -10,7 +10,7 @@ python3 lab_script.py getAverageTemperatures
 
 4. Add an index to make one of the queries faster. Do this through PSQL?
 
-CREATE INDEX idx_raw_data_1 ON raw_data USING GIST (location);
+python3 lab_script.py runSQL "CREATE INDEX idx_raw_data_1 ON raw_data USING GIST (location);"
 
 5. Run this to populate the "devices" table:
 
