@@ -1,1 +1,0 @@
-host=coshepar-lab.postgres.database.azure.com port=5432 dbname=postgres user=colton@coshepar-lab password=6A3xZ3L4jQ8Qgr sslmode=require
