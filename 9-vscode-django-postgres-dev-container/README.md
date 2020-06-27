@@ -22,6 +22,12 @@ You'll need the following tools installed on your local machine:
     ```cmd
     git clone https://github.com/Microsoft/python-sample-tweeterapp
     cd python-sample-tweeterapp
+    ```
+    ```cmd
+    code .
+    ```
+    or if you're using the [insiders](https://code.visualstudio.com/insiders/) version:
+    ```cmd
     code-insiders .
     ```
 
