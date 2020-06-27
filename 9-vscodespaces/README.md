@@ -19,7 +19,7 @@ You'll need the following tools installed on your local machine:
 1. Open the Command Palette (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>, or <kbd>Command</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> if you're on macOS) and run the `File: New File` command.
 1. Name it `hello.py`, and open it on VS Codespaces.
 1. Add `print("Hello, VS Codespaces!")` to the file and save it (<kbd>Ctrl</kbd> + <kbd>S</kbd>).
-1. Click on the green play button on the top right, next to your file name open on the editor. This will run your hello world script in the terminal.
+1. Right click on the editor select `Run Python File in Terminal`. 
 
 ## Debug the Hello World Flask app
 
