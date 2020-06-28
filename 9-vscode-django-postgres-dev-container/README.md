@@ -22,7 +22,7 @@ You'll need the following tools installed on your local machine:
     ```cmd
     git clone https://github.com/Microsoft/python-sample-tweeterapp
     cd python-sample-tweeterapp
-    code-insiders .
+    code .
     ```
 
 1. Click the `Reopen in Container` prompt, or press `F1` and select the `Reopen folder in dev container` command.
