@@ -57,7 +57,7 @@ def getNearestDevice(latitude, longitude):
     cursor=conn.cursor()
     cursor.execute('SELECT device_id,location_name,ST_DISTANCE(location,ST_SetSRID(ST_MakePoint(%s,%s),4326)) FROM device_list ORDER BY 3 ASC LIMIT 1',(longitude,latitude))
     data=cursor.fetchone()
-    print("Device number {0} in {1} is closest. {2} meters away (approx)".format(data[0],data[1]))
+    print("Device number {0} in {1} is closest.".format(data[0],data[1]))
     return None
     
 def getDeviceAverage(device):
