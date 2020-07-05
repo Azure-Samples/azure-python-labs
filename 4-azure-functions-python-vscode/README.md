@@ -79,7 +79,7 @@ VS Code reopens in the function app. Here are some important files and folders t
 
 1. If you don't have the Azure Functions Core Tools installed, VS Code will prompt you to install it. Select **Install**.
 
-    > If the installation fails, follow [these instructions](https://github.com/Azure/azure-functions-core-tools#installing) to install it.
+    > If the installation fails, follow [these instructions](https://github.com/Azure/azure-functions-core-tools#installing) to install it. Note: Azure Functions Core Tools Version 3 is compatible with Python3.8, if you're using 3.7 or 3.6 use the version2 command line to install.
 
 1. Once the function app has started, open your web browser and enter the following in the address bar to run your function:
 
