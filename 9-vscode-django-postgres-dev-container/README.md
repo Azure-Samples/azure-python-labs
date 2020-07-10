@@ -19,10 +19,11 @@ You'll need the following tools installed on your local machine:
 
 1. On a terminal, clone the sample app and open using Visual Studio Code:
 
-    ```cmd
+   ```cmd
     git clone https://github.com/Microsoft/python-sample-tweeterapp
     cd python-sample-tweeterapp
     ```
+    and:
     ```cmd
     code .
     ```

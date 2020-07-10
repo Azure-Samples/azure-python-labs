@@ -10,7 +10,7 @@ You will learn to:
 
 ## Prerequisites
 
-- [Azure Subscription](https://azure.microsoft.com/free/)
+- Azure Subscription (e.g. [Free](https://aka.ms/azure-free-account) or [Student](https://aka.ms/azure-student-account))
 - macOS, Windows, or Linux
 - Python 2.7, or 3.5 or later is required
 - Your favorite editor or [Visual Studio Code](https://code.visualstudio.com/download)
