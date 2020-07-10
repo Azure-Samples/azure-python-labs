@@ -11,7 +11,7 @@ You'll need the following tools installed on your local machine:
 
 ## Create a Codespace
 1. Navigate to https://aka.ms/vscodespaces, click on the "Sign in" button and enter your Azure credentials. 
-1. Click on the "Create Workspace" button, and add "HelloWorld" to the `Codespace Name` field.
+1. Click on the "Create Codespace" button, and add "HelloWorld" to the `Codespace Name` field.
 1. Add https://github.com/asw101/hello-vscodespaces to the `Git repository` field. This repo contains a simple Hello World Flask application. 
 1. Click on the "Create" button. You can leave the other fields with the default values. 
 
