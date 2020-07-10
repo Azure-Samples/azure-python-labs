@@ -26,7 +26,7 @@ You'll need the following tools installed on your local machine:
     ```cmd
     code .
     ```
-    or if you're using the [insiders](https://code.visualstudio.com/insiders/) version:
+    or if you are using [Visual Studio Code Insiders](https://code.visualstudio.com/insiders/):
     ```cmd
     code-insiders .
     ```
