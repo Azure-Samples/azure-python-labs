@@ -47,6 +47,16 @@ In this lab, you will learn how to quickly store information you collect from yo
 [Go to lab](9-azure-cognitive-services/README.md)
 
 
+## Explore Azure Database for PostgreSQL with Python
+
+In this lab, you will learn how to import data into an Azure Database for PostgreSQL instance using a python script and the `psycopg2` module. You will learn to:
+
+- Connect to an Azure Database for PostgreSQL
+- Use the `psycopg2` to load and query data in the database.
+
+[Go to lab](4-postgres/README.md)
+
+
 ## Number Facts with Python Web Apps
 
 In this lab, you will deploy a python app to App Service using the Azure CLI.
