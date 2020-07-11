@@ -32,7 +32,7 @@ Connecting to an Azure Database for PostgreSQL database requires the fully quali
 
    ```
    git clone https://github.com/Azure-Samples/azure-python-labs.git
-   cd 4-postgres/
+   cd azure-python-labs/4-postgres/
    ```
 
 1. Then, we need to set up the Postgres connection we're going to be using for the rest of this lab. The following script writes the connection string to a .config file in the current directory. To run this, all we need to do is use the string from the previous step in the following argument:
