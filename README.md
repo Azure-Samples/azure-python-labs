@@ -89,7 +89,7 @@ Work with a Flask application using WSL in VS Code.
 [Go to lab](9-windows-subsystem-for-linux/README.md)
 
 
-## Use Hyperscale (Citus) to speed up analytics
+## Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
 
 This workshop is meant to be an introduction to Azure Database for PostgreSQL Hyperscale (Citus). First, you will create a cluster to scale out PostgreSQL and turn it into a distributed database. Then, you will create a schema and tables, load test data, and create a rollup function to massively speed up your query workload.
 
