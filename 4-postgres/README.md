@@ -26,6 +26,8 @@ Connecting to an Azure Database for PostgreSQL database requires the fully quali
 1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL server name. 
 1. On the server's **Overview** page, copy the fully qualified **Server name** and the **Admin username**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*, and the **Admin username** is always of the form *\<my-admin-username>@\<my-server-name>*. 
 
+Note: make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
+
 ## How to run the Python examples
 
 1. First, we need to get the script [pg-lab.py](pg-lab.py) onto our local machine. You may download it manually, or `git clone` this repository and `cd` into the correct `4-postgres/` directory as follows:
