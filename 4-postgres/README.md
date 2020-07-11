@@ -28,21 +28,28 @@ Connecting to an Azure Database for PostgreSQL database requires the fully quali
 
 ## How to run the Python examples
 
-1. First, we need to set up the Postgres connection we're going to be using for the rest of this lab. The following script writes the connection string to a .config file in the current directory. To run this, all we need to do is use the string from the previous step in the following argument:
+0. First, we need to get the script [pg-lab.py](pg-lab.py) onto our local machine. You may download it manually, or `git clone` this repository and `cd` into the correct `4-postgres/` directory as follows:
 
-    ```bash
+   ```
+   git clone https://github.com/Azure-Samples/azure-python-labs.git
+   cd 4-postgres/
+   ```
+
+1. Then, we need to set up the Postgres connection we're going to be using for the rest of this lab. The following script writes the connection string to a .config file in the current directory. To run this, all we need to do is use the string from the previous step in the following argument:
+
+    ```
     python3 pg-lab.py writeConfig "host=postgis-lab.postgres.database.azure.com port=5432 dbname=postgres user=lab@coshepar-lab password=<password> sslmode=require"
     ```
 
 2. Next, let's create a table and load some data. The loadData function of the lab script will automatically connect to the database, create our tables if they don't exist, and then use a COPY command to load our data into the `raw_data` table from `data.csv`. All we need to do is invoke that function with the name of the data file. 
 
-    ```bash
+    ```
     python3 pg-lab.py loadData data.csv
     ```
 
 3. Now that the data is loaded, let's look at a sample of the data to see what we're working with. `pg-lab.py` has a few functions built in to process data and give us some results, so to keep things simple let's start with `getAverageTemperatures`. This function automatically pulls data, loads it into a dict for processing, and gives us average temperartures per location. This is a very inefficient function, so you'll probably notice that it is slow. 
 
-    ```bash
+    ```
     python3 pg-lab.py getAverageTemperatures
     ```
 
