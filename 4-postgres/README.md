@@ -87,3 +87,7 @@ Note: make sure you have created a [server-level firewall rule](https://docs.mic
 
 
 Bonus objective: [getAverageTemperatures](pg-lab.py#L77) pulls a lot of data it doesn't need to. Rewrite it to do the average calculation in pure SQL instead!
+
+## (Optional) Delete your Azure Database for PostgreSQL
+
+If you have created an Azure Database for PostgreSQL for the purposes of this lab and you *do not* want to keep and continue to be billed for it, you can delete it via the Azure Portal (see: [delete resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-portal#delete-resources)).
