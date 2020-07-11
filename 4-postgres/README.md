@@ -58,9 +58,7 @@ Connecting to an Azure Database for PostgreSQL database requires the fully quali
     python3 pg-lab.py populateDevices
     ```
 
-6. Now that we've got our database ready to go, let's start using our application. For this part of the lab, we're going to figure out what the average device was at the nearest sensor to a location of our choice. We'll start by picking any city that you like, anywhere in the world, and doing a Bing search for the city and the word "coordinates". For example, if you'd want to see temperature data for Lima, Peru, you'd get to [this result page](https://www.bing.com/search?q=Lima%2C+Peru+coordinates), where we get a latitude and longitude of -12.057977° N, -77.03713° E. 
-
-Now that we've got some coordinates to test with, we'll find the nearest device so we can get suitable information. The `getNearestDevice` function will query our new `device_list` table using the `ST_Distance` PostGIS function to figure out what the closest device is. 
+6. Now that we've got our database ready to go, let's start using our application. For this part of the lab, we're going to figure out what the average device was at the nearest sensor to a location of our choice. We'll start by picking any city that you like, anywhere in the world, and doing a Bing search for the city and the word "coordinates". For example, if you'd want to see temperature data for Lima, Peru, you'd get to [this result page](https://www.bing.com/search?q=Lima%2C+Peru+coordinates), where we get a latitude and longitude of -12.057977° N, -77.03713° E. Now that we've got some coordinates to test with, we'll find the nearest device so we can get suitable information. The `getNearestDevice` function will query our new `device_list` table using the `ST_Distance` PostGIS function to figure out what the closest device is. 
 
 
     ```
