@@ -28,7 +28,7 @@ Connecting to an Azure Database for PostgreSQL database requires the fully quali
 
 ## How to run the Python examples
 
-0. First, we need to get the script [pg-lab.py](pg-lab.py) onto our local machine. You may download it manually, or `git clone` this repository and `cd` into the correct `4-postgres/` directory as follows:
+1. First, we need to get the script [pg-lab.py](pg-lab.py) onto our local machine. You may download it manually, or `git clone` this repository and `cd` into the correct `4-postgres/` directory as follows:
 
    ```
    git clone https://github.com/Azure-Samples/azure-python-labs.git
@@ -41,38 +41,38 @@ Connecting to an Azure Database for PostgreSQL database requires the fully quali
     python3 pg-lab.py writeConfig "host=postgis-lab.postgres.database.azure.com port=5432 dbname=postgres user=lab@coshepar-lab password=<password> sslmode=require"
     ```
 
-2. Next, let's create a table and load some data. The loadData function of the lab script will automatically connect to the database, create our tables if they don't exist, and then use a COPY command to load our data into the `raw_data` table from `data.csv`. All we need to do is invoke that function with the name of the data file. 
+1. Next, let's create a table and load some data. The loadData function of the lab script will automatically connect to the database, create our tables if they don't exist, and then use a COPY command to load our data into the `raw_data` table from `data.csv`. All we need to do is invoke that function with the name of the data file. 
 
     ```
     python3 pg-lab.py loadData data.csv
     ```
 
-3. Now that the data is loaded, let's look at a sample of the data to see what we're working with. `pg-lab.py` has a few functions built in to process data and give us some results, so to keep things simple let's start with `getAverageTemperatures`. This function automatically pulls data, loads it into a dict for processing, and gives us average temperartures per location. This is a very inefficient function, so you'll probably notice that it is slow. 
+1. Now that the data is loaded, let's look at a sample of the data to see what we're working with. `pg-lab.py` has a few functions built in to process data and give us some results, so to keep things simple let's start with `getAverageTemperatures`. This function automatically pulls data, loads it into a dict for processing, and gives us average temperartures per location. This is a very inefficient function, so you'll probably notice that it is slow. 
 
     ```
     python3 pg-lab.py getAverageTemperatures
     ```
 
-4. We're going to be using geospatial data for the next part of this lab, so to prepare for that let's add a geospatial index to speed things up in advance. PostGIS can use [GIST indexes](https://postgis.net/workshops/postgis-intro/indexing.html) to make spatial lookups much faster, so if we create an index and specify the [GIST type](https://www.postgresql.org/docs/current/textsearch-indexes.html), we'll get great results. To make this easier, `pg-lab.py` has a built-in `runSQL` function to run arbitrary SQL for this lab.
+1. We're going to be using geospatial data for the next part of this lab, so to prepare for that let's add a geospatial index to speed things up in advance. PostGIS can use [GIST indexes](https://postgis.net/workshops/postgis-intro/indexing.html) to make spatial lookups much faster, so if we create an index and specify the [GIST type](https://www.postgresql.org/docs/current/textsearch-indexes.html), we'll get great results. To make this easier, `pg-lab.py` has a built-in `runSQL` function to run arbitrary SQL for this lab.
 
     ```
     python3 pg-lab.py runSQL "CREATE INDEX idx_raw_data_1 ON raw_data USING GIST (location);"
     ```
 
-5. There's one more thing we need to do before we can run all of the queries we want to. Right now, we've only got data in our `raw_data` table, and it has a record for every device and every minute. This means that, if we just want to look up basic information such as what city a device is in, we've got to query a big table, which can be slow. To fix this, `pg-lab.py` has a `populateDevices` function that will perform an `INSERT INTO SELECT` to automatically populate the `device_list` table with summary information on our devices. Creating aggregate or summary tables like this is an excellent way to speed up application performance!
+1. There's one more thing we need to do before we can run all of the queries we want to. Right now, we've only got data in our `raw_data` table, and it has a record for every device and every minute. This means that, if we just want to look up basic information such as what city a device is in, we've got to query a big table, which can be slow. To fix this, `pg-lab.py` has a `populateDevices` function that will perform an `INSERT INTO SELECT` to automatically populate the `device_list` table with summary information on our devices. Creating aggregate or summary tables like this is an excellent way to speed up application performance!
 
     ```
     python3 pg-lab.py populateDevices
     ```
 
-6. Now that we've got our database ready to go, let's start using our application. For this part of the lab, we're going to figure out what the average device was at the nearest sensor to a location of our choice. We'll start by picking any city that you like, anywhere in the world, and doing a Bing search for the city and the word "coordinates". For example, if you'd want to see temperature data for Lima, Peru, you'd get to [this result page](https://www.bing.com/search?q=Lima%2C+Peru+coordinates), where we get a latitude and longitude of -12.057977° N, -77.03713° E. Now that we've got some coordinates to test with, we'll find the nearest device so we can get suitable information. The `getNearestDevice` function will query our new `device_list` table using the `ST_Distance` PostGIS function to figure out what the closest device is. 
+1. Now that we've got our database ready to go, let's start using our application. For this part of the lab, we're going to figure out what the average device was at the nearest sensor to a location of our choice. We'll start by picking any city that you like, anywhere in the world, and doing a Bing search for the city and the word "coordinates". For example, if you'd want to see temperature data for Lima, Peru, you'd get to [this result page](https://www.bing.com/search?q=Lima%2C+Peru+coordinates), where we get a latitude and longitude of -12.057977° N, -77.03713° E. Now that we've got some coordinates to test with, we'll find the nearest device so we can get suitable information. The `getNearestDevice` function will query our new `device_list` table using the `ST_Distance` PostGIS function to figure out what the closest device is. 
 
 
     ```
     python3 pg-lab.py getNearestDevice -12.057977 -77.03713
     ```
 
-7. Now that we've found the device, we can get the average temperature of that device from our raw_data table. Unlike the inefficient query from step 3, we're having Postgres generate the average for us. This is a huge improvement in performance, as we need to move much less data over the network and Postgres is very well optimized to run analtyical queries.  
+1. Now that we've found the device, we can get the average temperature of that device from our raw_data table. Unlike the inefficient query from step 3, we're having Postgres generate the average for us. This is a huge improvement in performance, as we need to move much less data over the network and Postgres is very well optimized to run analtyical queries.  
 
     ```
     python3 pg-lab.py getDeviceAverage 5
