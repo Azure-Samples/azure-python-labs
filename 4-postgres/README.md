@@ -21,10 +21,12 @@ We will also install `fire`, required by our CLI tool, `pg-lab.py`, by running t
 
 
 ## Get database connection information
+
 Connecting to an Azure Database for PostgreSQL database requires the fully qualified server name and login credentials. You can get this information from the Azure portal.
 
 1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL server name. 
 1. On the server's **Overview** page, copy the fully qualified **Server name** and the **Admin username**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*, and the **Admin username** is always of the form *\<my-admin-username>@\<my-server-name>*. 
+1. You will also need your **Server password** which you chose when you created the server, otherwise you can reset it using the `Reset password` button.
 
 Note: make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
 
@@ -37,7 +39,7 @@ Note: make sure you have created a [server-level firewall rule](https://docs.mic
    cd azure-python-labs/4-postgres/
    ```
 
-1. Then, we need to set up the Postgres connection we're going to be using for the rest of this lab. The following script writes the connection string to a .config file in the current directory via the [writeConfig](pg-lab.py#L5) function. To run this, all we need to do is use the string from the previous step in the following argument:
+1. Then, we need to set up the Postgres connection we're going to be using for the rest of this lab. The following script writes the connection string to a .config file in the current directory via the [writeConfig](pg-lab.py#L5) function. To run this, set some environment variables which we use to create the connection string from the values :
 
     ```
     export SERVER_NAME='pg200700.postgres.database.azure.com'
