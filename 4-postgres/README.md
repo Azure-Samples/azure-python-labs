@@ -90,4 +90,4 @@ Bonus objective: [getAverageTemperatures](pg-lab.py#L77) pulls a lot of data it 
 
 ## (Optional) Delete your Azure Database for PostgreSQL
 
-If you have created an Azure Database for PostgreSQL for the purposes of this lab and you *do not* want to keep and continue to be billed for it, you can delete it via the [Azure Portal](https://portal.azure.com] (see: [delete resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-portal#delete-resources)).
+If you have created an Azure Database for PostgreSQL for the purposes of this lab and you *do not* want to keep and continue to be billed for it, you can delete it via the [Azure Portal](https://portal.azure.com) (see: [delete resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-portal#delete-resources)).
