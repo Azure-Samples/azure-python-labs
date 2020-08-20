@@ -1,2 +1,2 @@
 flask
-azure-servicebus==7.0.0b2
+azure-servicebus==7.0.0b5
