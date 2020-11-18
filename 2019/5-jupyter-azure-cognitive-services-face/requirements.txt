@@ -33,7 +33,7 @@ mypy==0.701
 mypy-extensions==0.4.1
 nbconvert==5.4.1
 nbformat==4.4.0
-notebook==5.7.8
+notebook==6.1.5
 numpy==1.16.2
 pandocfilters==1.4.2
 parso==0.4.0
