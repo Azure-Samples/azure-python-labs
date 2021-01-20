@@ -23,7 +23,7 @@ In this lab, you will build a serverless HTTP API with Azure Functions that take
 - Run and debug the API locally on your machine
 - Deploy the API to Azure Functions
 
-[Go to lab](4-azure-functions-python-vscode/README.md) | Duration: 7 minutes
+[Sentiment Analysis with Python Azure Functions lab](4-azure-functions-python-vscode/README.md) | Duration: 7 minutes
 
 
 ## Hello World in Visual Studio Codespaces
@@ -34,7 +34,7 @@ Create and work with an environment in Visual Studio Codespaces, all on the brow
 - How to create and run a Hello World in Python
 - How to run a Flask app
 
-[Go to lab](9-vscodespaces/README.md)
+[Hello World in Visual Studio Codespaces lab](9-vscodespaces/README.md)
 
 ## Document recognition with Python Azure Form Recognizer
 
@@ -44,7 +44,7 @@ In this lab, you will learn how to quickly store information you collect from yo
 - Write your own code using new Python packages for Azure
 - Analyze the information returned from the service
 
-[Go to lab](9-azure-cognitive-services/README.md)
+[Azure Cognitive Services lab](9-azure-cognitive-services/README.md)
 
 
 ## Explore Azure Database for PostgreSQL with Python
@@ -54,7 +54,7 @@ In this lab, you will learn how to import data into an Azure Database for Postgr
 - Connect to an Azure Database for PostgreSQL
 - Use the `psycopg2` to load and query data in the database.
 
-[Go to lab](4-postgres/README.md)
+[Azure Databse for PostgreSQL with Python lab](4-postgres/README.md)
 
 
 ## Number Facts with Python Web Apps
@@ -64,7 +64,7 @@ In this lab, you will deploy a python app to App Service using the Azure CLI.
 - Use `az webapp up` to quickly provision Azure resources and deploy your app to Azure App Service.
 - Leverage the `local context` feature of Azure CLI to ease management operations.
 
-[Go to lab](9-azure-web-apps/README.md)
+[Number Facts lab](9-azure-web-apps/README.md)
 
 
 ## Developing a Django + PostgreSQL application in a Dev Container
@@ -76,7 +76,7 @@ Work in a dev container using Visual Studio Code
 - Initialize a PostgreSQL database
 - Run a Django app
 
-[Go to lab](9-vscode-django-postgres-dev-container/README.md)
+[Django and PostgreSQL in a Dev Container lab](9-vscode-django-postgres-dev-container/README.md)
 
 
 ## Debugging a Flask App with WSL in VS Code 
@@ -86,11 +86,11 @@ Work with a Flask application using WSL in VS Code.
 - Configure application tests
 - Run application tests 
 
-[Go to lab](9-windows-subsystem-for-linux/README.md)
+[Debugging Flask App with WSL in VS Code lab](9-windows-subsystem-for-linux/README.md)
 
 
 ## Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
 
 This workshop is meant to be an introduction to Azure Database for PostgreSQL Hyperscale (Citus). First, you will create a cluster to scale out PostgreSQL and turn it into a distributed database. Then, you will create a schema and tables, load test data, and create a rollup function to massively speed up your query workload.
 
-[Go to lab](4-postgres-citus/README.md)
+[Real-Time Analytics on Azure Database for PostgreSQL lab](4-postgres-citus/README.md)
