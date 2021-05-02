@@ -169,6 +169,8 @@ Finally, navigate to the [Azure Machine Learning Studio](https://ml.azure.com) b
 
 From here you can view individual metrics you've logged and use the UI to compare metrics across different experiment runs.
 
+![Studio Metrics Tracking](./images/studio_metrics_track.png)
+
 ## Next steps
 
 If you are interested in learning more about different things you can do with Azure Machine Learning, such as deploying and serving your model on inferencing targets you can find [more documentation here](https://docs.microsoft.com/en-us/azure/machine-learning/).
