@@ -1,0 +1,7 @@
+aml_config/*
+.ipynb_aml_checkpoints/*
+.ipynb_checkpoints/*
+.amlignore
+.amlignore.amltmp
+*.ipynb.amltmp
+.vscode/*
