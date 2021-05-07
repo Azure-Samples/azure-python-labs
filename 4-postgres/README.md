@@ -1,16 +1,18 @@
-# Explore Azure Database for PostgreSQL with Python
+# Explore Azure Database for PostgreSQL-Flexible Server(Preview) with Python
 
-In this lab, you will learn how to import data into an Azure Database for PostgreSQL instance using a python script and the `psycopg2` module. Once the data is loaded, you will be exploring a dataset meant to simulate an "IoT", or Internet of Things, use case. This dataset contains simulated weather data from weather sensors in cities across the world.
+In this lab, we will explore one of the latest deployment offering of **Azure Database for PostgreSQL**-**Flexible Server** which is currently in public preview. Flexible server is architected to meet the requirements of modern applications. With Flexible server you get improved network latency, simplified provisioning experience, inbuilt connection pooler, burstable compute, and above all the ability to start/stop the service when needed to reduce the cost. 
 
-To store this dataset, we have tables containing geospatial information stored using Postgres's [PostGIS data type](https://postgis.net/) as well as JSON content stored in Postgres's [jsonb datatype](https://www.postgresql.org/docs/11/functions-json.html). We are accessing the data using functions built into a python script provided as part of this lab. The script relies on `psycopg2` to connect to Postgres and load or fetch data.  
+In this module you will learn how to import data into an Azure Database for PostgreSQL-Flexible Server instance using a python script and the `psycopg2` module. Once the data is loaded, you will be exploring a dataset meant to simulate an "IoT", or Internet of Things use case. This dataset contains simulated weather data from weather sensors in cities across the world.
 
+To store this dataset, we have tables containing geospatial information stored using Postgres's [PostGIS data type](https://postgis.net/) as well as JSON content stored in Postgres's [jsonb datatype](https://www.postgresql.org/docs/9.4/datatype-json.html). We are accessing the data using functions built into a python script provided as part of this lab. The script relies on `psycopg2` to connect to Postgres and load or fetch data.  
 
 
 ## Prerequisites
 - Azure Subscription (e.g. [Free](https://aka.ms/azure-free-account) or [Student](https://aka.ms/azure-student-account))
-- An Azure Database for PostgreSQL (Create via [Portal](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal) or [Azure CLI](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-azure-cli)) 
+- An Azure Database for PostgreSQL-Flexible Server(preview) (Create via [Portal](https://docs.microsoft.com/en-us/azure/postgresql/flexible-server/quickstart-create-server-portal) or [Azure CLI](https://docs.microsoft.com/en-us/azure/postgresql/flexible-server/quickstart-create-server-cli)) 
 - [Python](https://www.python.org/downloads/) 3.4+
 - Latest [pip](https://pip.pypa.io/en/stable/installing/) package installer
+
 
 ## Install the Python libraries for PostgreSQL
 The [psycopg2](https://pypi.python.org/pypi/psycopg2/) module enables connecting to and querying a PostgreSQL database, and is available as a Linux, macOS, or Windows [wheel](https://pythonwheels.com/) package. Install the binary version of the module, including all the dependencies. For more information about `psycopg2` installation and requirements, see [Installation](http://initd.org/psycopg/docs/install.html). 
@@ -24,11 +26,12 @@ We will also install `fire`, required by our CLI tool, `pg-lab.py`, by running t
 
 Connecting to an Azure Database for PostgreSQL database requires the fully qualified server name and login credentials. You can get this information from the Azure portal.
 
-1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL server name. 
-1. On the server's **Overview** page, copy the fully qualified **Server name** and the **Admin username**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*, and the **Admin username** is always of the form *\<my-admin-username>@\<my-server-name>*. 
-1. You will also need your **Admin password** which you chose when you created the server, otherwise you can reset it using the `Reset password` button.
+1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL-Flexible Server(preview) server name. 
+1. On the server's **Overview** page, copy the fully qualified **Server name** and the **Admin username**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*.
+1. You will also need your **Admin password** which you chose when you created the server, otherwise you can reset it using the `Reset password` button on `Overview` page.
 
-Note: make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
+Note: Make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
+
 
 ## How to run the Python examples
 
@@ -43,7 +46,7 @@ Note: make sure you have created a [server-level firewall rule](https://docs.mic
 
     ```
     export SERVER_NAME='pg200700.postgres.database.azure.com'
-    export ADMIN_USERNAME='myadmin@pg200700'
+    export ADMIN_USERNAME='myadmin'
     export ADMIN_PASSWORD='...'
     python3 pg-lab.py writeConfig "host=${SERVER_NAME} port=5432 dbname=postgres user=${ADMIN_USERNAME} password=${ADMIN_PASSWORD} sslmode=require"
     ```
@@ -72,11 +75,11 @@ Note: make sure you have created a [server-level firewall rule](https://docs.mic
     python3 pg-lab.py populateDevices
     ```
 
-1. Now that we've got our database ready to go, let's start using our application. For this part of the lab, we're going to figure out what the average device was at the nearest sensor to a location of our choice. We'll start by picking any city that you like, anywhere in the world, and doing a Bing search for the city and the word "coordinates". For example, if you'd want to see temperature data for Lima, Peru, you'd get to [this result page](https://www.bing.com/search?q=Lima%2C+Peru+coordinates), where we get a latitude and longitude of -12.057977° N, -77.03713° E. Now that we've got some coordinates to test with, we'll find the nearest device so we can get suitable information. The [getNearestDevice](pg-lab.py#L55) function will query our new `device_list` table using the `ST_Distance` PostGIS function to figure out what the closest device is. 
+1. Now that we've got our database ready to go, let's start using our application. For this part of the lab, we're going to figure out what the average device was at the nearest sensor to a location of our choice. We'll start by picking any city that you like, anywhere in the world, and doing a Bing search for the city and the word "coordinates". For example, if you'd want to see temperature data for Lima, Peru, you'd get to [this result page](https://www.bing.com/search?q=Lima%2C+Peru+coordinates), where we get a latitude and longitude of -12.046374° N, -77.042793° E. Now that we've got some coordinates to test with, we'll find the nearest device so we can get suitable information. The [getNearestDevice](pg-lab.py#L55) function will query our new `device_list` table using the `ST_Distance` PostGIS function to figure out what the closest device is. 
 
-
+-
     ```
-    python3 pg-lab.py getNearestDevice -12.057977 -77.03713
+    python3 pg-lab.py getNearestDevice -12.046374 -77.042793
     ```
 
 1. Now that we've found the device, we can get the average temperature of that device from our raw_data table using the [getDeviceAverage](pg-lab.py#L63) function. Unlike the inefficient query from step 3, we're having Postgres generate the average for us. This is a huge improvement in performance, as we need to move much less data over the network and Postgres is very well optimized to run analtyical queries.  
@@ -86,8 +89,15 @@ Note: make sure you have created a [server-level firewall rule](https://docs.mic
     ```
 
 
-Bonus objective: [getAverageTemperatures](pg-lab.py#L77) pulls a lot of data it doesn't need to. Rewrite it to do the average calculation in pure SQL instead!
+**Bonus objective:** [getAverageTemperatures](pg-lab.py#L77) pulls a lot of data it doesn't need to. Rewrite it to do the average calculation in pure SQL instead!
+
 
 ## (Optional) Delete your Azure Database for PostgreSQL
 
 If you have created an Azure Database for PostgreSQL for the purposes of this lab and you *do not* want to keep and continue to be billed for it, you can delete it via the [Azure Portal](https://portal.azure.com) (see: [delete resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-portal#delete-resources)).
+
+
+## Want to Learn More about PostgreSQL Flexible Server on Azure
+
+If you want to dig deeper and undestand what all PostgreSQL Flexible Server on Azure has to offer , the Flexible Server [documents](https://docs.microsoft.com/en-us/azure/postgresql/flexible-server/) are a great place to start.
+
