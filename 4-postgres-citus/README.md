@@ -16,9 +16,9 @@ In this lab, we will learn about some of the superpowers that Citus brings to th
 To test the new features of Citus you can either use:
 
 - [Citus 10 Open Source](https://www.citusdata.com/download/) or;
-- Hyperscale(Citus) on Azure Database for PostgreSQL
+- [Hyperscale(Citus) on Azure Database for PostgreSQL](https://docs.microsoft.com/en-us/azure/postgresql/hyperscale-overview)
 
-**Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But Docker image is intended to be used only for development or testing purposes only and for production workloads.
+**Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But Docker image is intended to be used for development or testing purposes only and for production workloads.
 
 ## Prerequisites
 
