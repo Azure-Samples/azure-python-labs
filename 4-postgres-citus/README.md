@@ -22,7 +22,17 @@ To test the new features of Citus you can either use:
 
 ## Prerequisites
 
-If you are **not** at an event, please see [REQUIREMENTS](REQUIREMENTS.md) to install the prerequisites for this lab.
+Please follow the steps listed under [REQUIREMENTS](REQUIREMENTS.md) to install the prerequisites for this lab.
+
+## Connecting to the Hyperscale(Citus) Database
+
+Connecting to an Azure Database for PostgreSQL-Hyperscale(Citus) database requires the fully qualified server name and login credentials. You can get this information from the Azure portal.
+
+1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL-Hyperscale(Citus) server name. 
+1. On the server's **Overview** page, copy the fully qualified **Server name**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*. For Hyperscale(Citus) the default **Admin username** is always **'Citus'**.
+1. You will also need your **Admin password** which you chose when you created the server, otherwise you can reset it using the `Reset password` button on `Overview` page.
+
+Note: Make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
 
 ## Create and distribute tables
 
