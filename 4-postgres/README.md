@@ -92,9 +92,13 @@ Note: Make sure you have created a [server-level firewall rule](https://docs.mic
 **Bonus objective:** [getAverageTemperatures](pg-lab.py#L77) pulls a lot of data it doesn't need to. Rewrite it to do the average calculation in pure SQL instead!
 
 
-## (Optional) Delete your Azure Database for PostgreSQL
+## (Optional) Delete/Stop your Azure Database for PostgreSQL-Flexible Server
 
-If you have created an Azure Database for PostgreSQL for the purposes of this lab and you *do not* want to keep and continue to be billed for it, you can delete it via the [Azure Portal](https://portal.azure.com) (see: [delete resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-portal#delete-resources)).
+If you have created an Azure Database for PostgreSQL-Flexible Server(preview) for the purposes of this lab and you *do not* want to keep and continue to be billed for it, you can delete it via the [Azure Portal](https://portal.azure.com) (see: [delete resources](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resources-portal#delete-resources)). Or if you want to return to it in future you can also stop the server temporarily by using [**Stop**](https://docs.microsoft.com/en-us/azure/postgresql/flexible-server/how-to-stop-start-server-portal) button available on the **Overview** page. Please note that while the machine is in **Stopped** state, you will not be charged for the compute resources. However you will still be charged for the storage.
+
+![image](https://user-images.githubusercontent.com/41684987/117609229-38636b00-b17d-11eb-8dbb-c1a02a26ed9b.png)
+
+To restart the server again, just go to Azure portal and click on the [**Start**](https://docs.microsoft.com/en-us/azure/postgresql/flexible-server/how-to-restart-server-portal) button available on **Overview** page.
 
 
 ## Want to Learn More about PostgreSQL Flexible Server on Azure
