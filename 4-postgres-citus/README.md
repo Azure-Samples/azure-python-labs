@@ -34,7 +34,18 @@ Connecting to an Azure Database for PostgreSQL-Hyperscale(Citus) database requir
 
 Note: Make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
 
-## Create and distribute tables
+## Creating Schema and Data Distribution on Citus
+
+
+You can create the tables by using standard PostgreSQL CREATE TABLE commands.
+
+Next, you can create primary key indexes on each of the tables just like you would do in PostgreSQL
+
+| Sr. | Table Type        | Description |   |   |
+|-----|-------------------|-------------|---|---|
+| 1   | Distributed Table | Tables horizontally partitioned across worker nodes.Helps in scaling and parallelism. |   |   |
+| 2   | Reference Table   | Tables that are replicated on each node.|   |   |
+| 3   | Local Table       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |   |   |
 
 Once connected to the Hyperscale coordinator node using psql, you can complete some basic tasks.
 
