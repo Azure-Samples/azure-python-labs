@@ -2,7 +2,7 @@
 
 Azure Database for PostgreSQL is a fully managed database-as-a-service based on the open-source Postgres relational database engine. The Hyperscale (Citus) deployment option enables you to scale queries horizontally- across multiple machines, to serve applications that require greater scale and performance. Citus transforms Postgres into a distributed database with features like sharding, a distributed SQL engine, reference tables, and distributed tables. The combination of parallelism, keeping more data in memory, and higher I/O bandwidth can lead to significant performance improvements
 
-With the latest release, Citus 10 is now available in preview on Azure Hyperscale(Citus) with exsiting new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more.
+With the latest release, Citus 10 is now available in preview on Azure Hyperscale(Citus) with new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more.
 
 In this lab, we will learn about some of the superpowers that Citus brings to the table by distributing data across multiple nodes. We will explore:
 
@@ -113,7 +113,7 @@ CREATE TABLE covid19.time_series_300421 OF covid19.time_series
     FOR VALUES IN ('2021-04-30');
 
 ```
-Now that the schema is ready, we can focus on deciding the right distribution starategy to shard tables accross nodes on Citus cluster to gain maximum performance.
+Now that the schema is ready, we can focus on deciding the right distribution strategy to shard tables accross nodes on Citus cluster and data ingestion.
 
 | Sr. | Table Type        | Description |
 |-----|-------------------|-------------|
@@ -121,22 +121,6 @@ Now that the schema is ready, we can focus on deciding the right distribution st
 | 2   | Reference Table   | Tables that are replicated on each node. Generally, tables which are smaller in size but are used frequently in JOINs|
 | 3   | Local Table       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |
 
-
-Connect to the Hyperscale coordinator using psql:
-
-```bash
-# if you are at an event, run the following lines to get your connection string automatically
-i=$(az account show | jq -r '.user.name |= split("@")[0] | .user.name |= split("-")[1] | .user.name')
-if [ "$i" = "null" ]; then i='1'; else echo $i; fi
-CONNECTION_STRING=$(az keyvault secret show --vault kv190700 --name citus-${i} | jq -r .value)
-# CONNECTION_STRING will be in the format:
-# "host={server_name}.postgres.database.azure.com port=5432 dbname=citus user=citus password={your_password} sslmode=require"
-
-# connect to server (if not at an event, replace $CONNECTION_STRING with your connection string)
-psql "$CONNECTION_STRING"
-```
-
-Once you've connected via psql using the above command, let's create our tables. In the psql console run:
 
 
 The `payload` field of `time_series` has a JSONB datatype. JSONB is the JSON datatype in binary form in Postgres. The datatype makes it easy to store a flexible schema in a single column.
