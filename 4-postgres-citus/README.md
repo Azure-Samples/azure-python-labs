@@ -36,28 +36,91 @@ Note: Make sure you have created a [server-level firewall rule](https://docs.mic
 
 ## Creating Schema and Data Distribution on Citus
 
+As we are now able to connect to the Hyperscale(Citus) server, let us move forward and define the table structure. For this lab, we will use a small sample of Covid-19 time-series data for UK and try to get some insights on the vaccination drive.
 
-You can create the tables by using standard PostgreSQL CREATE TABLE commands.
+You can create the tables by using standard PostgreSQL CREATE TABLE commands as shown below:
 
-Next, you can create primary key indexes on each of the tables just like you would do in PostgreSQL
+```sql
+-- re-initializing database
+DROP OWNED BY citus;
 
-| Sr. | Table Type        | Description |   |   |
-|-----|-------------------|-------------|---|---|
-| 1   | Distributed Table | Tables horizontally partitioned across worker nodes.Helps in scaling and parallelism. |   |   |
-| 2   | Reference Table   | Tables that are replicated on each node.|   |   |
-| 3   | Local Table       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |   |   |
+CREATE SCHEMA IF NOT EXISTS covid19;
 
-Once connected to the Hyperscale coordinator node using psql, you can complete some basic tasks.
+CREATE TABLE covid19.area_reference
+(
+    id integer NOT NULL DEFAULT nextval('area_reference_id_seq'::regclass),
+    area_type character varying(15) COLLATE pg_catalog."default" NOT NULL,
+    area_code character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    area_name character varying(120) COLLATE pg_catalog."default" NOT NULL,
+    unique_ref character varying(26) COLLATE pg_catalog."default" NOT NULL DEFAULT "substring"(((now())::character varying)::text, 0, 26),
+    CONSTRAINT area_reference_pkey PRIMARY KEY (area_type, area_code),
+    CONSTRAINT area_reference_id_key UNIQUE (id),
+    CONSTRAINT unq_area_reference_ref UNIQUE (unique_ref)
+);
 
-Within Hyperscale servers there are three types of tables:
 
-- Distributed or sharded tables (spread out to help scaling for performance and parallelization)
-- Reference tables (multiple copies maintained)
-- Local tables (tables you don't join to, typically administration/logging tables)
+CREATE TABLE covid19.metric_reference
+(
+    id integer NOT NULL DEFAULT nextval('metric_reference_id_seq'::regclass),
+    metric character varying(120) COLLATE pg_catalog."default" NOT NULL,
+    released boolean NOT NULL DEFAULT false,
+    metric_name character varying(150) COLLATE pg_catalog."default",
+    source_metric boolean NOT NULL DEFAULT false,
+    CONSTRAINT metric_reference_pkey PRIMARY KEY (id),
+    CONSTRAINT metric_reference_metric_key UNIQUE (metric)
+);
 
-In this quickstart, we'll set up some distributed tables, learn how they work, and show how they make analytics faster.  
 
-The data model we're going to work with is simple: user and event data from our GitHub repo. Events include fork creation, git commits related to an organization, and more.
+CREATE TABLE covid19.release_reference
+(
+    id integer NOT NULL DEFAULT nextval('release_reference_id_seq'::regclass),
+    "timestamp" timestamp without time zone NOT NULL,
+    released boolean NOT NULL DEFAULT false,
+    CONSTRAINT release_reference_pkey PRIMARY KEY (id),
+    CONSTRAINT release_reference_timestamp_key UNIQUE ("timestamp")
+);
+
+
+CREATE TABLE covid19.time_series
+(
+    hash character varying(24) COLLATE pg_catalog."default" NOT NULL,
+    partition_id character varying(26) COLLATE pg_catalog."default" NOT NULL,
+    release_id integer NOT NULL,
+    area_id integer NOT NULL,
+    metric_id integer NOT NULL,
+    date date NOT NULL,
+    payload jsonb DEFAULT '{"value": null}'::jsonb
+) PARTITION BY LIST (date) ;
+
+-- Partitions SQL
+
+CREATE TABLE covid19.time_series_250421 OF covid19.time_series
+    FOR VALUES IN ('2021-04-25');
+
+CREATE TABLE covid19.time_series_260421 OF covid19.time_series
+    FOR VALUES IN ('2021-04-26');
+
+CREATE TABLE covid19.time_series_270421 OF covid19.time_series
+    FOR VALUES IN ('2021-04-27');
+
+CREATE TABLE covid19.time_series_280421 OF covid19.time_series
+    FOR VALUES IN ('2021-04-28');
+
+CREATE TABLE covid19.time_series_290421 OF covid19.time_series
+    FOR VALUES IN ('2021-04-29');
+    
+CREATE TABLE covid19.time_series_300421 OF covid19.time_series
+    FOR VALUES IN ('2021-04-30');
+
+```
+Now that the schema is ready, we can focus on deciding the right distribution starategy to shard tables accross nodes on Citus cluster to gain maximum performance.
+
+| Sr. | Table Type        | Description |
+|-----|-------------------|-------------|
+| 1   | Distributed Table | Tables horizontally partitioned across worker nodes.Helps in scaling and parallelism. |
+| 2   | Reference Table   | Tables that are replicated on each node. Generally, tables which are smaller in size but are used frequently in JOINs|
+| 3   | Local Table       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |
+
 
 Connect to the Hyperscale coordinator using psql:
 
@@ -75,37 +138,13 @@ psql "$CONNECTION_STRING"
 
 Once you've connected via psql using the above command, let's create our tables. In the psql console run:
 
-```sql
--- re-initializing database
-DROP OWNED BY citus;
 
-CREATE TABLE github_events
-(
-    event_id bigint,
-    event_type text,
-    event_public boolean,
-    repo_id bigint,
-    payload jsonb,
-    repo jsonb,
-    user_id bigint,
-    org jsonb,
-    created_at timestamp with time zone
-);
+The `payload` field of `time_series` has a JSONB datatype. JSONB is the JSON datatype in binary form in Postgres. The datatype makes it easy to store a flexible schema in a single column.
 
-CREATE TABLE github_users
-(
-    user_id bigint,
-    url text,
-    login text,
-    avatar_url text,
-    gravatar_id text,
-    display_login text
-);
-```
+Postgres can create a `GIN` index on this type, which will index every key and value within it. With an index, it becomes fast and easy to query the payload with various conditions. Let's go ahead and create a couple of indexes before we load our data. In psql:
 
-The `payload` field of `github_events` has a JSONB datatype. JSONB is the JSON datatype in binary form in Postgres. The datatype makes it easy to store a flexible schema in a single column.
 
-Postgres can create a `GIN` index on this type, which will index every key and value within it. With an  index, it becomes fast and easy to query the payload with various conditions. Let's go ahead and create a couple of indexes before we load our data. In psql:
+
 
 ```sql
 CREATE INDEX event_type_index ON github_events (event_type);
