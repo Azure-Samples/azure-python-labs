@@ -1,6 +1,24 @@
-# Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
+# Real Time Transactional and Analytical Processing on Azure Database for PostgreSQL - Hyperscale (Citus)
 
-Azure Database for PostgreSQL is a managed service that you use to run, manage, and scale highly available PostgreSQL databases in the cloud. This Quickstart shows you how to create an Azure Database for PostgreSQL - Hyperscale (Citus) server group using the Azure portal. You'll explore distributed data: sharding tables across nodes, ingesting sample data, and run queries that are automatically parallelized across multiple nodes. 
+Azure Database for PostgreSQL is a fully managed database-as-a-service based on the open-source Postgres relational database engine. The Hyperscale (Citus) deployment option enables you to scale queries horizontally- across multiple machines, to serve applications that require greater scale and performance. Citus transforms Postgres into a distributed database with features like sharding, a distributed SQL engine, reference tables, and distributed tables. The combination of parallelism, keeping more data in memory, and higher I/O bandwidth can lead to significant performance improvements
+
+With the latest release, Citus 10 is now available in preview on Azure Hyperscale(Citus) with exsiting new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more.
+
+In this lab, we will learn about some of the superpowers that Citus brings to the table by distributing data across multiple nodes. We will explore:
+
+- How to create an Azure Database for PostgreSQL-Hyperscale(Citus) using Azure Portal
+- Concepts of Sharding on Hyperscale(Citus) Basic Tier
+- Creating schemas and ingesting data into an Hyperscale(Citus) instance
+- Using Columnar Storage to reduce storage cost and speedup analytical queries
+- Scaling the Hyperscale(Citus)-Basic Tier to Standard Tier
+- Rebalancing the data and capturing performance improvements
+
+To test the new features of Citus you can either use:
+
+- [Citus 10 Open Source](https://www.citusdata.com/download/) or;
+- Hyperscale(Citus) on Azure Database for PostgreSQL
+
+**Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But Docker image is intended to be used only for development or testing purposes only and for production workloads.
 
 ## Prerequisites
 
