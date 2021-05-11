@@ -119,7 +119,6 @@ CREATE TABLE covid19.time_series
     payload jsonb DEFAULT '{"value": null}'::jsonb
 ) PARTITION BY RANGE (date) ;
 
-CREATE INDEX time_series_metric_id_idx ON covid19.time_series USING btree (metric_id ASC NULLS LAST);
 
 -- Partitions SQL
 
@@ -151,7 +150,7 @@ SELECT create_reference_table('metric_reference');
 SELECT create_reference_table('release_reference');
 ```
 
-We're ready to load the data. In psql, shell out to download the files:
+We're now ready to load the data. In psql, shell out to download the files:
 
 ```sql
 curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/area_reference.csv
@@ -161,6 +160,9 @@ curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/pa
 curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesab.csv
 curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesac.csv
 curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesad.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesae.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesaf.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesag.csv
 ```
 
 Next, load the data from the files into the distributed tables:
@@ -183,19 +185,23 @@ Next, load the data from the files into the distributed tables:
 Now it's time for the fun part, actually running some queries. Let's start with a simple `count (*)` to see how much data we loaded:
 
 ```sql
-SELECT count(*) from covid19.time_series;
+1. SELECT count(*) from covid19.time_series;
 ```
-Let us now check the storage space consumed by the partition that stores old data `time_series_250421_to_290421`:
+That worked nicely. We'll move on to some complex queries in a bit, but for now we will see the benefit that we get with Columnar storage introduced with Citus 10. We have partitioned `time_series` table into two- `time_series_250421_to_290421` that holds data from 25 April till 29 April 2021 and `time_series_300421_to_040521` holds more recent data from 30 April till 04 May 2021.
+
+Let us now check the disk space consumed by the table `time_series`:
 
 ```sql
-select pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
+2. select pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') + citus_total_relation_size('time_series_300421_to_040521'));
+![image](https://user-images.githubusercontent.com/41684987/117798038-4fce5100-b26e-11eb-9975-c5dd61b816c7.png)
 ```
 
-That worked nicely. We'll come back to that sort of aggregation in a bit, but for now we will see the benefit that we get with Columnar storage introduced with Citus 10. We have partitioned `time_series` table into two- `time_series_250421_to_290421` that holds data from 25 April till 29 April 2021 and `time_series_300421_to_040521` holds more recent data from 30 April till 04 May 2021. As data grows, you can compress your old partitions to save storage cost just by running below simple command:
+With time as data grows, Hyperscale (Citus) gives you a flexibility to compress your old partitions to save storage cost just by running below simple command that uses table access method to compress the data:
 
 ```sql
-SELECT alter_table_set_access_method('time_series_250421_to_290421', 'columnar');
+3. SELECT alter_table_set_access_method('time_series_250421_to_290421', 'columnar');
 ```
 
+Please note that we have compressed only the first partition which is created to simulate historical data in real life scenario.
 Check the table size again post compression now. See the difference that **Columnar** brings in. If you noticed, relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as `HTAP`- wherein the same database can be used for both analytical and transactional workloads.
 
