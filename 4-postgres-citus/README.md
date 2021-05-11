@@ -2,21 +2,21 @@
 
 Azure Database for PostgreSQL is a fully managed database-as-a-service based on the open-source Postgres relational database engine. The Hyperscale (Citus) deployment option enables you to scale queries horizontally- across multiple machines, to serve applications that require greater scale and performance. Citus transforms Postgres into a distributed database with features like sharding, a distributed SQL engine, reference tables, and distributed tables. The combination of parallelism, keeping more data in memory, and higher I/O bandwidth can lead to significant performance improvements
 
-With the latest release, Citus 10 is now available in preview on Azure Hyperscale(Citus) with new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more. With Basic Tier, you can now build applications that are scale ready from day one.
+With the latest release, Citus 10 is now available in preview on Azure Hyperscale (Citus) with new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more. With Basic Tier, you can now build applications that are scale ready from day one.
 
 In this lab, we will learn about some of the superpowers that Citus brings in to the table by distributing data across multiple nodes. We will explore:
 
-- How to create an Azure Database for PostgreSQL-Hyperscale(Citus) using Azure Portal
-- Concepts of Sharding on Hyperscale(Citus) Basic Tier
-- Creating schemas and ingesting data into an Hyperscale(Citus) instance
+- How to create an Azure Database for PostgreSQL-Hyperscale (Citus) using Azure Portal
+- Concepts of Sharding on Hyperscale (Citus) Basic Tier
+- Creating schemas and ingesting data into an Hyperscale (Citus) instance
 - Using Columnar Storage to reduce storage cost and speedup analytical queries
-- Scaling the Hyperscale(Citus)-Basic Tier to Standard Tier
+- Scaling the Hyperscale (Citus)-Basic Tier to Standard Tier
 - Rebalancing the data and capturing performance improvements
 
 To test the new features of Citus you can either use:
 
 - [Citus 10 Open Source](https://www.citusdata.com/download/) or;
-- [Hyperscale(Citus) on Azure Database for PostgreSQL](https://docs.microsoft.com/en-us/azure/postgresql/hyperscale-overview)
+- [Hyperscale (Citus) on Azure Database for PostgreSQL](https://docs.microsoft.com/en-us/azure/postgresql/hyperscale-overview)
 
 **Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But please note that the docker image is intended to be used for development or testing purposes only and not for production workloads.
 
@@ -24,19 +24,19 @@ To test the new features of Citus you can either use:
 
 Please follow the steps listed under [REQUIREMENTS](REQUIREMENTS.md) to install the prerequisites for this lab.
 
-## Connecting to the Hyperscale(Citus) Database
+## Connecting to the Hyperscale (Citus) Database
 
-Connecting to an Azure Database for PostgreSQL-Hyperscale(Citus) database requires the fully qualified server name and login credentials. You can get this information from the Azure portal.
+Connecting to an Azure Database for PostgreSQL-Hyperscale (Citus) database requires the fully qualified server name and login credentials. You can get this information from the Azure portal.
 
-1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL-Hyperscale(Citus) server name. 
-1. On the server's **Overview** page, copy the fully qualified **Server name**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*. For Hyperscale(Citus) the default **Admin username** is always **'Citus'**.
+1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL-Hyperscale (Citus) server name. 
+1. On the server's **Overview** page, copy the fully qualified **Server name**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*. For Hyperscale (Citus) the default **Admin username** is always **'Citus'**.
 1. You will also need your **Admin password** which you chose when you created the server, otherwise you can reset it using the `Reset password` button on `Overview` page.
 
 Note: Make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
 
 ## Creating Schema and Data Distribution on Citus
 
-As we are now able to connect to the Hyperscale(Citus) server, let us move forward and define the table structure. For this lab, we will use a small sample of Covid-19 time-series data for UK and try to get some insights on the vaccination drive.
+As we are now able to connect to the Hyperscale (Citus) server, let us move forward and define the table structure. For this lab, we will use a small sample of Covid-19 time-series data for UK and try to get some insights on the vaccination drive.
 
 You can create the tables by using standard PostgreSQL CREATE TABLE commands as shown below:
 
@@ -133,9 +133,9 @@ Now that the schema is ready, we can focus on deciding the right distribution st
 
 | Sr. | Table Type        | Description |
 |-----|-------------------|-------------|
-| 1   | Distributed Table | Large tables that are horizontally partitioned across worker nodes.Helps in scaling and parallelism. |
-| 2   | Reference Table   | Tables that are replicated on each node. Generally, tables which are smaller in size but are used frequently in JOINs|
-| 3   | Local Table       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |
+| 1   | [Distributed Table](https://docs.citusdata.com/en/stable/get_started/concepts.html#type-1-distributed-tables) | Large tables that are horizontally partitioned across worker nodes.Helps in scaling and parallelism. |
+| 2   | [Reference Table](https://docs.citusdata.com/en/stable/get_started/concepts.html#type-2-reference-tables)   | Tables that are replicated on each node. Generally, tables which are smaller in size but are used frequently in JOINs|
+| 3   | [Local Table](https://docs.citusdata.com/en/stable/get_started/concepts.html#type-3-local-tables)       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |
 
 In our case `time_series` is the largest table that holds real time Covid19 data for various metrics across different areas in UK, and others are supporting tables with less data- which when joined with `time_series` helps in building useful analytics.
 
@@ -185,23 +185,62 @@ Next, load the data from the files into the distributed tables:
 Now it's time for the fun part, actually running some queries. Let's start with a simple `count (*)` to see how much data we loaded:
 
 ```sql
-1. SELECT count(*) from covid19.time_series;
+SELECT count(*) from covid19.time_series;
 ```
 That worked nicely. We'll move on to some complex queries in a bit, but for now we will see the benefit that we get with Columnar storage introduced with Citus 10. We have partitioned `time_series` table into two- `time_series_250421_to_290421` that holds data from 25 April till 29 April 2021 and `time_series_300421_to_040521` holds more recent data from 30 April till 04 May 2021.
 
 Let us now check the disk space consumed by the table `time_series`:
 
 ```sql
-2. select pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') + citus_total_relation_size('time_series_300421_to_040521'));
-![image](https://user-images.githubusercontent.com/41684987/117798038-4fce5100-b26e-11eb-9975-c5dd61b816c7.png)
+SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') + citus_total_relation_size('time_series_300421_to_040521'));
+SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
+OUTPUT:
+![image](https://user-images.githubusercontent.com/41684987/117798038-4fce5100-b26e-11eb-9975-c5dd61b816c7.png)
 
 With time as data grows, Hyperscale (Citus) gives you a flexibility to compress your old partitions to save storage cost just by running below simple command that uses table access method to compress the data:
 
 ```sql
-3. SELECT alter_table_set_access_method('time_series_250421_to_290421', 'columnar');
+SELECT alter_table_set_access_method('time_series_250421_to_290421', 'columnar');
 ```
+Please note that we have compressed only the first partition which is created to simulate historical data in real life scenario. Now that we have converted partition `time_series_250421_to_290421` into columnar, let us verify the table size again. 
 
-Please note that we have compressed only the first partition which is created to simulate historical data in real life scenario.
-Check the table size again post compression now. See the difference that **Columnar** brings in. If you noticed, relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as `HTAP`- wherein the same database can be used for both analytical and transactional workloads.
+```sql
+SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
+```
+OUTPUT:
+![image](https://user-images.githubusercontent.com/41684987/117805620-ccfdc400-b276-11eb-9d2d-7592b05378c0.png)
+
+Can you see the benefit of using **Columnar** storage- we got a compression ratio of about 5x in this use case. Another important aspect to notice here is that, the relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as **HTAP**-(Hybrid Transactional/Analytical Processing) wherein the same database can be used for both analytical and transactional workloads.
+
+We see that relation `time_series` has a attribute called `payload` of `jsonb` type which stores time-series metrics related to Covid-19 in UK. It also stores Foreign Keys to other tables like `area_reference`, `metric_reference` and `release_reference`. We can use this dataset to identify the no. of Covid-19 tests done in an area on a given date:
+
+```sql
+SELECT 
+area_code,
+area_name,
+date,
+MAX((payload -> 'value')::INT) AS Tests_Conducted
+FROM covid19.time_series_250421_to_290421 AS ts
+JOIN covid19.area_reference AS ar ON ar.id = ts.area_id
+JOIN covid19.metric_reference AS mr ON mr.id = ts.metric_id
+JOIN covid19.release_reference AS rr ON rr.id = ts.release_id
+WHERE date = '2021-04-27' 
+AND metric = 'newVirusTestsRollingSum'
+AND (payload -> 'value')  NOTNULL 
+GROUP BY area_code, area_name, date;
+```
+OUTPUT:
+![image](https://user-images.githubusercontent.com/41684987/117810543-2963e200-b27d-11eb-8b61-35de9bbd279a.png)
+
+
+
+
+
+
+
+
+
+
+Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus).
 
