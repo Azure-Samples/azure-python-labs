@@ -2,9 +2,9 @@
 
 Azure Database for PostgreSQL is a fully managed database-as-a-service based on the open-source Postgres relational database engine. The Hyperscale (Citus) deployment option enables you to scale queries horizontally- across multiple machines, to serve applications that require greater scale and performance. Citus transforms Postgres into a distributed database with features like sharding, a distributed SQL engine, reference tables, and distributed tables. The combination of parallelism, keeping more data in memory, and higher I/O bandwidth can lead to significant performance improvements
 
-With the latest release, Citus 10 is now available in preview on Azure Hyperscale(Citus) with new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more.
+With the latest release, Citus 10 is now available in preview on Azure Hyperscale(Citus) with new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more. With Basic Tier, you can now build applications that are scale ready from day one.
 
-In this lab, we will learn about some of the superpowers that Citus brings to the table by distributing data across multiple nodes. We will explore:
+In this lab, we will learn about some of the superpowers that Citus brings in to the table by distributing data across multiple nodes. We will explore:
 
 - How to create an Azure Database for PostgreSQL-Hyperscale(Citus) using Azure Portal
 - Concepts of Sharding on Hyperscale(Citus) Basic Tier
@@ -163,12 +163,11 @@ Let us now check the storage space consumed by the partition that stores old dat
 select pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
 
-That worked nicely. We'll come back to that sort of aggregation in a bit, but for now we will see the benefit that we get with Columnar storage introduced with Citus 10. We have partitioned `time_series` table into two- `time_series_250421_to_290421` for old data and `time_series_300421_to_040521` for more recent data. As data grows, you can compress your old partitions to save storage cost just by running below simple command:
+That worked nicely. We'll come back to that sort of aggregation in a bit, but for now we will see the benefit that we get with Columnar storage introduced with Citus 10. We have partitioned `time_series` table into two- `time_series_250421_to_290421` that holds data from 25 April till 29 April 2021 and `time_series_300421_to_040521` holds more recent data from 30 April till 04 May 2021. As data grows, you can compress your old partitions to save storage cost just by running below simple command:
 
 ```sql
 SELECT alter_table_set_access_method('time_series_250421_to_290421', 'columnar');
 ```
 
 Check the table size again post compression now. See the difference that **Columnar** brings in. If you noticed, relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as `HTAP`- wherein the same database can be used for both analytical and transactional workloads.
-
 
