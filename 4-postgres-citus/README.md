@@ -258,7 +258,7 @@ GROUP BY area_type, area_code;
 Output:
 ![image](https://user-images.githubusercontent.com/41684987/117834767-0cd3a400-b295-11eb-933e-6b10c780415c.png)
 
-Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus):- 
+Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus):
 
 ** The Power of Horizontal Scaling**
 
