@@ -294,5 +294,28 @@ AND (payload -> 'value')  NOTNULL
 GROUP BY area_code, area_name, date;
 ```
 Output:
+![image](https://user-images.githubusercontent.com/41684987/117859032-22a09380-b2ac-11eb-8f9a-ddbf61e56cee.png)
 
+Let's cross-check if the second query also shows similar behaviour.
+
+```sql
+SELECT 
+area_type,
+area_code,
+MAX(date) AS date,
+MAX((payload -> 'value')::FLOAT) AS first_dose
+FROM (
+	SELECT *
+	FROM covid19.time_series AS tm
+	JOIN covid19.release_reference AS rr ON rr.id = release_id
+	JOIN covid19.metric_reference AS mr ON mr.id = metric_id
+	JOIN covid19.area_reference AS ar ON ar.id = tm.area_id
+	 ) AS ts
+WHERE date > (now() - INTERVAL '30 days')
+AND metric = 'cumPeopleVaccinatedFirstDoseByPublishDate'
+AND (payload -> 'value') NOTNULL
+GROUP BY area_type, area_code;
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117859407-917dec80-b2ac-11eb-888b-7bbfc419704c.png)
 
