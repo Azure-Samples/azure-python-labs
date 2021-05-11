@@ -46,6 +46,8 @@ DROP OWNED BY citus;
 
 CREATE SCHEMA IF NOT EXISTS covid19;
 
+SET search_path='covid19';
+
 CREATE TABLE covid19.area_reference
 (
     id integer NOT NULL DEFAULT nextval('area_reference_id_seq'::regclass),
@@ -90,31 +92,17 @@ CREATE TABLE covid19.time_series
     metric_id integer NOT NULL,
     date date NOT NULL,
     payload jsonb DEFAULT '{"value": null}'::jsonb
-) PARTITION BY LIST (date) ;
+) PARTITION BY RANGE (date) ;
 
 CREATE INDEX time_series_metric_id_idx ON covid19.time_series_dist USING btree (metric_id ASC NULLS LAST);
 
 -- Partitions SQL
 
-CREATE TABLE covid19.time_series_250421 OF covid19.time_series
-    FOR VALUES IN ('2021-04-25');
+CREATE TABLE covid19.time_series_250421_to_290421 OF covid19.time_series
+    FOR VALUES FROM ('2021-04-25') TO ('2021-04-29');
 
-CREATE TABLE covid19.time_series_260421 OF covid19.time_series
-    FOR VALUES IN ('2021-04-26');
-
-CREATE TABLE covid19.time_series_270421 OF covid19.time_series
-    FOR VALUES IN ('2021-04-27');
-
-CREATE TABLE covid19.time_series_280421 OF covid19.time_series
-    FOR VALUES IN ('2021-04-28');
-
-CREATE TABLE covid19.time_series_290421 OF covid19.time_series
-    FOR VALUES IN ('2021-04-29');
-    
-CREATE TABLE covid19.time_series_300421 OF covid19.time_series
-    FOR VALUES IN ('2021-04-30');
-
-
+CREATE TABLE covid19.time_series_300421_to_040521 OF covid19.time_series
+    FOR VALUES FROM ('2021-04-30') TO ('2021-05-04');
 ```
 
 Now that the schema is ready, we can focus on deciding the right distribution strategy to shard tables across nodes on Citus cluster and data ingestion. Below table describes the different types of table on Citus cluster:
@@ -141,52 +129,46 @@ SELECT create_reference_table('release_reference');
 We're ready to load the data. In psql, shell out to download the files:
 
 ```sql
-
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/area_reference.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/metric_reference.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/release_reference.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesaa.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesab.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesac.csv
+curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesad.csv
 ```
 
 Next, load the data from the files into the distributed tables:
 
 ```sql
-\copy github_events from 'events.csv' WITH CSV
-\copy github_users from 'users.csv' WITH CSV
+\copy covid19.area_reference from 'area_reference.csv' WITH CSV
+\copy covid19.metric_reference from 'metric_reference.csv' WITH CSV
+\copy covid19.release_reference from 'release_reference.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesaa.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesab.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesac.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesad.csv' WITH CSV
 ```
 
-## Run queries
+## Running Queries
 
 Now it's time for the fun part, actually running some queries. Let's start with a simple `count (*)` to see how much data we loaded:
 
 ```sql
-SELECT count(*) from github_events;
+SELECT count(*) from covid19.time_series;
 ```
-
-That worked nicely. We'll come back to that sort of aggregation in a bit, but for now let’s look at a few other queries. Within the JSONB `payload` column there's a good bit of data, but it varies based on event type. `PushEvent` events contain a size that includes the number of distinct commits for the push. We can use it to find the total number of commits per hour:
+Let us now check the storage space consumed by the partition that stores old data `time_series_250421_to_290421`:
 
 ```sql
-SELECT date_trunc('hour', created_at) AS hour,
-       sum((payload->>'distinct_size')::int) AS num_commits
-FROM github_events
-WHERE event_type = 'PushEvent'
-GROUP BY hour
-ORDER BY hour;
+select pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
 
-So far the queries have involved the github\_events exclusively, but we can combine this information with github\_users. Since we sharded both users and events on the same identifier (`user_id`), the rows of both tables with matching user IDs will be [colocated](https://docs.citusdata.com/en/stable/sharding/data_modeling.html#colocation) on the same database nodes and can easily be joined.
-
-If we join on `user_id`, Hyperscale can push the join execution down into shards for execution in parallel on worker nodes. For example, let's find the users who created the greatest number of repositories:
+That worked nicely. We'll come back to that sort of aggregation in a bit, but for now we will see the benefit that we get with Columnar storage introduced with Citus 10. We have partitioned `time_series` table into two- `time_series_250421_to_290421` for old data and `time_series_300421_to_040521` for more recent data. As data grows, you can compress your old partitions to save storage cost just by running below simple command:
 
 ```sql
-SELECT login, count(*)
-FROM github_events ge
-JOIN github_users gu
-ON ge.user_id = gu.user_id
-WHERE event_type = 'CreateEvent' AND
-      payload @> '{"ref_type": "repository"}'
-GROUP BY login
-ORDER BY count(*) DESC;
+SELECT alter_table_set_access_method('time_series_250421_to_290421', 'columnar');
 ```
 
-As you can see, we've got perfectly normal SQL running in a distributed environment with no changes to our actual queries. This is a very powerful tool for scaling PostgreSQL to any size you need without dealing with the traditional complexity of distributed systems.
+Check the table size again post compression now. See the difference that **Columnar** brings in. If you noticed, relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as `HTAP`- wherein the same database can be used for both analytical and transactional workloads.
 
-## Next steps (Optional)
 
-You have successfully completed this lab. If you are interested in learning about advanced functionality, you can continue to the [Rolling up data](README-ADVANCED.md#Rolling-up-data) section in the [Advanced](README-ADVANCED.md#Rolling-up-data) version of this lab, or refer to our [Quickstart](https://docs.microsoft.com/azure/postgresql/quickstart-create-hyperscale-portal#create-an-azure-database-for-postgresql---hyperscale-citus) documentation in the future to create your own database.
