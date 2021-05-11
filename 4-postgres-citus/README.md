@@ -196,7 +196,8 @@ SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') 
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117798038-4fce5100-b26e-11eb-9975-c5dd61b816c7.png)
+![image](https://user-images.githubusercontent.com/41684987/117848538-077c5680-b2a1-11eb-93fe-863fd08f5e95.png)
+
 
 With time as data grows, Hyperscale (Citus) gives you a flexibility to compress your old partitions to save storage cost just by running below simple command that uses table access method to compress the data:
 
@@ -258,7 +259,7 @@ GROUP BY area_type, area_code;
 Output:
 ![image](https://user-images.githubusercontent.com/41684987/117834767-0cd3a400-b295-11eb-933e-6b10c780415c.png)
 
-Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus):
+Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore another important (infact most important) capability of Hyperscale (Citus):
 
 ** The Power of Horizontal Scaling**
 
@@ -266,6 +267,32 @@ For this, I would request you to goto the [Azure portal](https://portal.azure.co
 
 ![image](https://user-images.githubusercontent.com/41684987/117833371-ebbe8380-b293-11eb-82ee-77a0243dd4e3.png)
 
+`Please note that this will force Citus cluster to restart. Also, changing the tier back from Standard to Basic is not supported.`
 
+
+Once it's done and the new cluster with 4 worker nodes is available, the first thing we will have to do it rebalance the data across the new nodes that were added. And it can be easily acheived by running below command:
+
+```sql
+SELECT rebalance_table_shards('time_series',shard_transfer_mode=>'force_logical');
+```
+
+Once the data is rebalanced across the new nodes, we can again re-run the above queries and compare the run times with benchmarks captured earlier for Basic Tier.
+
+```sql
+SELECT 
+area_code,
+area_name,
+date,
+MAX((payload -> 'value')::INT) AS Tests_Conducted
+FROM covid19.time_series AS ts
+JOIN covid19.area_reference AS ar ON ar.id = ts.area_id
+JOIN covid19.metric_reference AS mr ON mr.id = ts.metric_id
+JOIN covid19.release_reference AS rr ON rr.id = ts.release_id
+WHERE date = '2021-04-27' 
+AND metric = 'newVirusTestsRollingSum'
+AND (payload -> 'value')  NOTNULL 
+GROUP BY area_code, area_name, date;
+```
+Output:
 
 
