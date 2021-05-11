@@ -20,6 +20,11 @@ To test the new features of Citus you can either use:
 
 **Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But please note that the docker image is intended to be used for development or testing purposes only and not for production workloads.
 
+```ssh
+# run PostgreSQL with Citus on port 5500
+docker run -d --name citus -p 5500:5432 -e POSTGRES_PASSWORD=mypassword citusdata/citus
+```
+
 ## Prerequisites
 
 Please follow the steps listed under [REQUIREMENTS](REQUIREMENTS.md) to install the prerequisites for this lab.
@@ -270,7 +275,9 @@ For this, I would request you to goto the [Azure portal](https://portal.azure.co
 `Please note that this will force Citus cluster to restart. Also, changing the tier back from Standard to Basic is not supported.`
 
 
-Once it's done and the new cluster with 4 worker nodes is available, the first thing we will have to do it rebalance the data across the new nodes that were added. And it can be easily acheived by running below command:
+Once it's done and the new cluster with 4 worker nodes is available, the first thing we will have to do it rebalance the data across the new nodes that were added. This activity needs to be done only for distributed tables and not referenced ones. Reference tables automatically gets copied to the new node when the node is created.
+
+Rebalancing distributed tables can be easily acheived by running below command:
 
 ```sql
 SELECT rebalance_table_shards('time_series',shard_transfer_mode=>'force_logical');
@@ -296,6 +303,9 @@ GROUP BY area_code, area_name, date;
 Output:
 ![image](https://user-images.githubusercontent.com/41684987/117859032-22a09380-b2ac-11eb-8f9a-ddbf61e56cee.png)
 
+Did you observed the difference?
+The same query is now taking only 1/6th of the time that it was taking earlier on a single node machine.
+
 Let's cross-check if the second query also shows similar behaviour.
 
 ```sql
@@ -317,5 +327,11 @@ AND (payload -> 'value') NOTNULL
 GROUP BY area_type, area_code;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117859407-917dec80-b2ac-11eb-888b-7bbfc419704c.png)
+![image](https://user-images.githubusercontent.com/41684987/117860625-21706600-b2ae-11eb-9a0e-e210db0cdf7c.png)
 
+For this query as well, we see similar improvements in the overall run time. 
+As you can see, we've got perfectly normal SQL running in a distributed environment with no changes to our actual queries. This is a very powerful tool for scaling PostgreSQL to any size you need without dealing with the traditional complexity of distributed systems.
+
+## Next steps (Optional)
+
+You have successfully completed this lab. If you are interested in learning more about Hyperscale (Citus) please refer to our [Quickstart](https://docs.microsoft.com/en-us/azure/postgresql/hyperscale/) guide.
