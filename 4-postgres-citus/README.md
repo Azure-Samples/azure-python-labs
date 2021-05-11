@@ -195,7 +195,7 @@ Let us now check the disk space consumed by the table `time_series`:
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') + citus_total_relation_size('time_series_300421_to_040521'));
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
-OUTPUT:
+Output:
 ![image](https://user-images.githubusercontent.com/41684987/117798038-4fce5100-b26e-11eb-9975-c5dd61b816c7.png)
 
 With time as data grows, Hyperscale (Citus) gives you a flexibility to compress your old partitions to save storage cost just by running below simple command that uses table access method to compress the data:
@@ -208,7 +208,7 @@ Please note that we have compressed only the first partition which is created to
 ```sql
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
-OUTPUT:
+Output:
 ![image](https://user-images.githubusercontent.com/41684987/117805620-ccfdc400-b276-11eb-9d2d-7592b05378c0.png)
 
 Can you see the benefit of using **Columnar** storage- we got a compression ratio of about 5x for `time_series_250421_to_290421` partition. Another important aspect to notice here is that, the relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as **HTAP**-(Hybrid Transactional/Analytical Processing) wherein the same database can be used for both analytical and transactional workloads.
@@ -221,7 +221,7 @@ area_code,
 area_name,
 date,
 MAX((payload -> 'value')::INT) AS Tests_Conducted
-FROM covid19.time_series_250421_to_290421 AS ts
+FROM covid19.time_series AS ts
 JOIN covid19.area_reference AS ar ON ar.id = ts.area_id
 JOIN covid19.metric_reference AS mr ON mr.id = ts.metric_id
 JOIN covid19.release_reference AS rr ON rr.id = ts.release_id
@@ -230,17 +230,41 @@ AND metric = 'newVirusTestsRollingSum'
 AND (payload -> 'value')  NOTNULL 
 GROUP BY area_code, area_name, date;
 ```
-OUTPUT:
-![image](https://user-images.githubusercontent.com/41684987/117810543-2963e200-b27d-11eb-8b61-35de9bbd279a.png)
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117832491-283daf80-b293-11eb-810b-9e66e090127e.png)
 
+That was quick, isn't it - that too when we are using Citus on single node machine. You can imagine the performance we will get when we will add more nodes ot the cluster.If we look at the query above, we will observe that the query ran efficiently because we have distributed our tables such that the data is [co-located](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location) with minimal cross-shard operations.
 
-That was quick, isn't it - that too when we are still on Basic Tier. You can imagine the performance we will when we will add more nodes ot the cluster.If we look at the query above, we will observe that the query ran efficiently because we have distributed our tables such that the data is [co-located](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location) with minimal cross-shard operations.
+Let's run another query that will generate stats for total no. of first dose vaccinations given across various areas in UK.
+
+```sql
+SELECT 
+area_type,
+area_code,
+MAX(date) AS date,
+MAX((payload -> 'value')::FLOAT) AS first_dose
+FROM (
+	SELECT *
+	FROM covid19.time_series AS tm
+	JOIN covid19.release_reference AS rr ON rr.id = release_id
+	JOIN covid19.metric_reference AS mr ON mr.id = metric_id
+	JOIN covid19.area_reference AS ar ON ar.id = tm.area_id
+	 ) AS ts
+WHERE date > (now() - INTERVAL '30 days')
+AND metric = 'cumPeopleVaccinatedFirstDoseByPublishDate'
+AND (payload -> 'value') NOTNULL
+GROUP BY area_type, area_code;
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117834767-0cd3a400-b295-11eb-933e-6b10c780415c.png)
 
 Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus):- 
 
 ** The Power of Horizontal Scaling**
 
-For this, I would request you to open Azure portal
+For this, I would request you to goto the [Azure portal](https://portal.azure.com/) again, select your Azure Database for PostgreSQL-Hyperscale (Citus) server and under *Compute + storage** section upgrade from **Basic** tier to **Standard** & increase **Worker node count** to **4** nodes as shown in screenshot below. 
+
+![image](https://user-images.githubusercontent.com/41684987/117833371-ebbe8380-b293-11eb-82ee-77a0243dd4e3.png)
 
 
 
