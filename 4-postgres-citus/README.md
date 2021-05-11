@@ -92,6 +92,8 @@ CREATE TABLE covid19.time_series
     payload jsonb DEFAULT '{"value": null}'::jsonb
 ) PARTITION BY LIST (date) ;
 
+CREATE INDEX time_series_metric_id_idx ON covid19.time_series_dist USING btree (metric_id ASC NULLS LAST);
+
 -- Partitions SQL
 
 CREATE TABLE covid19.time_series_250421 OF covid19.time_series
@@ -112,41 +114,34 @@ CREATE TABLE covid19.time_series_290421 OF covid19.time_series
 CREATE TABLE covid19.time_series_300421 OF covid19.time_series
     FOR VALUES IN ('2021-04-30');
 
+
 ```
-Now that the schema is ready, we can focus on deciding the right distribution strategy to shard tables accross nodes on Citus cluster and data ingestion.
+
+Now that the schema is ready, we can focus on deciding the right distribution strategy to shard tables across nodes on Citus cluster and data ingestion. Below table describes the different types of table on Citus cluster:
 
 | Sr. | Table Type        | Description |
 |-----|-------------------|-------------|
-| 1   | Distributed Table | Tables horizontally partitioned across worker nodes.Helps in scaling and parallelism. |
+| 1   | Distributed Table | Large tables that are horizontally partitioned across worker nodes.Helps in scaling and parallelism. |
 | 2   | Reference Table   | Tables that are replicated on each node. Generally, tables which are smaller in size but are used frequently in JOINs|
 | 3   | Local Table       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |
 
+In our case `time_series` is the largest table that holds real time Covid19 data for various metrics across different areas in UK, and others are supporting tables with less data- which when joined with `time_series` helps in building useful analytics.
 
 
-The `payload` field of `time_series` has a JSONB datatype. JSONB is the JSON datatype in binary form in Postgres. The datatype makes it easy to store a flexible schema in a single column.
-
-Postgres can create a `GIN` index on this type, which will index every key and value within it. With an index, it becomes fast and easy to query the payload with various conditions. Let's go ahead and create a couple of indexes before we load our data. In psql:
-
-
-
+Next we’ll take these Postgres tables on the coordinator node and tell Hyperscale(Citus) to either distribute or replicate them across the workers. To do so, we’ll run a query for each table specifying the key to shard it on. In the current example we’ll shard `time_series` table on `area_id`, and make other three tables are reference tables to avoid cross shard operations.
 
 ```sql
-CREATE INDEX event_type_index ON github_events (event_type);
-CREATE INDEX payload_index ON github_events USING GIN (payload jsonb_path_ops);
+SELECT create_distributed_table('time_series', 'area_id');
+
+SELECT create_reference_table('area_reference');
+SELECT create_reference_table('metric_reference');
+SELECT create_reference_table('release_reference');
 ```
 
-Next we’ll take those Postgres tables on the coordinator node and tell Hyperscale to shard them across the workers. To do so, we’ll run a query for each table specifying the key to shard it on. In the current example we’ll shard both the events and users table on `user_id`, causing all database entries on each of these tables with the same `user_id` to be on the same node in your cluster:
+We're ready to load the data. In psql, shell out to download the files:
 
 ```sql
-SELECT create_distributed_table('github_events', 'user_id');
-SELECT create_distributed_table('github_users', 'user_id');
-```
 
-We're ready to load data. In psql still, shell out to download the files:
-
-```sql
-\! curl -O https://examples.citusdata.com/users.csv
-\! curl -O https://examples.citusdata.com/events.csv
 ```
 
 Next, load the data from the files into the distributed tables:
