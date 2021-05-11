@@ -234,11 +234,13 @@ OUTPUT:
 ![image](https://user-images.githubusercontent.com/41684987/117810543-2963e200-b27d-11eb-8b61-35de9bbd279a.png)
 
 
-That was quick, isn't it - that too when we are still using Hyperscale (Citus) -Basic Tier. If we look at the query above, we will observe that the query ran efficiently because we have distributed our tables such that the data is [co-located](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location) with minimal cross-shard operations.
+That was quick, isn't it - that too when we are still on Basic Tier. You can imagine the performance we will when we will add more nodes ot the cluster.If we look at the query above, we will observe that the query ran efficiently because we have distributed our tables such that the data is [co-located](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location) with minimal cross-shard operations.
 
 Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus):- 
 
 ** The Power of Horizontal Scaling**
+
+For this, I would request you to open Azure portal
 
 
 
