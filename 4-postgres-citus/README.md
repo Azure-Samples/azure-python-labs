@@ -1,6 +1,6 @@
 # Real Time Transactional and Analytical Processing on Azure Database for PostgreSQL - Hyperscale (Citus)
 
-Azure Database for PostgreSQL is a fully managed database-as-a-service based on the open-source Postgres relational database engine. The Hyperscale (Citus) deployment option enables you to scale queries horizontally- across multiple machines, to serve applications that require greater scale and performance. Citus transforms Postgres into a distributed database with features like sharding, a distributed SQL engine, reference tables, and distributed tables. The combination of parallelism, keeping more data in memory, and higher I/O bandwidth can lead to significant performance improvements
+Azure Database for PostgreSQL is a fully managed database-as-a-service based on the open-source Postgres relational database engine. The Hyperscale (Citus) deployment option enables you to scale queries horizontally- across multiple machines, to serve applications that require greater scale and performance. Citus transforms Postgres into a distributed database with features like [co-location](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location), a distributed SQL engine, reference tables, distributed tables and many more. The combination of [parallelism](https://docs.citusdata.com/en/stable/get_started/concepts.html#parallelism), keeping more data in memory, and higher I/O bandwidth can lead to significant performance improvements
 
 With the latest release, Citus 10 is now available in preview on Azure Hyperscale (Citus) with new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more. With Basic Tier, you can now build applications that are scale ready from day one.
 
@@ -211,7 +211,7 @@ SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'))
 OUTPUT:
 ![image](https://user-images.githubusercontent.com/41684987/117805620-ccfdc400-b276-11eb-9d2d-7592b05378c0.png)
 
-Can you see the benefit of using **Columnar** storage- we got a compression ratio of about 5x in this use case. Another important aspect to notice here is that, the relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as **HTAP**-(Hybrid Transactional/Analytical Processing) wherein the same database can be used for both analytical and transactional workloads.
+Can you see the benefit of using **Columnar** storage- we got a compression ratio of about 5x for `time_series_250421_to_290421` partition. Another important aspect to notice here is that, the relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as **HTAP**-(Hybrid Transactional/Analytical Processing) wherein the same database can be used for both analytical and transactional workloads.
 
 We see that relation `time_series` has a attribute called `payload` of `jsonb` type which stores time-series metrics related to Covid-19 in UK. It also stores Foreign Keys to other tables like `area_reference`, `metric_reference` and `release_reference`. We can use this dataset to identify the no. of Covid-19 tests done in an area on a given date:
 
@@ -234,13 +234,12 @@ OUTPUT:
 ![image](https://user-images.githubusercontent.com/41684987/117810543-2963e200-b27d-11eb-8b61-35de9bbd279a.png)
 
 
+That was quick, isn't it - that too when we are still using Hyperscale (Citus) -Basic Tier. If we look at the query above, we will observe that the query ran efficiently because we have distributed our tables such that the data is [co-located](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location) with minimal cross-shard operations.
+
+Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus):- 
+
+** The Power of Horizontal Scaling**
 
 
 
-
-
-
-
-
-Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore the next superpower of Hyperscale (Citus).
 
