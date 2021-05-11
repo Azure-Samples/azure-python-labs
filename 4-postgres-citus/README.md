@@ -41,7 +41,7 @@ Note: Make sure you have created a [server-level firewall rule](https://docs.mic
 
 ## Creating Schema and Data Distribution on Citus
 
-As we are now able to connect to the Hyperscale (Citus) server, let us move forward and define the table structure. For this lab, we will use a small sample of Covid-19 time-series data released by the UK government part of [OGL license](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/)  and try to get some insights on the vaccination drive. For more details please refer [coronavirus.data.gov.uk](https://coronavirus.data.gov.uk/).
+As we are now able to connect to the Hyperscale (Citus) server, let us move forward and define the table structure. For this lab, we will use a small sample of Covid-19 time-series data released by the UK government (part of [OGL license](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/))  and try to get some insights on the vaccination drive. For more details please refer [coronavirus.data.gov.uk](https://coronavirus.data.gov.uk/).
 
 
 You can create the tables by using standard PostgreSQL CREATE TABLE commands as shown below:
