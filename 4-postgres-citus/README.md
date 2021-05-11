@@ -48,6 +48,31 @@ CREATE SCHEMA IF NOT EXISTS covid19;
 
 SET search_path='covid19';
 
+-- Sequences
+
+CREATE SEQUENCE covid19.area_reference_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+CREATE SEQUENCE covid19.metric_reference_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+CREATE SEQUENCE covid19.release_reference_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+-- Tables
+
 CREATE TABLE covid19.area_reference
 (
     id integer NOT NULL DEFAULT nextval('area_reference_id_seq'::regclass),
@@ -94,15 +119,15 @@ CREATE TABLE covid19.time_series
     payload jsonb DEFAULT '{"value": null}'::jsonb
 ) PARTITION BY RANGE (date) ;
 
-CREATE INDEX time_series_metric_id_idx ON covid19.time_series_dist USING btree (metric_id ASC NULLS LAST);
+CREATE INDEX time_series_metric_id_idx ON covid19.time_series USING btree (metric_id ASC NULLS LAST);
 
 -- Partitions SQL
 
-CREATE TABLE covid19.time_series_250421_to_290421 OF covid19.time_series
-    FOR VALUES FROM ('2021-04-25') TO ('2021-04-29');
+CREATE TABLE covid19.time_series_250421_to_290421 PARTITION OF covid19.time_series
+    FOR VALUES FROM ('2021-04-25') TO ('2021-04-30');
 
-CREATE TABLE covid19.time_series_300421_to_040521 OF covid19.time_series
-    FOR VALUES FROM ('2021-04-30') TO ('2021-05-04');
+CREATE TABLE covid19.time_series_300421_to_040521 PARTITION OF covid19.time_series
+    FOR VALUES FROM ('2021-04-30') TO ('2021-05-05');
 ```
 
 Now that the schema is ready, we can focus on deciding the right distribution strategy to shard tables across nodes on Citus cluster and data ingestion. Below table describes the different types of table on Citus cluster:
@@ -148,6 +173,9 @@ Next, load the data from the files into the distributed tables:
 \copy covid19.time_series from 'time_seriesab.csv' WITH CSV
 \copy covid19.time_series from 'time_seriesac.csv' WITH CSV
 \copy covid19.time_series from 'time_seriesad.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesae.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesaf.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesag.csv' WITH CSV
 ```
 
 ## Running Queries
