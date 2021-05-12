@@ -79,12 +79,12 @@ Work in a dev container using Visual Studio Code
 [Django and PostgreSQL in a Dev Container lab](9-vscode-django-postgres-dev-container/README.md)
 
 
-## Debugging a Flask App with WSL in VS Code 
+## Debugging a Flask App with WSL in VS Code
 
 Work with a Flask application using WSL in VS Code.
 - Run/debug the Flask app
 - Configure application tests
-- Run application tests 
+- Run application tests
 
 [Debugging Flask App with WSL in VS Code lab](9-windows-subsystem-for-linux/README.md)
 
@@ -94,3 +94,10 @@ Work with a Flask application using WSL in VS Code.
 This workshop is meant to be an introduction to Azure Database for PostgreSQL Hyperscale (Citus). First, you will create a cluster to scale out PostgreSQL and turn it into a distributed database. Then, you will create a schema and tables, load test data, and create a rollup function to massively speed up your query workload.
 
 [Real-Time Analytics on Azure Database for PostgreSQL lab](4-postgres-citus/README.md)
+
+
+## Cyber Security Investigations and Analysis with MSTICPy
+
+This lab is an introduction to MSTICPy - an open source cyber security tool kit created by the Microsoft Threat Intelligence Center. In this lab you will learn about the core features of MSTICPy, and how to use to them in cyber security incident response or threat hunting. This lab takes the form of a Jupyter Notebook that you can run locally or directly in your browser.
+
+[Cyber Security Investigations and Analysis with MSTICPy](9-MSTICPy/README.md)
