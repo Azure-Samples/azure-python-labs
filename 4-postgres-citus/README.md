@@ -346,6 +346,6 @@ As you can see, we've got perfectly normal SQL running in a distributed environm
 
 ## Next steps
 
-If you have created an Azure Database for PostgreSQL- Hyperscale (Citus) for the purposes of this lab and you do not want to keep and continue to be billed for it, you can [delete](https://docs.microsoft.com/en-us/azure/postgresql/howto-hyperscale-read-replicas-portal#:~:text=To%20delete%20a%20server%20group,Select%20Delete.) it via the Azure Portal.
+If you do not want to keep and continue to be billed for the Azure database for Postgres-Hyperscale (Citus) server that we provisioned at the beginning of the lab, you can [delete](https://docs.microsoft.com/en-us/azure/postgresql/howto-hyperscale-read-replicas-portal#:~:text=To%20delete%20a%20server%20group,Select%20Delete.) it via the Azure Portal.
 
 You have successfully completed this lab. If you are interested in learning more about Hyperscale (Citus) please refer to our [Quickstart](https://docs.microsoft.com/en-us/azure/postgresql/hyperscale/) guide.
