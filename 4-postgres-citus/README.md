@@ -275,6 +275,7 @@ WHERE metric_id=15 AND date='2021-04-27' AND area_id=775 AND release_id=29674 ;
 Output:
 ![image](https://user-images.githubusercontent.com/41684987/117937719-ef015000-b323-11eb-8249-b34b65b977a5.png)
 
+So we see that with Hyperscale (Citus)- you can run both transactional and analytical workloads on the same machine.
 Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore another important (infact most important) capability of Hyperscale (Citus):
 
 ** The Power of Horizontal Scaling**
