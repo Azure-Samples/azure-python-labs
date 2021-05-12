@@ -14,6 +14,7 @@ You will learn to:
 - Azure Subscription (e.g. [Free](https://aka.ms/azure-free-account) or [Student](https://aka.ms/azure-student-account))
 - [Visual Studio Code](https://code.visualstudio.com/download)
 - The [Azure Machine Learning Extension](https://aka.ms/aml-ext) for Visual Studio Code
+- The [Azure Machine Learning SDK for Python](https://docs.microsoft.com/en-us/python/api/overview/azure/ml/install?view=azure-ml-py)
 
 ## Create an Azure Machine Learning Workspace
 
