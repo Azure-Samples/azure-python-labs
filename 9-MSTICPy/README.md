@@ -2,7 +2,7 @@
 
 This lab provides you with an interactive introduction to [MSTICPy](https://github.com/microsoft/msticpy).
 
-MSTICPy is an open source cyber security tool kit created by the Microsoft Threat Intelligence Center to support security analysts during investigations and threat hunting.If you want to know more about MSTICPy before starting this lab take a look at [our documentation over at ReadTheDocs](https://msticpy.readthedocs.io/en/latest/)
+MSTICPy is an open source cyber security tool kit created by the Microsoft Threat Intelligence Center to support security analysts during investigations and threat hunting. If you want to know more about MSTICPy before starting this lab take a look at [our documentation over at ReadTheDocs](https://msticpy.readthedocs.io/en/latest/)
 
 ## What we will cover in the lab
 In this lab you will learn about and use the main features of MSTICPy. The lab is split into several sections, each one focused on a key element of MSTICPy:
