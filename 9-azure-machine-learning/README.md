@@ -21,18 +21,18 @@ The [Azure Machine Learning workspace](https://docs.microsoft.com/en-us/azure/ma
 
 You can create an Azure ML workspace by clicking here:
 
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fazure-python-labs%2Fsiunnith%2F9-azure-machine-learning-vscode%2F.cloud%2Fdeploy.json)
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fazure-python-labs%2Fsiunnith%2F9-azure-machine-learning%2F.cloud%2Fdeploy.json)
 
-For more details about the deployment in the button used above, check the [ARM JSON definition](https://github.com/Azure-Samples/azure-python-labs/blob/siunnith/9-azure-machine-learning-vscode/.cloud/azuredeploy.json).
+For more details about the deployment in the button used above, check the [ARM JSON definition](https://github.com/Azure-Samples/azure-python-labs/blob/siunnith/9-azure-machine-learning/.cloud/deploy.json).
 
 ## Submit a Training Job to Azure Machine Learning
 Now that you have a workspace set up, you're ready to submit a training job to the Azure Machine Learning service. Through this lab, you're going to train a deep neural network to classify handwritten digits using the [MNIST dataset](https://www.tensorflow.org/datasets/catalog/mnist).
 
 Let's start by examining core files in this repo:
-1. _train.py_: The script used to train the neural network for classifying hand-written digits.
-1. _utils.py_: Utility script with methods for data preparation and loading.
-1. _run\_experiment.py_: The script used to create Azure Machine Learning resources and submit the training job to the cloud.
-1. _config.json_: The configuration file used by the orchestration script to initialize the workspace.
+1. `train.py`: The script used to train the neural network for classifying hand-written digits.
+1. `utils.py`: Utility script with methods for data preparation and loading.
+1. `run_experiment.py`: The script used to create Azure Machine Learning resources and submit the training job to the cloud.
+1. `config.json`: The configuration file used by the orchestration script to initialize the workspace.
 
 To familiarize yourself with the training details, please take a quick read through the main train and utility scripts. Once you've completed that, let's take a look at the first file you'll need to modify - the configuration JSON.
 
@@ -90,11 +90,11 @@ src.run_config.target = target
 The last step before submission is to define an experiment. The experiment artifact is used to track progress, metrics, and logs of your training run. Once your experiment and script run configuration have been defined, you can submit the experiment to the Azure Machine Learning service:
 
 ```python
-    experiment_name = "pycon-experiment"
-    experiment = Experiment(workspace=ws, name=experiment_name)
-    
-    run = experiment.submit(config=src)
-    run.wait_for_completion(show_output=True)
+experiment_name = "pycon-experiment"
+experiment = Experiment(workspace=ws, name=experiment_name)
+
+run = experiment.submit(config=src)
+run.wait_for_completion(show_output=True)
 ```
 
 Execute the following command to run your training script:
@@ -175,4 +175,4 @@ From here you can view individual metrics you've logged and use the UI to compar
 
 If you are interested in learning more about different things you can do with Azure Machine Learning, such as deploying and serving your model on inferencing targets you can find [more documentation here](https://docs.microsoft.com/en-us/azure/machine-learning/).
 
-For more samples and notebooks visit the [Examples Github Page](https://github.com/Azure/azureml-examples) and the [AzureML Notebooks Repo](https://github.com/Azure/MachineLearningNotebooks/).
+For more samples and notebooks visit the [Azure Machine Learning examples repository](https://github.com/Azure/azureml-examples) and the [Azure Machine Learning example notebooks repository](https://github.com/Azure/MachineLearningNotebooks/).
