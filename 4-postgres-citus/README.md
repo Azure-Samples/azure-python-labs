@@ -278,9 +278,9 @@ Output:
 So we see that with Hyperscale (Citus)- you can run both transactional and analytical workloads on the same machine.
 Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore another important (infact most important) capability of Hyperscale (Citus):
 
-** The Power of Horizontal Scaling**
+**The Power of Horizontal Scaling**
 
-For this, I would request you to goto the [Azure portal](https://portal.azure.com/) again, select your Azure Database for PostgreSQL-Hyperscale (Citus) server and under *Compute + storage** section upgrade from **Basic** tier to **Standard** & increase **Worker node count** to **4** nodes as shown in screenshot below. 
+For this, I would request you to goto the [Azure portal](https://portal.azure.com/) again, select your Azure Database for PostgreSQL-Hyperscale (Citus) server and under **Compute + storage** section upgrade from **Basic** tier to **Standard** & increase **Worker node count** to **4** nodes as shown in screenshot below. 
 
 ![image](https://user-images.githubusercontent.com/41684987/117833371-ebbe8380-b293-11eb-82ee-77a0243dd4e3.png)
 
