@@ -100,4 +100,4 @@ This workshop is meant to be an introduction to Azure Database for PostgreSQL Hy
 
 This lab is an introduction to MSTICPy - an open source cyber security tool kit created by the Microsoft Threat Intelligence Center. In this lab you will learn about the core features of MSTICPy, and how to use to them in cyber security incident response or threat hunting. This lab takes the form of a Jupyter Notebook that you can run locally or directly in your browser.
 
-[Cyber Security Investigations and Analysis with MSTICPy](9-MSTICPy/README.md)
+[Cyber Security Investigations and Analysis with MSTICPy lab](9-MSTICPy/README.md)
