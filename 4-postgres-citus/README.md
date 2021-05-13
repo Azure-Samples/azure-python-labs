@@ -1,135 +1,358 @@
-# Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
+# Real Time Transactional and Analytical Processing on Azure Database for PostgreSQL - Hyperscale (Citus)
 
-Azure Database for PostgreSQL is a managed service that you use to run, manage, and scale highly available PostgreSQL databases in the cloud. This Quickstart shows you how to create an Azure Database for PostgreSQL - Hyperscale (Citus) server group using the Azure portal. You'll explore distributed data: sharding tables across nodes, ingesting sample data, and run queries that are automatically parallelized across multiple nodes. 
+Azure Database for PostgreSQL is a fully managed database-as-a-service based on the open-source Postgres relational database engine. The Hyperscale (Citus) deployment option enables you to scale queries horizontally- across multiple machines, to serve applications that require greater scale and performance. Citus transforms Postgres into a distributed database with features like [co-location](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location), a distributed SQL engine, reference tables, distributed tables and many more. The combination of [parallelism](https://docs.citusdata.com/en/stable/get_started/concepts.html#parallelism), keeping more data in memory, and higher I/O bandwidth can lead to significant performance improvements
+
+With the latest release, Citus 10 is now available in preview on Azure Hyperscale (Citus) with new capabilities like Columnar Storage, sharding on a single node Postgres machine, Joins between Local PostgreSQL & Citus tables and much more. With Basic Tier, you can now build applications that are scale ready from day one.
+
+In this lab, we will learn about some of the superpowers that Citus brings in to the table by distributing data across multiple nodes. We will explore:
+
+- How to create an Azure Database for PostgreSQL-Hyperscale (Citus) using Azure Portal
+- Concepts of Sharding on Hyperscale (Citus) Basic Tier
+- Creating schemas and ingesting data into an Hyperscale (Citus) instance
+- Using Columnar Storage to reduce storage cost and speedup analytical queries
+- Scaling the Hyperscale (Citus)-Basic Tier to Standard Tier
+- Rebalancing the data and capturing performance improvements
+
+To test the new features of Citus you can either use:
+
+- [Citus 10 Open Source](https://www.citusdata.com/download/) or;
+- [Hyperscale (Citus) on Azure Database for PostgreSQL](https://docs.microsoft.com/azure/postgresql/hyperscale-overview)
+
+**Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But please note that the docker image is intended to be used for development or testing purposes only and not for production workloads.
+
+```ssh
+# run PostgreSQL with Citus on port 5500
+docker run -d --name citus -p 5500:5432 -e POSTGRES_PASSWORD=mypassword citusdata/citus
+```
 
 ## Prerequisites
 
-If you are **not** at an event, please see [REQUIREMENTS](REQUIREMENTS.md) to install the prerequisites for this lab.
+- Azure Subscription (e.g. [Free](https://aka.ms/azure-free-account) or [Student](https://aka.ms/azure-student-account))
+- An **Azure Database for PostgreSQL-Hyperscale Server-Basic Tier** (Detailed steps are listed [here](https://docs.microsoft.com/azure/postgresql/quickstart-create-hyperscale-basic-tier)). For this lab, we will start with Azure Basic Tier- run queries & capture performance benchmarks and later scale it to Standard Tier to see the performance improvements introduced by horizantal scaling of nodes.
+- You will also need [psql](https://www.postgresql.org/download/) (Ver 11 is recommended), which is included in [Azure Cloud Shell](https://docs.microsoft.com/en-ca/azure/cloud-shell/overview).
+- [Optional] If you want you can also run Citus open source on your laptop as a single Docker container!
+    ```bash
+    # run PostgreSQL with Citus on port 5500
+    docker run -d --name citus -p 5500:5432 -e POSTGRES_PASSWORD=mypassword citusdata/citus
+    ```
 
-## Create and distribute tables
+## Connecting to the Hyperscale (Citus) Database
 
-Once connected to the Hyperscale coordinator node using psql, you can complete some basic tasks.
+Connecting to an Azure Database for PostgreSQL-Hyperscale (Citus) database requires the fully qualified server name and login credentials. You can get this information from the Azure portal.
 
-Within Hyperscale servers there are three types of tables:
+1. In the [Azure portal](https://portal.azure.com/), search for and select your Azure Database for PostgreSQL-Hyperscale (Citus) server name. 
+1. On the server's **Overview** page, copy the fully qualified **Server name**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*. For Hyperscale (Citus) the default **Admin username** is always **'Citus'**.
+1. You will also need your **Admin password** which you chose when you created the server, otherwise you can reset it using the `Reset password` button on `Overview` page.
 
-- Distributed or sharded tables (spread out to help scaling for performance and parallelization)
-- Reference tables (multiple copies maintained)
-- Local tables (tables you don't join to, typically administration/logging tables)
+Note: Make sure you have created a [server-level firewall rule](https://docs.microsoft.com/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
 
-In this quickstart, we'll set up some distributed tables, learn how they work, and show how they make analytics faster.  
+## Creating Schema and Data Distribution on Citus
 
-The data model we're going to work with is simple: user and event data from our GitHub repo. Events include fork creation, git commits related to an organization, and more.
+As we are now able to connect to the Hyperscale (Citus) server, let us move forward and define the table structure. For this lab, we will use a small sample of Covid-19 time-series data released by the UK government (part of [OGL license](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/))  and try to get some insights on the vaccination drive. For more details please refer [coronavirus.data.gov.uk](https://coronavirus.data.gov.uk/).
 
-Connect to the Hyperscale coordinator using psql:
 
-```bash
-# if you are at an event, run the following lines to get your connection string automatically
-i=$(az account show | jq -r '.user.name |= split("@")[0] | .user.name |= split("-")[1] | .user.name')
-if [ "$i" = "null" ]; then i='1'; else echo $i; fi
-CONNECTION_STRING=$(az keyvault secret show --vault kv190700 --name citus-${i} | jq -r .value)
-# CONNECTION_STRING will be in the format:
-# "host={server_name}.postgres.database.azure.com port=5432 dbname=citus user=citus password={your_password} sslmode=require"
-
-# connect to server (if not at an event, replace $CONNECTION_STRING with your connection string)
-psql "$CONNECTION_STRING"
-```
-
-Once you've connected via psql using the above command, let's create our tables. In the psql console run:
+You can create the tables by using standard PostgreSQL CREATE TABLE commands as shown below:
 
 ```sql
 -- re-initializing database
 DROP OWNED BY citus;
 
-CREATE TABLE github_events
+CREATE SCHEMA IF NOT EXISTS covid19;
+
+SET search_path='covid19';
+
+-- Sequences
+
+CREATE SEQUENCE covid19.area_reference_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+CREATE SEQUENCE covid19.metric_reference_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+CREATE SEQUENCE covid19.release_reference_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+-- Tables
+
+CREATE TABLE covid19.area_reference
 (
-    event_id bigint,
-    event_type text,
-    event_public boolean,
-    repo_id bigint,
-    payload jsonb,
-    repo jsonb,
-    user_id bigint,
-    org jsonb,
-    created_at timestamp with time zone
+    id integer NOT NULL DEFAULT nextval('area_reference_id_seq'::regclass),
+    area_type character varying(15) COLLATE pg_catalog."default" NOT NULL,
+    area_code character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    area_name character varying(120) COLLATE pg_catalog."default" NOT NULL,
+    unique_ref character varying(26) COLLATE pg_catalog."default" NOT NULL DEFAULT "substring"(((now())::character varying)::text, 0, 26),
+    CONSTRAINT area_reference_pkey PRIMARY KEY (area_type, area_code),
+    CONSTRAINT area_reference_id_key UNIQUE (id),
+    CONSTRAINT unq_area_reference_ref UNIQUE (unique_ref)
 );
 
-CREATE TABLE github_users
+
+CREATE TABLE covid19.metric_reference
 (
-    user_id bigint,
-    url text,
-    login text,
-    avatar_url text,
-    gravatar_id text,
-    display_login text
+    id integer NOT NULL DEFAULT nextval('metric_reference_id_seq'::regclass),
+    metric character varying(120) COLLATE pg_catalog."default" NOT NULL,
+    released boolean NOT NULL DEFAULT false,
+    metric_name character varying(150) COLLATE pg_catalog."default",
+    source_metric boolean NOT NULL DEFAULT false,
+    CONSTRAINT metric_reference_pkey PRIMARY KEY (id),
+    CONSTRAINT metric_reference_metric_key UNIQUE (metric)
 );
+
+
+CREATE TABLE covid19.release_reference
+(
+    id integer NOT NULL DEFAULT nextval('release_reference_id_seq'::regclass),
+    "timestamp" timestamp without time zone NOT NULL,
+    released boolean NOT NULL DEFAULT false,
+    CONSTRAINT release_reference_pkey PRIMARY KEY (id),
+    CONSTRAINT release_reference_timestamp_key UNIQUE ("timestamp")
+);
+
+
+CREATE TABLE covid19.time_series
+(
+    hash character varying(24) COLLATE pg_catalog."default" NOT NULL,
+    partition_id character varying(26) COLLATE pg_catalog."default" NOT NULL,
+    release_id integer NOT NULL,
+    area_id integer NOT NULL,
+    metric_id integer NOT NULL,
+    date date NOT NULL,
+    payload jsonb DEFAULT '{"value": null}'::jsonb
+) PARTITION BY RANGE (date) ;
+
+
+-- Partitions SQL
+
+CREATE TABLE covid19.time_series_250421_to_290421 PARTITION OF covid19.time_series
+    FOR VALUES FROM ('2021-04-25') TO ('2021-04-30');
+
+CREATE TABLE covid19.time_series_300421_to_040521 PARTITION OF covid19.time_series
+    FOR VALUES FROM ('2021-04-30') TO ('2021-05-05');
 ```
 
-The `payload` field of `github_events` has a JSONB datatype. JSONB is the JSON datatype in binary form in Postgres. The datatype makes it easy to store a flexible schema in a single column.
+Now that the schema is ready, we can focus on deciding the right distribution strategy to shard tables across nodes on Citus cluster and data ingestion. Below table describes the different types of table on Citus cluster:
 
-Postgres can create a `GIN` index on this type, which will index every key and value within it. With an  index, it becomes fast and easy to query the payload with various conditions. Let's go ahead and create a couple of indexes before we load our data. In psql:
+| Sr. | Table Type        | Description |
+|-----|-------------------|-------------|
+| 1   | [Distributed Table](https://docs.citusdata.com/en/stable/get_started/concepts.html#type-1-distributed-tables) | Large tables that are horizontally partitioned across worker nodes.Helps in scaling and parallelism. |
+| 2   | [Reference Table](https://docs.citusdata.com/en/stable/get_started/concepts.html#type-2-reference-tables)   | Tables that are replicated on each node. Generally, tables which are smaller in size but are used frequently in JOINs|
+| 3   | [Local Table](https://docs.citusdata.com/en/stable/get_started/concepts.html#type-3-local-tables)       | Tables that stays on coordinator node. Generally, the ones with no dependencies or JOINS. |
+
+In our case `time_series` is the largest table that holds real time Covid19 data for various metrics across different areas in UK, and others are supporting tables with less data- which when joined with `time_series` helps in building useful analytics.
+
+
+Next we’ll take these Postgres tables on the coordinator node and tell Hyperscale(Citus) to either distribute or replicate them across the workers. To do so, we’ll run a query for each table specifying the key to shard it on. In the current example we’ll shard `time_series` table on `area_id`, and make other three tables are reference tables to avoid cross shard operations.
 
 ```sql
-CREATE INDEX event_type_index ON github_events (event_type);
-CREATE INDEX payload_index ON github_events USING GIN (payload jsonb_path_ops);
+SELECT create_distributed_table('time_series', 'area_id');
+
+SELECT create_reference_table('area_reference');
+SELECT create_reference_table('metric_reference');
+SELECT create_reference_table('release_reference');
 ```
 
-Next we’ll take those Postgres tables on the coordinator node and tell Hyperscale to shard them across the workers. To do so, we’ll run a query for each table specifying the key to shard it on. In the current example we’ll shard both the events and users table on `user_id`, causing all database entries on each of these tables with the same `user_id` to be on the same node in your cluster:
+We're now ready to load the data. In psql, shell out to download the files:
 
 ```sql
-SELECT create_distributed_table('github_events', 'user_id');
-SELECT create_distributed_table('github_users', 'user_id');
-```
-
-We're ready to load data. In psql still, shell out to download the files:
-
-```sql
-\! curl -O https://examples.citusdata.com/users.csv
-\! curl -O https://examples.citusdata.com/events.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/area_reference.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/metric_reference.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/release_reference.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesaa.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesab.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesac.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesad.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesae.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesaf.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesag.csv
 ```
 
 Next, load the data from the files into the distributed tables:
 
 ```sql
-\copy github_events from 'events.csv' WITH CSV
-\copy github_users from 'users.csv' WITH CSV
+\copy covid19.area_reference from 'area_reference.csv' WITH CSV
+\copy covid19.metric_reference from 'metric_reference.csv' WITH CSV
+\copy covid19.release_reference from 'release_reference.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesaa.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesab.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesac.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesad.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesae.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesaf.csv' WITH CSV
+\copy covid19.time_series from 'time_seriesag.csv' WITH CSV
 ```
 
-## Run queries
+## Running Queries
 
 Now it's time for the fun part, actually running some queries. Let's start with a simple `count (*)` to see how much data we loaded:
 
 ```sql
-SELECT count(*) from github_events;
+SELECT count(*) from covid19.time_series;
 ```
+That worked nicely. We'll move on to some complex queries in a bit, but for now we will see the benefit that we get with Columnar storage introduced with Citus 10. We have partitioned `time_series` table into two- `time_series_250421_to_290421` that holds data from 25 April till 29 April 2021 and `time_series_300421_to_040521` holds more recent data from 30 April till 04 May 2021.
 
-That worked nicely. We'll come back to that sort of aggregation in a bit, but for now let’s look at a few other queries. Within the JSONB `payload` column there's a good bit of data, but it varies based on event type. `PushEvent` events contain a size that includes the number of distinct commits for the push. We can use it to find the total number of commits per hour:
+Let us now check the disk space consumed by the table `time_series`:
 
 ```sql
-SELECT date_trunc('hour', created_at) AS hour,
-       sum((payload->>'distinct_size')::int) AS num_commits
-FROM github_events
-WHERE event_type = 'PushEvent'
-GROUP BY hour
-ORDER BY hour;
+SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') + citus_total_relation_size('time_series_300421_to_040521'));
+SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117848538-077c5680-b2a1-11eb-93fe-863fd08f5e95.png)
 
-So far the queries have involved the github\_events exclusively, but we can combine this information with github\_users. Since we sharded both users and events on the same identifier (`user_id`), the rows of both tables with matching user IDs will be [colocated](https://docs.citusdata.com/en/stable/sharding/data_modeling.html#colocation) on the same database nodes and can easily be joined.
 
-If we join on `user_id`, Hyperscale can push the join execution down into shards for execution in parallel on worker nodes. For example, let's find the users who created the greatest number of repositories:
+With time as data grows, Hyperscale (Citus) gives you a flexibility to compress your old partitions to save storage cost just by running below simple command that uses table access method to compress the data:
 
 ```sql
-SELECT login, count(*)
-FROM github_events ge
-JOIN github_users gu
-ON ge.user_id = gu.user_id
-WHERE event_type = 'CreateEvent' AND
-      payload @> '{"ref_type": "repository"}'
-GROUP BY login
-ORDER BY count(*) DESC;
+SELECT alter_table_set_access_method('time_series_250421_to_290421', 'columnar');
+```
+Please note that we have compressed only the first partition which is created to simulate historical data in real life scenario. Now that we have converted partition `time_series_250421_to_290421` into columnar, let us verify the table size again. 
+
+```sql
+SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117805620-ccfdc400-b276-11eb-9d2d-7592b05378c0.png)
+
+Can you see the benefit of using **Columnar** storage- we got a compression ratio of about 5x for `time_series_250421_to_290421` partition. Another important aspect to notice here is that, the relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as **HTAP**-(Hybrid Transactional/Analytical Processing) wherein the same database can be used for both analytical and transactional workloads.
+
+We see that relation `time_series` has a attribute called `payload` of `jsonb` type which stores time-series metrics related to Covid-19 in UK. It also stores Foreign Keys to other tables like `area_reference`, `metric_reference` and `release_reference`. We can use this dataset to identify the no. of Covid-19 tests done in an area on a given date:
+
+```sql
+SELECT 
+area_code,
+area_name,
+date,
+MAX((payload -> 'value')::INT) AS Tests_Conducted
+FROM covid19.time_series AS ts
+JOIN covid19.area_reference AS ar ON ar.id = ts.area_id
+JOIN covid19.metric_reference AS mr ON mr.id = ts.metric_id
+JOIN covid19.release_reference AS rr ON rr.id = ts.release_id
+WHERE date = '2021-04-27' 
+AND metric = 'newVirusTestsRollingSum'
+AND (payload -> 'value')  NOTNULL 
+GROUP BY area_code, area_name, date;
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117832491-283daf80-b293-11eb-810b-9e66e090127e.png)
+
+That was quick, isn't it - that too when we are using Citus on single node machine. You can imagine the performance we will get when we will add more nodes ot the cluster.If we look at the query above, we will observe that the query ran efficiently because we have distributed our tables such that the data is [co-located](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location) with minimal cross-shard operations.
+
+Let's run another query that will generate stats for total no. of first dose vaccinations given across various areas in UK.
+
+```sql
+SELECT 
+area_type,
+area_code,
+MAX(date) AS date,
+MAX((payload -> 'value')::FLOAT) AS first_dose
+FROM (
+	SELECT *
+	FROM covid19.time_series AS tm
+	JOIN covid19.release_reference AS rr ON rr.id = release_id
+	JOIN covid19.metric_reference AS mr ON mr.id = metric_id
+	JOIN covid19.area_reference AS ar ON ar.id = tm.area_id
+	 ) AS ts
+WHERE date > (now() - INTERVAL '30 days')
+AND metric = 'cumPeopleVaccinatedFirstDoseByPublishDate'
+AND (payload -> 'value') NOTNULL
+GROUP BY area_type, area_code;
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117834767-0cd3a400-b295-11eb-933e-6b10c780415c.png)
+
+Let's try to see how a transactional query will perform on the same cluster.
+
+```sql
+UPDATE covid19.time_series
+SET payload = '{"value": 0.0}'
+WHERE metric_id=15 AND date='2021-04-27' AND area_id=775 AND release_id=29674 ;
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117937719-ef015000-b323-11eb-8249-b34b65b977a5.png)
+
+So we see that with Hyperscale (Citus)- you can run both transactional and analytical workloads on the same machine.
+Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore another important (infact most important) capability of Hyperscale (Citus):
+
+**The Power of Horizontal Scaling**
+
+For this, I would request you to goto the [Azure portal](https://portal.azure.com/) again, select your Azure Database for PostgreSQL-Hyperscale (Citus) server and under **Compute + storage** section upgrade from **Basic** tier to **Standard** & increase **Worker node count** to **4** nodes as shown in screenshot below. 
+
+![image](https://user-images.githubusercontent.com/41684987/117833371-ebbe8380-b293-11eb-82ee-77a0243dd4e3.png)
+
+`Please note that this will force Citus cluster to restart. Also, changing the tier back from Standard to Basic is not supported.`
+
+
+Once it's done and the new cluster with 4 worker nodes is available, the first thing we will have to do it rebalance the data across the new nodes that were added. This activity needs to be done only for distributed tables and not referenced ones. Reference tables automatically gets copied to the new node when the node is created.
+
+Rebalancing distributed tables can be easily acheived by running below command:
+
+```sql
+SELECT rebalance_table_shards('time_series',shard_transfer_mode=>'force_logical');
 ```
 
+Once the data is rebalanced across the new nodes, we can again re-run the above queries and compare the run times with benchmarks captured earlier for Basic Tier.
+
+```sql
+SELECT 
+area_code,
+area_name,
+date,
+MAX((payload -> 'value')::INT) AS Tests_Conducted
+FROM covid19.time_series AS ts
+JOIN covid19.area_reference AS ar ON ar.id = ts.area_id
+JOIN covid19.metric_reference AS mr ON mr.id = ts.metric_id
+JOIN covid19.release_reference AS rr ON rr.id = ts.release_id
+WHERE date = '2021-04-27' 
+AND metric = 'newVirusTestsRollingSum'
+AND (payload -> 'value')  NOTNULL 
+GROUP BY area_code, area_name, date;
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117859032-22a09380-b2ac-11eb-8f9a-ddbf61e56cee.png)
+
+Did you observed the difference?
+The same query is now taking only 1/6th of the time that it was taking earlier on a single node machine.
+
+Let's cross-check if the second query also shows similar behaviour.
+
+```sql
+SELECT 
+area_type,
+area_code,
+MAX(date) AS date,
+MAX((payload -> 'value')::FLOAT) AS first_dose
+FROM (
+	SELECT *
+	FROM covid19.time_series AS tm
+	JOIN covid19.release_reference AS rr ON rr.id = release_id
+	JOIN covid19.metric_reference AS mr ON mr.id = metric_id
+	JOIN covid19.area_reference AS ar ON ar.id = tm.area_id
+	 ) AS ts
+WHERE date > (now() - INTERVAL '30 days')
+AND metric = 'cumPeopleVaccinatedFirstDoseByPublishDate'
+AND (payload -> 'value') NOTNULL
+GROUP BY area_type, area_code;
+```
+Output:
+![image](https://user-images.githubusercontent.com/41684987/117860625-21706600-b2ae-11eb-9a0e-e210db0cdf7c.png)
+
+For this query as well, we see similar improvements in the overall run time. 
 As you can see, we've got perfectly normal SQL running in a distributed environment with no changes to our actual queries. This is a very powerful tool for scaling PostgreSQL to any size you need without dealing with the traditional complexity of distributed systems.
 
-## Next steps (Optional)
+## Next steps
 
-You have successfully completed this lab. If you are interested in learning about advanced functionality, you can continue to the [Rolling up data](README-ADVANCED.md#Rolling-up-data) section in the [Advanced](README-ADVANCED.md#Rolling-up-data) version of this lab, or refer to our [Quickstart](https://docs.microsoft.com/azure/postgresql/quickstart-create-hyperscale-portal#create-an-azure-database-for-postgresql---hyperscale-citus) documentation in the future to create your own database.
+If you do not want to keep and continue to be billed for the Azure database for Postgres-Hyperscale (Citus) server that we provisioned at the beginning of the lab, you can [delete](https://docs.microsoft.com/azure/postgresql/howto-hyperscale-read-replicas-portal#:~:text=To%20delete%20a%20server%20group,Select%20Delete.) it via the Azure Portal.
+
+You have successfully completed this lab. If you are interested in learning more about Hyperscale (Citus) please refer to our [Quickstart](https://docs.microsoft.com/azure/postgresql/hyperscale/) guide.
