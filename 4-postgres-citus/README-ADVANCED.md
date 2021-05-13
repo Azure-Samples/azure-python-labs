@@ -1,20 +1,8 @@
-# Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
+# Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus) with GitHub
 
-Azure Database for PostgreSQL is a managed service that you use to run, manage, and scale highly available PostgreSQL databases in the cloud. This Quickstart shows you how to create an Azure Database for PostgreSQL - Hyperscale (Citus) server group using the Azure portal. You'll explore distributed data: sharding tables across nodes, ingesting sample data, running queries that execute on multiple nodes, and learn how to use rollup queries to make real-time analytics even faster.
-
-## Prerequisites
-
-If you are **not** at an event, please see [REQUIREMENTS](REQUIREMENTS.md) to install the prerequisites for this lab.
+This is an extension of the [main lab](README.md) with GitHub data.
 
 ## Create and distribute tables
-
-Once connected to the Hyperscale coordinator node using psql, you can complete some basic tasks.
-
-Within Hyperscale servers there are three types of tables:
-
-- Distributed or sharded tables (spread out to help scaling for performance and parallelization)
-- Reference tables (multiple copies maintained)
-- Local tables (tables you don't join to, typically administration/logging tables)
 
 In this quickstart, we'll set up some distributed tables, learn how they work, and show how they make analytics faster.  
 
@@ -23,18 +11,12 @@ The data model we're going to work with is simple: user and event data from GitH
 Connect to the Hyperscale coordinator using psql:
 
 ```bash
-# if you are at an event, run the following lines to get your connection string automatically
-i=$(az account show | jq -r '.user.name |= split("@")[0] | .user.name |= split("-")[1] | .user.name')
-if [ "$i" = "null" ]; then i='1'; else echo $i; fi
-CONNECTION_STRING=$(az keyvault secret show --vault kv190700 --name citus-${i} | jq -r .value)
-# CONNECTION_STRING will be in the format:
-# "host={server_name}.postgres.database.azure.com port=5432 dbname=citus user=citus password={your_password} sslmode=require"
-
-# connect to server (if not at an event, replace $CONNECTION_STRING with your connection string)
+# export CONNECTION_STRING="host={server_name}.postgres.database.azure.com port=5432 dbname=citus user=citus password={your_password} sslmode=require"
+# connect to server
 psql "$CONNECTION_STRING"
 ```
 
-Once you've connected via psql using the above command, let's create our tables. In the psql console run:
+Let's create our tables. In the psql console run:
 
 ```sql
 -- re-initializing database
