@@ -59,6 +59,20 @@ This workshop is meant to be an introduction to Azure Database for PostgreSQL Hy
 
 [Real-Time Analytics on Azure Database for PostgreSQL lab](4-postgres-citus/README.md)
 
+
+## Training Digit Recognition Model with Azure Machine Learning
+
+In this lab, you will learn how to train and track a machine learning model on a cloud compute cluster through Azure Machine Learning. You will learn to:
+
+- Deploy machine learning resources in Azure.
+- Submit a training job to Azure Machine Learning.
+- Use the Azure Machine Learning extension to monitor the state of your run.
+- Add logging metrics to your training job.
+- Resubmit and track your metrics in the Azure Machine Learning studio.
+
+[Training Digit Recognition Model with Azure Machine Learning lab](9-azure-machine-learning/README.md)
+
+
 ---
 
 ## [MORE](MORE.md) | [2020](2020/README.md) | [2019](2019/README.md)
