@@ -362,10 +362,21 @@ AND (payload -> 'value')  NOTNULL
 GROUP BY area_code, area_name, date;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117859032-22a09380-b2ac-11eb-8f9a-ddbf61e56cee.png)
+```sql
+ area_code |    area_name     |    date    | tests_conducted
+-----------+------------------+------------+-----------------
+ S92000003 | Scotland         | 2021-04-27 |          127272
+ N92000002 | Northern Ireland | 2021-04-27 |           77090
+ W92000004 | Wales            | 2021-04-27 |           66246
+ E92000001 | England          | 2021-04-27 |         6680473
+ K02000001 | United Kingdom   | 2021-04-27 |         6951081
+(5 rows)
+
+Time: 138.908 ms
+```
 
 Did you observed the difference?
-The same query is now taking only 1/6th of the time that it was taking earlier on a single node machine.
+The same query is now taking only 1/4th of the time that it was taking earlier on a single node machine.
 
 Let's cross-check if the second query also shows similar behaviour.
 
@@ -388,7 +399,18 @@ AND (payload -> 'value') NOTNULL
 GROUP BY area_type, area_code;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117860625-21706600-b2ae-11eb-9a0e-e210db0cdf7c.png)
+```sql
+ area_type | area_code |    date    | first_dose
+-----------+-----------+------------+------------
+ nation    | E92000001 | 2021-05-03 |   29025049
+ overview  | K02000001 | 2021-05-03 |   34667904
+ nation    | S92000003 | 2021-05-03 |    2833761
+ nation    | W92000004 | 2021-05-03 |    1864400
+ nation    | N92000002 | 2021-05-03 |     944694
+(5 rows)
+
+Time: 205.218 ms
+```
 
 For this query as well, we see similar improvements in the overall run time. 
 As you can see, we've got perfectly normal SQL running in a distributed environment with no changes to our actual queries. This is a very powerful tool for scaling PostgreSQL to any size you need without dealing with the traditional complexity of distributed systems.
