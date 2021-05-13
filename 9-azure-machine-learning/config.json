@@ -1,0 +1,5 @@
+{
+    "subscription_id": "<input-subscription-id-here>",
+    "resource_group": "<input-resource-group-here>",
+    "workspace_name": "pyconworkspace"
+}
