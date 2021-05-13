@@ -20,7 +20,7 @@ To test the new features of Citus you can either use:
 
 **Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But please note that the docker image is intended to be used for development or testing purposes only and not for production workloads.
 
-```ssh
+```bash
 # run PostgreSQL with Citus on port 5500
 docker run -d --name citus -p 5500:5432 -e POSTGRES_PASSWORD=mypassword citusdata/citus
 ```
@@ -165,7 +165,7 @@ SELECT create_reference_table('release_reference');
 
 We're now ready to load the data. In psql, shell out to download the files:
 
-```sql
+```bash
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/area_reference.csv
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/metric_reference.csv
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/release_reference.csv
@@ -180,7 +180,7 @@ curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgr
 
 Next, connect to the database server again and load the data from the files into the distributed tables:
 
-```sql
+```bash
 \copy covid19.area_reference from 'area_reference.csv' WITH CSV
 \copy covid19.metric_reference from 'metric_reference.csv' WITH CSV
 \copy covid19.release_reference from 'release_reference.csv' WITH CSV
@@ -209,7 +209,7 @@ SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') 
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
 Output:
-```sql
+```text
 citus=> SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') + citus_total_relation_size('time_series_300421_to_040521'));
  pg_size_pretty
 ----------------
@@ -235,7 +235,7 @@ Please note that we have compressed only the first partition which is created to
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
 Output:
-```sql
+```text
  pg_size_pretty
 ----------------
  23 MB
@@ -262,7 +262,7 @@ AND (payload -> 'value')  NOTNULL
 GROUP BY area_code, area_name, date;
 ```
 Output:
-```sql
+```text
  area_code |    area_name     |    date    | tests_conducted
 -----------+------------------+------------+-----------------
  S92000003 | Scotland         | 2021-04-27 |          127272
@@ -298,7 +298,7 @@ AND (payload -> 'value') NOTNULL
 GROUP BY area_type, area_code;
 ```
 Output:
-```sql
+```text
  area_type | area_code |    date    | first_dose
 -----------+-----------+------------+------------
  nation    | E92000001 | 2021-05-03 |   29025049
@@ -319,7 +319,7 @@ SET payload = '{"value": 1.0}'
 WHERE metric_id=101 AND date='2021-04-30' AND area_id=873 AND release_id=29795 ;
 ```
 Output:
-```sql
+```text
 UPDATE 1
 Time: 5.237 ms
 ```
@@ -362,7 +362,7 @@ AND (payload -> 'value')  NOTNULL
 GROUP BY area_code, area_name, date;
 ```
 Output:
-```sql
+```text
  area_code |    area_name     |    date    | tests_conducted
 -----------+------------------+------------+-----------------
  S92000003 | Scotland         | 2021-04-27 |          127272
@@ -399,7 +399,7 @@ AND (payload -> 'value') NOTNULL
 GROUP BY area_type, area_code;
 ```
 Output:
-```sql
+```text
  area_type | area_code |    date    | first_dose
 -----------+-----------+------------+------------
  nation    | E92000001 | 2021-05-03 |   29025049
