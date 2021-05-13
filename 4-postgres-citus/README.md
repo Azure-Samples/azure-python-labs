@@ -16,7 +16,7 @@ In this lab, we will learn about some of the superpowers that Citus brings in to
 To test the new features of Citus you can either use:
 
 - [Citus 10 Open Source](https://www.citusdata.com/download/) or;
-- [Hyperscale (Citus) on Azure Database for PostgreSQL](https://docs.microsoft.com/en-us/azure/postgresql/hyperscale-overview)
+- [Hyperscale (Citus) on Azure Database for PostgreSQL](https://docs.microsoft.com/azure/postgresql/hyperscale-overview)
 
 **Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But please note that the docker image is intended to be used for development or testing purposes only and not for production workloads.
 
@@ -44,7 +44,7 @@ Connecting to an Azure Database for PostgreSQL-Hyperscale (Citus) database requi
 1. On the server's **Overview** page, copy the fully qualified **Server name**. The fully qualified **Server name** is always of the form *\<my-server-name>.postgres.database.azure.com*. For Hyperscale (Citus) the default **Admin username** is always **'Citus'**.
 1. You will also need your **Admin password** which you chose when you created the server, otherwise you can reset it using the `Reset password` button on `Overview` page.
 
-Note: Make sure you have created a [server-level firewall rule](https://docs.microsoft.com/en-us/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
+Note: Make sure you have created a [server-level firewall rule](https://docs.microsoft.com/azure/postgresql/quickstart-create-server-database-portal#configure-a-server-level-firewall-rule) to allow traffic from the IP address of the machine you will be using to connect to the database. If you are connected to a remote machine via SSH, you can find your current IP address via the terminal using `dig +short myip.opendns.com @resolver1.opendns.com`.
 
 ## Creating Schema and Data Distribution on Citus
 
@@ -166,16 +166,16 @@ SELECT create_reference_table('release_reference');
 We're now ready to load the data. In psql, shell out to download the files:
 
 ```sql
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/area_reference.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/metric_reference.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/release_reference.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesaa.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesab.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesac.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesad.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesae.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesaf.csv
-curl -O https://raw.githubusercontent.com/sudhanshuvishodia/azure-python-labs/patch-1/4-postgres-citus/data/time_seriesag.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/area_reference.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/metric_reference.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/release_reference.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesaa.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesab.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesac.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesad.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesae.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesaf.csv
+curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesag.csv
 ```
 
 Next, load the data from the files into the distributed tables:
@@ -353,6 +353,6 @@ As you can see, we've got perfectly normal SQL running in a distributed environm
 
 ## Next steps
 
-If you do not want to keep and continue to be billed for the Azure database for Postgres-Hyperscale (Citus) server that we provisioned at the beginning of the lab, you can [delete](https://docs.microsoft.com/en-us/azure/postgresql/howto-hyperscale-read-replicas-portal#:~:text=To%20delete%20a%20server%20group,Select%20Delete.) it via the Azure Portal.
+If you do not want to keep and continue to be billed for the Azure database for Postgres-Hyperscale (Citus) server that we provisioned at the beginning of the lab, you can [delete](https://docs.microsoft.com/azure/postgresql/howto-hyperscale-read-replicas-portal#:~:text=To%20delete%20a%20server%20group,Select%20Delete.) it via the Azure Portal.
 
-You have successfully completed this lab. If you are interested in learning more about Hyperscale (Citus) please refer to our [Quickstart](https://docs.microsoft.com/en-us/azure/postgresql/hyperscale/) guide.
+You have successfully completed this lab. If you are interested in learning more about Hyperscale (Citus) please refer to our [Quickstart](https://docs.microsoft.com/azure/postgresql/hyperscale/) guide.
