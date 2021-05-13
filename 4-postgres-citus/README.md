@@ -178,7 +178,7 @@ curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgr
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesag.csv
 ```
 
-Next, load the data from the files into the distributed tables:
+Next, connect to the database server again and load the data from the files into the distributed tables:
 
 ```sql
 \copy covid19.area_reference from 'area_reference.csv' WITH CSV
