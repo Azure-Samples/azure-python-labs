@@ -20,7 +20,7 @@ To test the new features of Citus you can either use:
 
 **Note:** You can even run Citus on [Docker](https://docs.citusdata.com/en/v10.0/installation/single_node_docker.html). But please note that the docker image is intended to be used for development or testing purposes only and not for production workloads.
 
-```ssh
+```bash
 # run PostgreSQL with Citus on port 5500
 docker run -d --name citus -p 5500:5432 -e POSTGRES_PASSWORD=mypassword citusdata/citus
 ```
@@ -165,7 +165,7 @@ SELECT create_reference_table('release_reference');
 
 We're now ready to load the data. In psql, shell out to download the files:
 
-```sql
+```bash
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/area_reference.csv
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/metric_reference.csv
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/release_reference.csv
@@ -178,9 +178,9 @@ curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgr
 curl -O https://raw.githubusercontent.com/Azure-Samples/azure-python-labs/postgres-1/4-postgres-citus/data/time_seriesag.csv
 ```
 
-Next, load the data from the files into the distributed tables:
+Next, connect to the database server again and load the data from the files into the distributed tables:
 
-```sql
+```bash
 \copy covid19.area_reference from 'area_reference.csv' WITH CSV
 \copy covid19.metric_reference from 'metric_reference.csv' WITH CSV
 \copy covid19.release_reference from 'release_reference.csv' WITH CSV
@@ -209,7 +209,19 @@ SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') 
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117848538-077c5680-b2a1-11eb-93fe-863fd08f5e95.png)
+```text
+citus=> SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421') + citus_total_relation_size('time_series_300421_to_040521'));
+ pg_size_pretty
+----------------
+ 153 MB
+(1 row)
+
+citus=> SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
+ pg_size_pretty
+----------------
+ 121 MB
+(1 row)
+```
 
 
 With time as data grows, Hyperscale (Citus) gives you a flexibility to compress your old partitions to save storage cost just by running below simple command that uses table access method to compress the data:
@@ -223,7 +235,12 @@ Please note that we have compressed only the first partition which is created to
 SELECT pg_size_pretty(citus_total_relation_size('time_series_250421_to_290421'));
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117805620-ccfdc400-b276-11eb-9d2d-7592b05378c0.png)
+```text
+ pg_size_pretty
+----------------
+ 23 MB
+(1 row)
+```
 
 Can you see the benefit of using **Columnar** storage- we got a compression ratio of about 5x for `time_series_250421_to_290421` partition. Another important aspect to notice here is that, the relation `time_series` now has both columnar storage as well as row-based storage. This is what we call as **HTAP**-(Hybrid Transactional/Analytical Processing) wherein the same database can be used for both analytical and transactional workloads.
 
@@ -245,7 +262,18 @@ AND (payload -> 'value')  NOTNULL
 GROUP BY area_code, area_name, date;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117832491-283daf80-b293-11eb-810b-9e66e090127e.png)
+```text
+ area_code |    area_name     |    date    | tests_conducted
+-----------+------------------+------------+-----------------
+ S92000003 | Scotland         | 2021-04-27 |          127272
+ N92000002 | Northern Ireland | 2021-04-27 |           77090
+ W92000004 | Wales            | 2021-04-27 |           66246
+ E92000001 | England          | 2021-04-27 |         6680473
+ K02000001 | United Kingdom   | 2021-04-27 |         6951081
+(5 rows)
+
+Time: 615.612 ms
+```
 
 That was quick, isn't it - that too when we are using Citus on single node machine. You can imagine the performance we will get when we will add more nodes ot the cluster.If we look at the query above, we will observe that the query ran efficiently because we have distributed our tables such that the data is [co-located](https://docs.citusdata.com/en/stable/get_started/concepts.html#co-location) with minimal cross-shard operations.
 
@@ -270,17 +298,31 @@ AND (payload -> 'value') NOTNULL
 GROUP BY area_type, area_code;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117834767-0cd3a400-b295-11eb-933e-6b10c780415c.png)
+```text
+ area_type | area_code |    date    | first_dose
+-----------+-----------+------------+------------
+ nation    | E92000001 | 2021-05-03 |   29025049
+ overview  | K02000001 | 2021-05-03 |   34667904
+ nation    | S92000003 | 2021-05-03 |    2833761
+ nation    | W92000004 | 2021-05-03 |    1864400
+ nation    | N92000002 | 2021-05-03 |     944694
+(5 rows)
+
+Time: 1106.661 ms (00:01.107)
+```
 
 Let's try to see how a transactional query will perform on the same cluster.
 
 ```sql
 UPDATE covid19.time_series
-SET payload = '{"value": 0.0}'
-WHERE metric_id=15 AND date='2021-04-27' AND area_id=775 AND release_id=29674 ;
+SET payload = '{"value": 1.0}'
+WHERE metric_id=101 AND date='2021-04-30' AND area_id=873 AND release_id=29795 ;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117937719-ef015000-b323-11eb-8249-b34b65b977a5.png)
+```text
+UPDATE 1
+Time: 5.237 ms
+```
 
 So we see that with Hyperscale (Citus)- you can run both transactional and analytical workloads on the same machine.
 Now that we are familiar with columnar and how to query data on Hyperscale (Citus), lets move on to explore another important (infact most important) capability of Hyperscale (Citus):
@@ -320,10 +362,21 @@ AND (payload -> 'value')  NOTNULL
 GROUP BY area_code, area_name, date;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117859032-22a09380-b2ac-11eb-8f9a-ddbf61e56cee.png)
+```text
+ area_code |    area_name     |    date    | tests_conducted
+-----------+------------------+------------+-----------------
+ S92000003 | Scotland         | 2021-04-27 |          127272
+ N92000002 | Northern Ireland | 2021-04-27 |           77090
+ W92000004 | Wales            | 2021-04-27 |           66246
+ E92000001 | England          | 2021-04-27 |         6680473
+ K02000001 | United Kingdom   | 2021-04-27 |         6951081
+(5 rows)
+
+Time: 138.908 ms
+```
 
 Did you observed the difference?
-The same query is now taking only 1/6th of the time that it was taking earlier on a single node machine.
+The same query is now taking only 1/4th of the time that it was taking earlier on a single node machine.
 
 Let's cross-check if the second query also shows similar behaviour.
 
@@ -346,7 +399,18 @@ AND (payload -> 'value') NOTNULL
 GROUP BY area_type, area_code;
 ```
 Output:
-![image](https://user-images.githubusercontent.com/41684987/117860625-21706600-b2ae-11eb-9a0e-e210db0cdf7c.png)
+```text
+ area_type | area_code |    date    | first_dose
+-----------+-----------+------------+------------
+ nation    | E92000001 | 2021-05-03 |   29025049
+ overview  | K02000001 | 2021-05-03 |   34667904
+ nation    | S92000003 | 2021-05-03 |    2833761
+ nation    | W92000004 | 2021-05-03 |    1864400
+ nation    | N92000002 | 2021-05-03 |     944694
+(5 rows)
+
+Time: 205.218 ms
+```
 
 For this query as well, we see similar improvements in the overall run time. 
 As you can see, we've got perfectly normal SQL running in a distributed environment with no changes to our actual queries. This is a very powerful tool for scaling PostgreSQL to any size you need without dealing with the traditional complexity of distributed systems.
