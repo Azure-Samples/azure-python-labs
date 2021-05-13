@@ -93,4 +93,4 @@ Work with a Flask application using WSL in VS Code.
 
 This workshop is meant to be an introduction to Azure Database for PostgreSQL Hyperscale (Citus). First, you will create a cluster to scale out PostgreSQL and turn it into a distributed database. Then, you will create a schema and tables, load test data, and create a rollup function to massively speed up your query workload.
 
-[Real-Time Analytics on Azure Database for PostgreSQL lab](4-postgres-citus/README.md)
+[Real-Time Analytics on Azure Database for PostgreSQL lab](../postgres-1/4-postgres-citus/README.md)
