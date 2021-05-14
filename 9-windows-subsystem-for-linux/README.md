@@ -26,7 +26,7 @@ You'll need the following tools installed on your local machine:
 1. Open the terminal in VS Code (<kbd>Ctrl</kbd> + <kbd>`</kbd>)
 1. Install python3-venv by typing:
 
-   ```sudo apt-get install python3-venv```
+   ```sudo apt-get update && sudo apt-get install python3-venv```
    
 1. Create a virtual environment by typing:
 
