@@ -1,0 +1,20 @@
+dapr_http_get_state
+  GET /v1.0/state/{store}/{name}
+
+dapr_http_post_state
+  POST /v1.0/state/{store}
+
+dapr_http_get_secret
+  GET /v1.0/secrets/{store}/{name}
+
+dapr_get_state
+  DaprClient().get_state(store_name=store, key=name)
+
+dapr_save_state
+  DaprClient().save_state(store_name=store, key=name, value=value)
+
+dapr_save_state_etag
+  DaprClient().save_state(store_name=store, key=name, value=value, etag=etag)
+
+dapr_get_secret
+  DaprClient().get_secret(store_name=store, key=name)
