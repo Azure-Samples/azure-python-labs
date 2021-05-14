@@ -179,8 +179,4 @@ From here you can view individual metrics you've logged and use the UI to compar
 
 If you are interested in learning more about different things you can do with Azure Machine Learning, such as deploying and serving your model on inferencing targets you can find [more documentation here](https://docs.microsoft.com/en-us/azure/machine-learning/).
 
-<<<<<<< HEAD
 For more samples and notebooks visit the [Azure Machine Learning examples repository](https://github.com/Azure/azureml-examples) and the [Azure Machine Learning example notebooks repository](https://github.com/Azure/MachineLearningNotebooks/).
-=======
-For more samples and notebooks visit the [Azure Machine Learning examples repository](https://github.com/Azure/azureml-examples) and the [Azure Machine Learning example notebooks repository](https://github.com/Azure/MachineLearningNotebooks/).
->>>>>>> 6bc0c4bd22acfb588adeeb6a8a0df19315a486fa
