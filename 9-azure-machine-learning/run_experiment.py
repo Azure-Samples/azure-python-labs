@@ -1,6 +1,7 @@
 from azureml.core.compute import AmlCompute, ComputeTarget
 from azureml.core.compute_target import ComputeTargetException
 from azureml.core import Experiment, Environment, ScriptRunConfig, Workspace
+from azureml.core.conda_dependencies import CondaDependencies
 
 def submit():
     # define workspace

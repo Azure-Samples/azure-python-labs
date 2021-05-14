@@ -152,12 +152,15 @@ One small change needs to be made to the environment used in _run\_experiment.py
 environment_name = "AzureML-TensorFlow-1.15-Inference-CPU"
 tf_env = Environment.get(workspace=ws, name=environment_name)
 
+# create a clone of the curated environment
+tf_env_cloned = tf_env.clone("custom-tensorflow")
+
 # add the azureml core pip package
-conda_dependencies = tf_env.CondaDependencies()
+conda_dependencies = tf_env_cloned.CondaDependencies()
 conda_dependencies.add_pip_package("azureml-core")
 
 # add dependencies to python section of the environment
-tf_env.python.conda_dependencies = conda_dependencies
+tf_env_cloned.python.conda_dependencies = conda_dependencies
 ```
 
 Submit your experiment again using the following command:
