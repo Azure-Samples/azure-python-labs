@@ -27,7 +27,7 @@ Dapr can be used via HTTP, gRPC, and language-specific SDKs for languages inlcud
 You will:
 - Get hands-on with Dapr by running it on your local machine through the [Try Dapr](https://docs.dapr.io/getting-started/) experience.
 - Explore State Mangement and Secrets building blocks via the REST API using cURL (optional), Python Requests, and the Dapr SDK for Python ([dapr/python-sdk](https://github.com/dapr/python-sdk)).
-- Seamlessly swap the State Management and/or Secrets components to use a cloud component in Azure.
+- Seamlessly swap the State component from local development to a managed service in the cloud. 
 
 ## Prerequisites
 - You will need [Docker](https://docs.docker.com/get-docker/) to use this lab as-is with Dapr's default Docker support. Dapr can run as a binary [in self-hosted mode without Docker](https://docs.dapr.io/operations/hosting/self-hosted/self-hosted-no-docker/), however it will require additional setup steps.
