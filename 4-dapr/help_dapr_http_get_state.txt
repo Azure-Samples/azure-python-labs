@@ -1,0 +1,14 @@
+NAME
+    main.py dapr_http_get_state - GET /v1.0/state/{store}/{name}
+
+SYNOPSIS
+    main.py dapr_http_get_state <flags>
+
+DESCRIPTION
+    GET /v1.0/state/{store}/{name}
+
+FLAGS
+    --store=STORE
+        Default: 'statestore'
+    --name=NAME
+        Default: 'name'
