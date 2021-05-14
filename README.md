@@ -53,6 +53,15 @@ In this lab, you will learn how to import data into an Azure Database for Postgr
 [Azure Databse for PostgreSQL with Python lab](4-postgres/README.md)
 
 
+# Explore the Distributed Application Runtime (Dapr) with Python
+
+- Get hands-on with Dapr by running it on your local machine through the [Try Dapr](https://docs.dapr.io/getting-started/) experience.
+- Explore State Mangement and Secrets building blocks via the REST API using cURL (optional), Python Requests, and the Dapr SDK for Python ([dapr/python-sdk](https://github.com/dapr/python-sdk)).
+- Seamlessly swap the State component from local development to a managed service in the cloud.
+
+[Explore the Distributed Application Runtime (Dapr) with Python lab](4-dapr/README.md)
+
+
 ## Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
 
 This workshop is meant to be an introduction to Azure Database for PostgreSQL Hyperscale (Citus). First, you will create a cluster to scale out PostgreSQL and turn it into a distributed database. Then, you will create a schema and tables, load test data, and create a rollup function to massively speed up your query workload.
