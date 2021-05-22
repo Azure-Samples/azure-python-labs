@@ -114,7 +114,7 @@ def dapr_get_state(store="statestore", name="name"):
         # Wait for sidecar to be up within 5 seconds.
         d.wait(5)
         res = d.get_state(store_name=store, key=name)
-        print(res.data.decode())s
+        print(res.data.decode())
 ```
 
 You can execute these as follows:
