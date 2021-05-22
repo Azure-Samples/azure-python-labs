@@ -59,7 +59,7 @@ You can do a quick test by running the following to save and get some state:
 
 ```bash
 # save state
-curl -X POST -H "Content-Type: application/json" -d '[{ "key": "name", "value": "Bruce Wayne"}]' http://localhost:3500/v1.0/state/statestore`
+curl -X POST -H "Content-Type: application/json" -d '[{ "key": "name", "value": "Bruce Wayne"}]' 'http://localhost:3500/v1.0/state/statestore'
 # get state
 curl http://localhost:3500/v1.0/state/statestore/name
 ```
