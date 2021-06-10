@@ -5,7 +5,7 @@ azure-nspkg==3.0.2
 certifi==2020.4.5.1
 chardet==3.0.4
 colorama==0.4.1
-Django==3.0.14
+Django==3.1.12
 idna==2.9
 isort==4.3.20
 lazy-object-proxy==1.4.1
