@@ -59,7 +59,7 @@ You can do a quick test by running the following to save and get some state:
 
 ```bash
 # save state
-curl -X POST -H "Content-Type: application/json" -d '[{ "key": "name", "value": "Bruce Wayne"}]' http://localhost:3500/v1.0/state/statestore`
+curl -X POST -H "Content-Type: application/json" -d '[{ "key": "name", "value": "Bruce Wayne"}]' 'http://localhost:3500/v1.0/state/statestore'
 # get state
 curl http://localhost:3500/v1.0/state/statestore/name
 ```
@@ -114,7 +114,7 @@ def dapr_get_state(store="statestore", name="name"):
         # Wait for sidecar to be up within 5 seconds.
         d.wait(5)
         res = d.get_state(store_name=store, key=name)
-        print(res.data.decode())s
+        print(res.data.decode())
 ```
 
 You can execute these as follows:
