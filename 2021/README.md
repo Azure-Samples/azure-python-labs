@@ -13,7 +13,7 @@ In this lab, you will build a serverless HTTP API with Azure Functions that take
 - Run and debug the API locally on your machine
 - Deploy the API to Azure Functions
 
-[Sentiment Analysis with Python Azure Functions lab](../4-azure-functions-python-vscode/README.md) | Duration: 7 minutes
+[Sentiment Analysis with Python Azure Functions lab](../4-azure-functions-python-vscode/README.md)
 
 ## Document recognition with Python Azure Form Recognizer
 
