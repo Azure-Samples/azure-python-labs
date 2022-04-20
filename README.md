@@ -14,6 +14,13 @@ A collection of labs demonstrating how to build Python applications with Azure a
 
 Join the Microsoft Python Discord (http://aka.ms/python-discord ) and the **#python-virtual-labs** channel to ask questions, get help with labs, and/or further instructions (also see: <https://aka.ms/python-virtual-labs> for our PyCon Online 2021 experience).
 
+# Python & Visual Studio Code in the browser with vscode.dev
+
+[vscode.dev](https://vscode.dev/) is a lightweight version of [Visual Studio Code](https://code.visualstudio.com/) that runs fully in the browser, providing the ability to navigate files and repositories, and it's ideal for committing lightweight code changes.
+
+In this lab, we will go through the process of creating and running Python code in Jupyter Notebooks on the browser. We'll create a simplified version of the popular [wordle](https://www.nytimes.com/games/wordle/index.html) game.
+
+[Python & Visual Studio Code in the browser with vscode.dev](2022/python-vscode-dev/README.md)
 
 ## Sentiment Analysis with Python Azure Functions
 
