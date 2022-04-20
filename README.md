@@ -67,4 +67,4 @@ This workshop is meant to be an introduction to Azure Database for PostgreSQL Hy
 
 ---
 
-## [MORE](MORE.md) | [2021](2021/README.md) | [2020](2020/README.md) | [2019](2019/README.md)
+## [2021](2021/README.md) | [2020](2020/README.md) | [2019](2019/README.md)

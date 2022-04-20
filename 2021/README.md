@@ -13,7 +13,7 @@ In this lab, you will build a serverless HTTP API with Azure Functions that take
 - Run and debug the API locally on your machine
 - Deploy the API to Azure Functions
 
-[Sentiment Analysis with Python Azure Functions lab](4-azure-functions-python-vscode/README.md) | Duration: 7 minutes
+[Sentiment Analysis with Python Azure Functions lab](../4-azure-functions-python-vscode/README.md) | Duration: 7 minutes
 
 ## Document recognition with Python Azure Form Recognizer
 
@@ -30,7 +30,7 @@ In this lab, you will learn how to quickly store information you collect from yo
 
 This lab is an introduction to MSTICPy - an open source cyber security tool kit created by the Microsoft Threat Intelligence Center. In this lab you will learn about the core features of MSTICPy, and how to use to them in cyber security incident response or threat hunting. This lab takes the form of a Jupyter Notebook that you can run locally or directly in your browser.
 
-[Cyber Security Investigations and Analysis with MSTICPy lab](9-MSTICPy/README.md)
+[Cyber Security Investigations and Analysis with MSTICPy lab](../9-MSTICPy/README.md)
 
 
 ## Explore Azure Database for PostgreSQL with Python
@@ -40,7 +40,7 @@ In this lab, you will learn how to import data into an Azure Database for Postgr
 - Connect to an Azure Database for PostgreSQL
 - Use the `psycopg2` to load and query data in the database.
 
-[Azure Databse for PostgreSQL with Python lab](4-postgres/README.md)
+[Azure Databse for PostgreSQL with Python lab](../4-postgres/README.md)
 
 
 ## Explore the Distributed Application Runtime (Dapr) with Python
@@ -49,14 +49,14 @@ In this lab, you will learn how to import data into an Azure Database for Postgr
 - Explore State Mangement and Secrets building blocks via the REST API using cURL (optional), Python Requests, and the Dapr SDK for Python ([dapr/python-sdk](https://github.com/dapr/python-sdk)).
 - Seamlessly swap the State component from local development to a managed service in the cloud.
 
-[Explore the Distributed Application Runtime (Dapr) with Python lab](4-dapr/README.md)
+[Explore the Distributed Application Runtime (Dapr) with Python lab](../4-dapr/README.md)
 
 
 ## Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
 
 This workshop is meant to be an introduction to Azure Database for PostgreSQL Hyperscale (Citus). First, you will create a cluster to scale out PostgreSQL and turn it into a distributed database. Then, you will create a schema and tables, load test data, and create a rollup function to massively speed up your query workload.
 
-[Real-Time Analytics on Azure Database for PostgreSQL lab](4-postgres-citus/README.md)
+[Real-Time Analytics on Azure Database for PostgreSQL lab](../4-postgres-citus/README.md)
 
 
 ## Training Digit Recognition Model with Azure Machine Learning
@@ -71,7 +71,39 @@ In this lab, you will learn how to train and track a machine learning model on a
 
 [Training Digit Recognition Model with Azure Machine Learning lab](9-azure-machine-learning/README.md)
 
+---
+
+## Number Facts with Python Web Apps
+
+In this lab, you will deploy a python app to App Service using the Azure CLI.
+
+- Use `az webapp up` to quickly provision Azure resources and deploy your app to Azure App Service.
+- Leverage the `local context` feature of Azure CLI to ease management operations.
+
+[Number Facts lab](../9-azure-web-apps/README.md)
+
+
+## Developing a Django + PostgreSQL application in a Dev Container
+
+Work in a dev container using Visual Studio Code
+
+- Open existing dev container in VS Code with the Remote - Container extension
+- Build a React front-end
+- Initialize a PostgreSQL database
+- Run a Django app
+
+[Django and PostgreSQL in a Dev Container lab](../9-vscode-django-postgres-dev-container/README.md)
+
+
+## Debugging a Flask App with WSL in VS Code
+
+Work with a Flask application using WSL in VS Code.
+- Run/debug the Flask app
+- Configure application tests
+- Run application tests
+
+[Debugging Flask App with WSL in VS Code lab](../9-windows-subsystem-for-linux/README.md)
 
 ---
 
-## [MORE](../MORE.md) | [2020](../2020/README.md) | [2019](../2019/README.md)
+[2020](../2020/README.md) | [2019](../2019/README.md)
