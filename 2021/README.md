@@ -30,7 +30,7 @@ In this lab, you will learn how to quickly store information you collect from yo
 
 This lab is an introduction to MSTICPy - an open source cyber security tool kit created by the Microsoft Threat Intelligence Center. In this lab you will learn about the core features of MSTICPy, and how to use to them in cyber security incident response or threat hunting. This lab takes the form of a Jupyter Notebook that you can run locally or directly in your browser.
 
-[Cyber Security Investigations and Analysis with MSTICPy lab](../9-MSTICPy/README.md)
+[Cyber Security Investigations and Analysis with MSTICPy lab](../4-msticpy/README.md)
 
 
 ## Explore Azure Database for PostgreSQL with Python
