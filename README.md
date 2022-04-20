@@ -14,7 +14,7 @@ A collection of labs demonstrating how to build Python applications with Azure a
 
 Join the Microsoft Python Discord (http://aka.ms/python-discord ) and the **#python-virtual-labs** channel to ask questions, get help with labs, and/or further instructions (also see: <https://aka.ms/python-virtual-labs> for our PyCon 2022 experience).
 
-# Python & Visual Studio Code in the browser with vscode.dev
+## Python & Visual Studio Code in the browser with vscode.dev
 
 [vscode.dev](https://vscode.dev/) is a lightweight version of [Visual Studio Code](https://code.visualstudio.com/) that runs fully in the browser, providing the ability to navigate files and repositories, and it's ideal for committing lightweight code changes.
 
