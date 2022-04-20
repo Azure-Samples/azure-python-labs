@@ -13,7 +13,7 @@ In this lab, you will build a serverless HTTP API with Azure Functions that take
 - Run and debug the API locally on your machine
 - Deploy the API to Azure Functions
 
-[Sentiment Analysis with Python Azure Functions lab](../4-azure-functions-python-vscode/README.md)
+[Sentiment Analysis with Python Azure Functions lab](../01-azure-functions-python-vscode/README.md)
 
 ## Document recognition with Python Azure Form Recognizer
 
@@ -30,7 +30,7 @@ In this lab, you will learn how to quickly store information you collect from yo
 
 This lab is an introduction to MSTICPy - an open source cyber security tool kit created by the Microsoft Threat Intelligence Center. In this lab you will learn about the core features of MSTICPy, and how to use to them in cyber security incident response or threat hunting. This lab takes the form of a Jupyter Notebook that you can run locally or directly in your browser.
 
-[Cyber Security Investigations and Analysis with MSTICPy lab](../4-msticpy/README.md)
+[Cyber Security Investigations and Analysis with MSTICPy lab](../01-msticpy/README.md)
 
 
 ## Explore Azure Database for PostgreSQL with Python
@@ -40,7 +40,7 @@ In this lab, you will learn how to import data into an Azure Database for Postgr
 - Connect to an Azure Database for PostgreSQL
 - Use the `psycopg2` to load and query data in the database.
 
-[Azure Databse for PostgreSQL with Python lab](../4-postgres/README.md)
+[Azure Databse for PostgreSQL with Python lab](../01-postgres/README.md)
 
 
 ## Explore the Distributed Application Runtime (Dapr) with Python
@@ -49,14 +49,14 @@ In this lab, you will learn how to import data into an Azure Database for Postgr
 - Explore State Mangement and Secrets building blocks via the REST API using cURL (optional), Python Requests, and the Dapr SDK for Python ([dapr/python-sdk](https://github.com/dapr/python-sdk)).
 - Seamlessly swap the State component from local development to a managed service in the cloud.
 
-[Explore the Distributed Application Runtime (Dapr) with Python lab](../4-dapr/README.md)
+[Explore the Distributed Application Runtime (Dapr) with Python lab](../01-dapr/README.md)
 
 
 ## Real-Time Analytics on Azure Database for PostgreSQL - Hyperscale (Citus)
 
 This workshop is meant to be an introduction to Azure Database for PostgreSQL Hyperscale (Citus). First, you will create a cluster to scale out PostgreSQL and turn it into a distributed database. Then, you will create a schema and tables, load test data, and create a rollup function to massively speed up your query workload.
 
-[Real-Time Analytics on Azure Database for PostgreSQL lab](../4-postgres-citus/README.md)
+[Real-Time Analytics on Azure Database for PostgreSQL lab](../01-postgres-citus/README.md)
 
 
 ## Training Digit Recognition Model with Azure Machine Learning
