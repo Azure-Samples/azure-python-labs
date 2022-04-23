@@ -10,7 +10,7 @@ You will learn to:
 ## Prerequisites
 
 - macOS, Windows, or Linux
-- Python 3.6, 3.7, or 3.8
+- Python 3.7, 3.8, or 3.9
 - [Visual Studio Code](https://code.visualstudio.com/download) with these extensions installed:
     - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
     - [Azure Functions](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)
