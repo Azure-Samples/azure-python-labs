@@ -94,11 +94,11 @@ In this lab, we will go through the process of creating and running Python code 
         for i, g in enumerate(guess_word):
             pair = i, g
             if pair in green_letters:
-                output.append(g)
+                output.append(f" {g} ")
             elif pair in yellow_letters:
                 output.append(f"({g})")
             else:
-                output.append("_")
+                output.append(" _ ")
 
         previous_guesses[current_turn] = " ".join(output)
         for i in previous_guesses.keys():
