@@ -22,6 +22,18 @@ In this lab, we will go through the process of creating and running Python code 
 
 [Python & Visual Studio Code in the browser with vscode.dev](2022/python-vscode-dev/README.md)
 
+## Cloud Native Python with Azure Container Apps, Azure Container Registry, and FastAPI on PyPy
+
+In this lab you will containerize an existing Python application using the Azure CLI, a private Azure Container Registry, and Azure Container Registry Tasks. You will then deploy it to Azure Container Apps, which enables you to run microservices and containerized applications on a serverless platform.
+
+[Cloud Native Python with Azure Container Apps, Container Registry, and FastAPI on PyPy](2022/containerapps-python-fastapi/README.md)
+
+## Serverless Containers with Python, Azure Container Apps, and GitHub Container Registry
+
+In this lab you will create a sample Python app from a template repository in GitHub. You will then use the included GitHub Actions workflow which will build a container image you can then make public. You will then deploy the public container image to Azure Container Apps, which enables you to run microservices and containerized applications on a serverless platform.
+
+[Serverless Containers with Python, Azure Container Apps, and GitHub Container Registry](2022/containerapps-github-python/README.md)
+
 ## Sentiment Analysis with Python Azure Functions
 
 In this lab, you will build a serverless HTTP API with Azure Functions that takes a sentence as an input and returns the sentiment of the sentence.
