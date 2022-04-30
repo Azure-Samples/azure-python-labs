@@ -168,7 +168,7 @@ python main.py dapr_get_secret --name "my-secret"
 
 Now you have used Dapr with Python via the HTTP API and the Dapr SDK for Python, you may wish to continue the [Try Dapr](https://docs.dapr.io/getting-started/) experience to "Configure a component" and "Explore Dapr quickstarts".
 
-### [4. Configure a component](https://docs.dapr.io/getting-started/get-started-component/)
+### [4. Configure a component](https://docs.dapr.io/getting-started/tutorials/get-started-component/)
 
 ### [5. Explore Dapr quickstarts](https://docs.dapr.io/getting-started/quickstarts/)
 
