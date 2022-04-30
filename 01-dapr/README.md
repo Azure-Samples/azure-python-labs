@@ -75,7 +75,7 @@ Install [Python Fire](https://github.com/google/python-fire#installation), [Pyth
 git clone https://github.com/Azure-Samples/azure-python-labs.git
 
 # cd into the correct directory
-cd 4-dapr
+cd azure-python-labs/01-dapr
 
 # create and activate a virtual environment
 python3 -m venv env
@@ -152,7 +152,7 @@ In order to reference the [components](https://docs.dapr.io/concepts/components-
 In your first terminal, run:
 
 ```bash
-cd 4-dapr
+cd azure-python-labs/01-dapr
 
 dapr run --app-id myapp --dapr-http-port 3500 --dapr-grpc-port 50001 --components-path ./my-components
 ```
