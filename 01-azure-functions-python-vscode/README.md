@@ -9,6 +9,7 @@ You will learn to:
 
 ## Prerequisites
 
+- An **Azure Subscription** (e.g. [Free](https://aka.ms/azure-free-account) or [Student](https://aka.ms/azure-student-account) account)
 - macOS, Windows, or Linux
 - Python 3.7, 3.8, or 3.9
 - [Visual Studio Code](https://code.visualstudio.com/download) with these extensions installed:
