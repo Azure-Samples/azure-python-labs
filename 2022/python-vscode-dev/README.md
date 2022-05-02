@@ -60,7 +60,8 @@ In this lab, we will go through the process of creating and running Python code 
         if status == "win":
             print("Congratulations, you guessed correctly!")
         else:
-            print(f"Sorry, you lost. The correct word was {answer_word}.")
+            decoded_word = b64decode(answer_word).decode('utf-8')
+            print(f"Sorry, you lost. The correct word was {decoded_word}")
 
         current_turn = 0
         return
