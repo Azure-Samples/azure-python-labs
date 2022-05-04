@@ -20,7 +20,19 @@ git clone https://github.com/asw101/python-fastapi-pypy.git
 cd python-fastapi-pypy/
 ```
 
-## 2. Set Environment Variables
+## 2. Install Azure CLI Extension and Register Resource Providers
+
+If this is the first time you have used Azure Container Apps from the Azure CLI, or with your Azure Account, you will need to install the `containerapp` extension, and register the resource providers for `Microsoft.App` and `Microsoft.OperationalInsights` using the following commands.
+
+```bash
+az extension add --name containerapp
+
+az provider register --namespace Microsoft.App --wait
+
+az provider register --namespace Microsoft.OperationalInsights --wait
+```
+
+## 3. Set Environment Variables
 
 ```bash
 RESOURCE_GROUP="my-container-apps"
@@ -35,7 +47,7 @@ ACR_NAME="acr${RANDOM_STR}"
 ACR_IMAGE_NAME="pypy-fastapi:latest"
 ```
 
-## 3. Create Resource Group
+## 4. Create Resource Group
 
 ```bash
 az group create \
@@ -43,7 +55,7 @@ az group create \
   --location $LOCATION
 ```
 
-## 4. Create Azure Container Registry
+## 5. Create Azure Container Registry
 
 [Quickstart (docs.microsoft.com)](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-azure-cli)
 
@@ -63,20 +75,18 @@ REGISTRY_PASSWORD=$(az acr credential show -n $ACR_NAME --query 'passwords[0].va
 echo "$CONTAINER_IMAGE"
 ```
 
-## 5. Create Azure Container Apps Environment
+## 6. Create Azure Container Apps Environment
 
 [Quickstart (docs.microsoft.com)](https://docs.microsoft.com/en-us/azure/container-apps/get-started-existing-container-image?tabs=bash&pivots=container-apps-private-registry)
 
 ```bash
-az extension add --name containerapp
-
 az containerapp env create \
   --name $CONTAINERAPPS_ENVIRONMENT \
   --resource-group $RESOURCE_GROUP \
   --location $LOCATION
 ```
 
-## 6. Create Container App
+## 7. Create Container App
 
 ```bash
 az containerapp create \
@@ -91,7 +101,7 @@ az containerapp create \
   --ingress 'external'
 ```
 
-## 7. Test Container App with curl
+## 8. Test Container App with curl
 
 ```bash
 CONTAINERAPP_FQDN=$(az containerapp show --resource-group $RESOURCE_GROUP \
@@ -104,7 +114,7 @@ echo "https://${CONTAINERAPP_FQDN}"
 curl "https://${CONTAINERAPP_FQDN}/"
 ```
 
-## 8. Delete Resource Group
+## 9. Delete Resource Group
 
 ```bash
 az group delete \
