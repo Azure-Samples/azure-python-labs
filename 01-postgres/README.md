@@ -35,11 +35,11 @@ Note: Make sure you have created a [server-level firewall rule](https://docs.mic
 
 ## How to run the Python examples
 
-1. First, we need to get the script [pg-lab.py](pg-lab.py), as well as [data.csv](data.csv) onto our local machine. You may download them manually, or `git clone` this repository and `cd` into the correct `4-postgres/` directory as follows:
+1. First, we need to get the script [pg-lab.py](pg-lab.py), as well as [data.csv](data.csv) onto our local machine. You may download them manually, or `git clone` this repository and `cd` into the correct `01-postgres/` directory as follows:
 
    ```
    git clone https://github.com/Azure-Samples/azure-python-labs.git
-   cd azure-python-labs/4-postgres/
+   cd azure-python-labs/01-postgres/
    ```
 
 1. Then, we need to set up the Postgres connection we're going to be using for the rest of this lab. The following script writes the connection string to a .config file in the current directory via the [writeConfig](pg-lab.py#L5) function. To run this, set some environment variables which we use to create the connection string from the values :
