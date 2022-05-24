@@ -12,6 +12,7 @@ You will learn to:
 - An **Azure Subscription** (e.g. [Free](https://aka.ms/azure-free-account) or [Student](https://aka.ms/azure-student-account) account)
 - macOS, Windows, or Linux
 - Python 3.7, 3.8, or 3.9
+- [Azure Functions Core Tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools). If needed, there are [more ways to install here](https://github.com/Azure/azure-functions-core-tools#installing).
 - [Visual Studio Code](https://code.visualstudio.com/download) with these extensions installed:
     - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
     - [Azure Functions](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)
@@ -35,7 +36,7 @@ You will build an HTTP API using an Azure Function. An Azure Functions app can c
     | Prompt | Value | Description |
     | --- | --- | --- |
     | Language for your project | **Python** | |
-    | Python interpreter | Select one | Azure Functions requires Python 3.6, 3.7, 3.8 |
+    | Python interpreter | Select one | Azure Functions requires Python 3.7, 3.8, 3.9 |
     | Template for your first function | **HTTP trigger** | |
     | Function name | **sentiment** | |
     | Authorization level | **anonymous** | Allow function to be accessed anonymously |
@@ -80,7 +81,7 @@ VS Code reopens in the function app. Here are some important files and folders t
 
 1. If you don't have the Azure Functions Core Tools installed, VS Code will prompt you to install it. Select **Install**.
 
-    > If the installation fails, follow [these instructions](https://github.com/Azure/azure-functions-core-tools#installing) to install it. Note: Azure Functions Core Tools Version 3 is compatible with Python 3.8, if you are using 3.7 or 3.6 use the v2 command line to install.
+    > If the installation fails, follow [these instructions](https://github.com/Azure/azure-functions-core-tools#installing) to install it.
 
 1. Once the function app has started, open your web browser and enter the following in the address bar to run your function:
 
