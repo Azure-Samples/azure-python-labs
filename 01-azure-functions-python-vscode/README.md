@@ -12,7 +12,7 @@ You will learn to:
 - An **Azure Subscription** (e.g. [Free](https://aka.ms/azure-free-account) or [Student](https://aka.ms/azure-student-account) account)
 - macOS, Windows, or Linux
 - Python 3.7, 3.8, or 3.9
-- [Azure Functions Core Tools](https://docs.microsoft.com/en-us/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools). If needed, there are [more ways to install here](https://github.com/Azure/azure-functions-core-tools#installing).
+- [Azure Functions Core Tools](https://docs.microsoft.com/azure/azure-functions/functions-run-local#install-the-azure-functions-core-tools). If needed, there are [more ways to install here](https://github.com/Azure/azure-functions-core-tools#installing).
 - [Visual Studio Code](https://code.visualstudio.com/download) with these extensions installed:
     - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
     - [Azure Functions](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)
