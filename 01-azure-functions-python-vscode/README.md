@@ -119,7 +119,7 @@ Before you can deploy your function code to Azure, you need to create several su
     | Select a location for new resources | Select whatever location is closest to you geographically |
     | Select a hosting plan | Select **Consumption** |
     | Select a storage account | Select **Create new storage account** and accept suggested name |
-    | Select an Application Insights resource for your app | Select **Create new Application Insights resource**** and accept suggested name |
+    | Select an Application Insights resource for your app | Select **Create new Application Insights resource** and accept suggested name |
     
 5. You should see both a notification and a message in the **Azure: Activity Log** panel once the Function App resources are successfully created.  
 
