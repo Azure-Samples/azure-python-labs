@@ -17,7 +17,7 @@ You will learn to:
     - [Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
     - [Azure Functions](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions)
 
-## Create an Azure Functions app and a new function
+## Create a local Azure Functions app and a new function
 
 Azure Functions allows you to build and deploy your code as functions, without worrying about managing servers and other infrastructure. Your functions are triggered by events such as: items added on a queue, a document updated in a database, or an HTTP request.
 
@@ -99,36 +99,41 @@ VS Code reopens in the function app. Here are some important files and folders t
 
 1. Stop debugging by pressing `Shift-F5`.
 
+## Create Azure resources for your function
+
+Before you can deploy your function code to Azure, you need to create several supporting resources inside a resource group, such as a Function App itself, a Storage account (for storing the code), and an Application Insights instance (to provide monitoring).
+
+1. In the command palette, search for and select **Azure Functions: Create new Function App in Azure (Advanced)**.
+
+2. When prompted to select a subscription, select **Sign in to Azure**.
+
+3. The browser should open to the Azure sign in page. Log in with your Azure credentials.
+
+4. Enter the following values in the prompts:
+
+    | Prompt | Description |
+    | --- | --- |
+    | Enter a globally unique name for the new function app | Type something like `yourname-sentiment-analyzer-function`
+    | Select a runtime stack | Select the same version as you used to create your local function app |
+    | Select a resource group | If you were provided lab credentials, you must select the existing resource group from the dropdown |
+    | Select a location for new resources | Select whatever location is closest to you geographically |
+    | Select a hosting plan | Select **Consumption** |
+    | Select a storage account | Select **Create new storage account** and accept suggested name |
+    | Select an Application Insights resource for your app | Select **Create new Application Insights resource**** and accept suggested name |
+    
+5. You should see both a notification and a message in the **Azure: Activity Log** panel once the Function App resources are successfully created.  
+
 ## Deploy the app to Azure
 
-You will now use VS Code to deploy the function app to Azure.
+You will now use VS Code to actually deploy the local function app to the Azure resources you just created.
 
 1. In the command palette, search for and select **Azure Functions: Deploy to Function App**.
 
-1. When prompted to select a subscription, select **Sign in to Azure**.
+1. When it prompts you to "Select a resource", select the name of the resource created in the previous step. In the dialog box that pops up, confirm that you do intend to overwrite the previously deployed version. Since this is your first time deploying, that shouldn't be a concern.
 
-1. The browser should open to the Azure sign in page. Log in with your Azure credentials.
-
-1. Enter the following values in the prompts:
-
-    | Prompt | Value | Description |
-    | --- | --- | --- |
-    | Select subscription | Your Azure subscription | If you were provided credentials for the lab, select the subscription that appears |
-    | Select Function App | **Create new Function App in Azure (Advanced)** | Ensure you select the **Advanced** option so you can choose the resource group to deploy to |
-    | Select a runtime | A Python version | Select the same version as you used to create your local function app |
-    | Select a hosting plan | **Consumption** | |
-    | Select a resource group | A resource group | If you were provided lab credentials, you must select the existing resource group from the dropdown |
-    | Select a storage account | **Create a new storage account** | Azure Functions requires a storage account to store your code |
-    | Name of storage account | Accept the default name | |
-    | Select an Application Insights | **Create new Application Insights** | Application Insights provides monitoring for your function app |
-    | Name of Application Insights | Accept the default name | |
-    | Location | **Central US** | |
-
-    Wait for the resources to be provisioned and your app to be deployed.
-
+    Watch the deployment progress in the notification.
+    
 1. When the deployment is complete, A prompt should appear. Click on **View output**.
-
-    > If you were not prompted to view the output, open the Output window manually by pressing `Ctrl-Shift-U` (`Cmd-Shift-U` on macOS). Select **Azure Functions** from the dropdown.
 
 1. In the output, locate the HTTP trigger URL, it should look like `https://<function-app-name>.azurewebsites.net/api/sentiment`.
 
@@ -136,4 +141,4 @@ You will now use VS Code to deploy the function app to Azure.
 
     You should see the sentiment returned.
 
-Congratulations! You have deployed an HTTP API using Azure Functions!
+Congratulations! You have deployed an HTTP API using Azure Functions! 🎉
