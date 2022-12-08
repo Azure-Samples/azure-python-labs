@@ -5,7 +5,7 @@ attrs==19.1.0
 backcall==0.1.0
 black==19.3b0
 bleach==3.1.4
-certifi==2019.3.9
+certifi==2022.12.7
 chardet==3.0.4
 Click==7.0
 cycler==0.10.0
