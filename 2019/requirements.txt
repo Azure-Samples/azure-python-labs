@@ -9,7 +9,7 @@ chardet==3.0.4
 Click==7.0
 colorama==0.4.1
 cryptography==3.3.2
-Flask==1.0.2
+Flask==2.3.2
 idna==2.8
 isodate==0.6.0
 isort==4.3.17
