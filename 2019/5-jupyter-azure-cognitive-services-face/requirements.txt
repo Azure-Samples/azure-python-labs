@@ -52,7 +52,7 @@ pytest==4.4.1
 python-dateutil==2.8.0
 pyzmq==18.0.1
 qtconsole==4.4.3
-requests==2.21.0
+requests==2.31.0
 Send2Trash==1.5.0
 six==1.12.0
 terminado==0.8.2
